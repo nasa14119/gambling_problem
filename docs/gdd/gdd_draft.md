@@ -16,7 +16,6 @@ This is a project for the course of _Software Construction and Decision-Making_ 
 
 ---
 
-<!-- TOC -->
 * [**Gambling Problem**](#gambling-problem)
     * [DeathSignal Productions](#deathsignal-productions)
   * [_Game Design Document_](#_game-design-document_)
@@ -59,7 +58,6 @@ This is a project for the course of _Software Construction and Decision-Making_ 
     * [**Sounds Needed**](#sounds-needed)
     * [**Music Needed**](#music-needed)
   * [_Schedule_](#_schedule_)
-<!-- TOC -->
 
 ## _Game Design_
 
@@ -134,7 +132,7 @@ For the casino it should be difficult to know if you are being caught thus the t
 
 For the TCG aspect, the exploits will work as these cards. Better exploits are harder to find and have less probability of appearing when winning in a table. Some exploits can have a small chance of disappearing of your exploit deck after being used (usually specified in the exploit description). Each exploit card will have some art representing what the exploit does.
 
-The game is a roguelite experience, this meaning that losing doesn't restart your progress. In this game you have a casino account that can be banned, which means you lose the money/chips that were in the account, you don't lose the moeny outside the banned account. Then there is the "real" death of the run part, where the mafia gets mad at you and they get to your house and end you, which means you do lose all your progress, being how far in the tables you've gone and all of your money. But the tun loss is not for nothing as the discovery of all of the powerful exploits is not lost at all. The more you play the game the more exploits you find. The first time you play you have basic exploits like lets say change card and disconnect player, and as you advance you discover change suit. Now there is a chance that when restarting the game when killed by the mafia, you may start with change suit instead of disconnect.
+The game is a roguelike experience, this meaning that losing doesn't restart your progress. In this game you have a casino account that can be banned, which means you lose the money/chips that were in the account, you don't lose the money outside the banned account. Then there is the "real" death of the run part, where the mafia gets mad at you, they get to your house and end you, which means you lose it all your progress. Being how far in the tables you've gone and all of your money. But the tun loss is not for nothing as the discovery of powerful exploits is not lost at all. The more you play the game the more exploits you find. The first time you play you have basic exploits like lets say change card and disconnect player, and as you advance you discover change suit. Now there is a chance that when restarting the game when killed by the mafia, you may start with change suit instead of disconnect.
 
 ## _Technical_
 
@@ -178,7 +176,7 @@ The pause page will be the content blur and a simple continue of leave button.
 ### Game concepts and character
 ### Casino website
 ![casino website](assets/mesa-poker-pixilart-update.png)
-### Termninal
+### Terminal
 ![terminal with example](assets/Terminal_w_example.png)
 ### Main character
 ![Main character concept](assets/MainCharacterResized.png)
