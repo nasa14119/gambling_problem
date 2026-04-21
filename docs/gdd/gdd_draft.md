@@ -77,7 +77,7 @@ As you play you need to keep your loans in check because this mafia guys are not
 
 You can't be too greedy and careless of how you cheat because the casino will ban your account. If it sees your account suspicious will make you lose your exploits and money that is in your casino account at the moment.
 
-The idea is that you balance your cheats and money to be the richest before making the mafia boss mad and kill you. Making the game in a way a psychological horror with a tense environment, challenging your poker skills and desition making.    
+The idea is that you balance your cheats and money to be the richest before making the mafia boss want to kill you. Making the game in a way a psychological horror with a tense environment, challenging your poker skills and desition making.    
 
 ### **Atmosphere**
 
@@ -268,56 +268,139 @@ _(Note : These sections can safely be skipped if they&#39;re not relevant, or yo
 _(example)_
 
 ### **Game Flow**
+#### Tutorial
+1. Notification dm got 
+2. Player is presented the main page 
+3. Poker face use (how to see exploit desc)
+4. How much money need's to be pay 
+5. See the bank page (describe the main info of that page) 
+6. First round
 
-1. Player starts in forest
-2. Pond to the left, must move right
-3. To the right is a hill, player jumps to traverse it (&quot;jump&quot; taught)
-4. Player encounters castle - door&#39;s shut and locked
-5. There&#39;s a window within jump height, and a rock on the ground
-6. Player picks up rock and throws at glass (&quot;throw&quot; taught)
-7. … etc.
+#### Game Loop
 
-_(example)_
+1. ¿Continue playing?
+2. round + 1
+3. flop and hand cards 
+4. place bet (if turn)
+5. { end turn event } 
+6. change player { event trigger }  
+7. repeat until all place bet / fold 
+8. turn (repeat place bet)
+9. river (last bets)
+10. determine winner 
+11. give chips 
+12. round end 
+13. restart loop
+
 
 ## _Development_
 
 ---
+### Cache
 
-### **Abstract Classes / Components**
+- Sessions 
+- 50 best runs 
+- ExploitsClassList
+  - meta data (price, level cap, ...rest)
 
-1. BasePhysics
-    1. BasePlayer
-    2. BaseEnemy
-    3. BaseObject
-2. BaseObstacle
-3. BaseInteractable
+### Init 
 
-_(example)_
+Route _start_ game is reach: 
+- new Game(timestamp)
+- abstract addPlayer() _to game_
+- send static assets
+- add player id cookie
+- addPlayer() _to session manager_
 
-### **Derived Classes / Component Compositions**
+### Game Instance
 
-1. BasePlayer
-    1. PlayerMain
-    2. PlayerUnlockable
-2. BaseEnemy
-    1. EnemyWolf
-    2. EnemyGoblin
-    3. EnemyGuard (may drop key)
-    4. EnemyGiantRat
-    5. EnemyPrisoner
-3. BaseObject
-    1. ObjectRock (pick-up-able, throwable)
-    2. ObjectChest (pick-up-able, throwable, spits gold coins with key)
-    3. ObjectGoldCoin (cha-ching!)
-    4. ObjectKey (pick-up-able, throwable)
-4. BaseObstacle
-    1. ObstacleWindow (destroyed with rock)
-    2. ObstacleWall
-    3. ObstacleGate (watches to see if certain buttons are pressed)
-5. BaseInteractable
-    1. InteractableButton
+We need to have game instances. Are created and associated to a player id. For the time being having only one, after we need to create this in a cache or _singleton_ parent of sessions. 
 
-_(example)_
+Is important to say that we need to implement a why to know if game instance must be terminated because is abandoned (no players in it, isPause for to long). So we save a refreshToken and a why to know if is pause. We add a session manager to see all of this. 
+
+Elements: 
+- Session: {isPaused: boolean, refreshToken:string} 
+  - killSession()
+- Deck:class
+  - PokerMaster
+- White list of exploits: string[]
+- attachedExploits: Exploit[]
+- currentLevel: number
+- EventHandler:class(hardReset)
+  - Must have EventHandlerClient
+- Players:class
+  - private players: Payer[] 
+  - addPlayer(playerId)
+  - attachPlayerHook(playerSession)
+  - attachExploitsHook(exploitSession)
+- abstract hardReset()
+
+### Exploit 
+
+Interface required for every exploit:
+- init(eventos?)
+- kill()
+- trigger()
+- playerId: string
+
+Note: might be necessary to have an abstract Deck factory for card manipulation without changing other things. 
+
+Provisional exploits:
+
+- Count cards 
+- Change current hand (to random)
+- See coming card
+- See card played history 
+- Save a card 
+- Disconnect player
+- See the card count 
+- Change to random strong (A, K, Q, J)
+- Change to x card 
+- Change the coming card
+- Change username **(reset casino)** 
+- Change suit
+- See flop 
+- Change the flop
+- See players cards
+- _to be added_
+
+### ExploitsEventManager
+As communication changes and is not in sync with game a different connections and events are made. 
+### Player
+Encapsulates the player info in current session. Might change in the future for multiplayer's sessions. 
+
+Description: 
+- playerId
+- Inventory
+- Bank:class
+- Mafia:class
+- Casino:class
+
+#### Inventory 
+This class is encapsulation of the storage, manage of exploits, and history of them. 
+
+#### Bank 
+This class is encapsulation of the logic of validation of exploit bough and addition to inventory. Also, money and chips storage of player.
+
+#### Mafia 
+This class encapsulates the logic of tracking loan payment. It tracks rounds played and money paid. If the back bet is activated makes the changes needed. It must trigger the hard reset logic. 
+
+#### Casino 
+Tracks exploits used and cooldown of account. Basically if the conditions are meets trigger the soft reset. As we develop we tune the criteria for this to happen.  
+
+### EventManager 
+This is the way to propagate event between children. Thinking of making a factory for creation and mitigation of the parameter drilling. We create and EventManagerClient class that encapsulates the communication of client and server.
+
+### Sessions
+We are going to abstract the creation and attachment of hook to game session. As the hook may disconnect in this way we use a facade to make event manager communicate the event to client. Wen connections are made or restore it wraps the EventClientManager to send the event through the hook. We need to have a _strategy_ base contract for this class so that we add the ExploitsHook and The PlayerHook.
+
+This could be a service detached from the webserver, for independence in case of fault or potential restarts. 
+
+### DB Manager 
+Singleton with the dg connection attach, with the method for saving what's needed in the sql db. 
+
+### Cache 
+The cache needs to be tune but must be the model controller for redis connection for thing as best 50 runs, best run of current players, games instances (in memory), etc.
 
 ## _Graphics_
 
