@@ -397,7 +397,7 @@ We are going to abstract the creation and attachment of hook to game session. As
 This could be a service detached from the webserver, for independence in case of fault or potential restarts. 
 
 ### DB Manager 
-Singleton with the dg connection attach, with the method for saving what's needed in the sql db. 
+Singleton with the db connection attach, with the method for saving what's needed in the sql db. 
 
 ### Cache 
 The cache needs to be tune but must be the model controller for redis connection for thing as best 50 runs, best run of current players, games instances (in memory), etc.
