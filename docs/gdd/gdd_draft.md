@@ -28,6 +28,7 @@ This is a project for the course of _Software Construction and Decision-Making_ 
       * [References](#references)
     * [**Gameplay**](#gameplay)
   * [_Technical_](#_technical_)
+    * [Glossary](#glossary)
     * [**Screens**](#screens)
       * [Title Screen](#title-screen)
       * [Pause](#pause)
@@ -46,7 +47,7 @@ This is a project for the course of _Software Construction and Decision-Making_ 
     * [Computer screen](#computer-screen)
     * [Backend Analytics](#backend-analytics)
     * [Event Driven Architecture](#event-driven-architecture-)
-  * [_*Progress end*_](#_progress-end_)
+      * [Provisional events:](#provisional-events-)
     * [**Controls**](#controls)
     * [**Mechanics**](#mechanics)
   * [_Level Design_](#_level-design_)
@@ -153,10 +154,36 @@ For the TCG aspect, the exploits will work as these cards. Better exploits are h
 
 The game is a roguelike experience, this meaning that losing doesn't restart your progress. In this game you have a casino account that can be banned, which means you lose the money/chips that were in the account, you don't lose the money outside the banned account. Then there is the "real" death of the run part, where the mafia gets mad at you, they get to your house and end you, which means you lose it all your progress. Being how far in the tables you've gone and all of your money. But the tun loss is not for nothing as the discovery of powerful exploits is not lost at all. The more you play the game the more exploits you find. The first time you play you have basic exploits like lets say change card and disconnect player, and as you advance you discover change suit. Now there is a chance that when restarting the game when killed by the mafia, you may start with change suit instead of disconnect.
 
+#### Texas Hold'em 
+This version is play by drawing 2 cards to each player then every player has a turn to place a bet. Then tree cards are turn (that's call the floop). After there is a second round of turn in witch players can raise, pay or fold: 
+    if player raises the bet then other players have a turn again and this loop can be infinite. If the player fold it automatically loses the change to take the current pool of money. Wen the player pays it consider still in the game. 
+The cycle will be done for the turn (4 cards in the table) and the river (5 cards in the table). When all the turn are play and bets the players show their cards and see who has the highest conviction and that players takes all the cash pool. 
+![Poker Rank](assets/poker-rank.jpeg)
+
+full rule book: [rules](https://bicyclecards.com/how-to-play/texas-holdem-poker) \
+video version: [video](https://youtu.be/ep1riICX-KU?si=4E8vLbSnqE0Q2WxZ)
+
 ## _Technical_
 
 ---
+### Glossary
+Hand: current player cards
 
+Round: the amount rounds to the complete game loop. It goes up one when a player is in the screens that ask if you want to continue.
+
+Turn: every time the player is prompted to place a bet. 
+
+Run: defined as the moment the game instance is terminated. 
+
+Back bet: common practice in the gambling world in witch people outside the casino offer you to multiply in some amount your returns. For example, you place a bet for 10k and be offer 3x they will pay you 20k extras if you win. But you could also lose 30k.  
+
+Flop: initial face up of tree cards 
+
+Turn: is the moment there are 4 cards turn in the table 
+
+River: the last card is turn 
+
+Fold: the act of not paying the current bet and losing the money placed 
 ### **Screens**
 
 1. [Title Screen](#title-screen)
@@ -217,31 +244,39 @@ In conclusion, we will save:
 - Total earnings
 
 We could cache some of the users data for the analytics page: 
-- His record / id of best run 
-- His time played 
-- His game played 
-- His recent history (last 20 games)
+- His record of best run 
+- His time played in general
+- His game started
+- His recent history (last 20 games in summary)
 
-To see if leaderboard table must be reordered / updated in page we cache the top 50 players to only check if the current run is better that those. The other time we check for leaderboard position if that run was a personal record. 
+To see if leaderboard table must be reordered or updated for the page of the same name. "e cache the top 50 players to only check if the current run is better that those. The other time we check for leaderboard position if that run was a personal record. 
 
 ### Event Driven Architecture 
 
-This is because we want a flexible system for constant change in its logic. Exploits are hearing all that is happening, also the bank and the database controller. Exploits might change the deck or the player. The bank object is the one that check if the exploit can be bought and applied the changes. As the design of the system matures the consumers and reactors are going to be assigned. 
+This is because we want a flexible system for constant change in its logic. Exploits are hearing all that is happening, also the bank and the database controller, and others. Exploits might change the deck or the player attributes. The bank object is the one that check if the exploit can be bought and applied the changes.
 
-Provisional events: 
+#### Provisional events: 
+This can be extended if necessary. 
+
+Game Event
 - turn ended 
 - hard reset 
 - soft reset 
-- leave table 
-- change player 
+- withdraw chips
+- player change 
 - deck change
 - time exceeded _(experimental)_
-- buying of exploit attempt
-- exploit used 
+- buy exploit attempt 
+- winner assigned 
+- change of round
+- prompt:continue 
+- backed bet status change
 
-## _*Progress end*_
-
----
+Exploit Events 
+- exploit trigger 
+- exploit used
+- exploit success bought
+- exploit was kill
 
 ### **Controls**
 
@@ -249,7 +284,15 @@ Our game is base in click events the only need of a key press event (as this mom
 
 ### **Mechanics**
 
-Are there any interesting mechanics? If so, how are you going to accomplish them? Physics, algorithms, etc.
+The key factor is that we are making the already fun game of poker and adding some twists. The idea is for players constantly try new strategies and different routes to progress. Also track their progress and contrast.  
+
+The game starts as normal poker with 2 random exploits unlocked. The way to progress is by winning rounds a get to certain threshold in money. If you get to them, you can level to tables with higher bitting so you win much more pear turn and unlock new exploits. 
+
+The limitation is that you change table and only can take one exploit with you. This as it add the need to buy the exploits again. The casino instance keeps track of how much exploits are used and the rounds played. If you trigger a soft reset you lose the chips and the exploits that you were using. The difference is that the money in the is safe so you could instantly buy them back and also use different kind of exploits in the beginning.  
+
+But if the game was just to continue playing without purpose it would be boring. The other twist is the mafia; you need to keep in check your loans by withdrawing ang paying. It determines the amount of rounds you have to pay (might vary in some internal logic as current level). If the loans are not paid in time the game ends because they go to you house and kill you.   
+
+The meta part is that you actually feel like you are doing the complex gambling. You could evaluate your current strategies, compare them with other players, see what exploits are useful, check if you are behind.  
 
 ## _Level Design_
 
@@ -290,9 +333,9 @@ _(example)_
 #### Tutorial
 1. Notification dm got 
 2. Player is presented the main page 
-3. Poker face use (how to see exploit desc)
-4. How much money need's to be pay 
-5. See the bank page (describe the main info of that page) 
+3. Poker face use (how to see exploit description)
+4. Display of money that must be paid
+5. See the bank page (describe the main info of that page like who much money they have) 
 6. First round
 
 #### Game Loop
@@ -304,20 +347,21 @@ _(example)_
 5. { end turn event } 
 6. change player { event trigger }  
 7. repeat until all place bet / fold 
-8. turn (repeat place bet)
-9. river (last bets)
+8. turn (use the Bet state machine)
+9. river (use the Bet state machine)
 10. determine winner 
 11. give chips 
 12. round end 
 13. restart loop
 
-
+![Game loop diagram](assets/game-loop.png)
 ## _Development_
 
 ---
 ### Cache
 
-- Sessions 
+- Sessions
+  - Attributes of the run
 - 50 best runs 
 - ExploitsClassList
   - meta data (price, level cap, ...rest)
@@ -366,25 +410,57 @@ Note: might be necessary to have an abstract Deck factory for card manipulation 
 
 Provisional exploits:
 
-- Count cards 
-- Change current hand (to random)
-- See coming card
-- See card played history 
-- Save a card 
-- Disconnect player
-- See the card count 
-- Change to random strong (A, K, Q, J)
-- Change to x card 
-- Change the coming card
-- Change username **(reset casino)** 
-- Change suit
-- See flop 
-- Change the flop
-- See players cards
-- _to be added_
+- No reshuffle \
+Disables that the card are shuffle on every round change. 
+
+- Count cards \
+Like in blackjack. it is not useful without the no shuffle exploit. 
+
+- Change current hand (to random) \
+Player hand redraw. 
+
+- See coming card \
+Peak the current deck cards array
+
+- See card played history \
+Save and stack of all the cards played. 
+
+- Save a card \
+Draws card to change current create exploit to use the card that was picked by user
+
+- Remove player \
+Remove a player from the players array.  
+
+- Disconnect player \
+Mark player as disconnected. Overwrite the _change turn_ method to skip player in the current round only.
+
+- Change to random strong (A, K, Q, J) \
+Pick random card in that range then update the deck to that 
+
+- Change to x card \
+Put that card in players hand and trigger event to check if card was already played. 
+
+- Change the coming card \
+Change the deck card to x
+
+- Change username \
+Reset the casino awareness 
+
+- Change suit \
+Change the suit of the player card or the coming card
+
+- See flop \
+See the 3 card that will be placed at the beginning
+
+- See a player's cards \
+Pick a player and see their current hand
+
+- Trigger full view \
+See all the players cards all the time. 
 
 ### ExploitsEventManager
-As communication changes and is not in sync with game a different connections and events are made. 
+Facade that abstract the hook logic and session attachment to communicate the events in the server to client. In this  
+
 ### Player
 Encapsulates the player info in current session. Might change in the future for multiplayer's sessions. 
 
