@@ -87,7 +87,7 @@ This is a project for the course of _Software Construction and Decision-Making_ 
 
 A high-stakes poker roguelike where your money is your life. Build a deck of illegal exploits that let you manipulate cards, cheat the table, and outplay both the casino and the mafia. Take risky missions, break the rules, and push your luck but , try not to get banned, but if you lose it all, you don’t just go broke, you die.
 
-We are trying to make this an immersive experience. We achieve this being a meta game. You are the main character that it's playing online poker. The consequence of your desitions fell real to you. The game will be a typical desktop screen in where you can receive emails, DMs. You use a TUI in your terminal and use your browser to play. 
+We are trying to make this an immersive experience. We achieve this being a meta game. You are the main character that it's playing online poker. The consequence of your desitions fell real to you. The game will be displayed as a typical desktop screen in where you can receive emails, DMs. You use a TUI in your terminal and use your browser to play. 
 
 #### Description
 
@@ -140,7 +140,7 @@ These movies is an inspiration of how to build a scary experience with meta elem
 
 ### **Gameplay**
 
-As previously mentioned the main objective is to make the most amount of money without dying while also being careful in how you use exploits. In practice, you have a limited number of turns that can be increased if you play your cards right. 
+As previously mentioned the main objective is to make the most amount of money without dying while also being careful in how you use exploits. In practice, you have a limited number of turns that can be increased if you play your cards right. The way you play is like handling a casino website where you can play texas held'em poker. You basically click buttons if you want to stay, fold, raise, etc. After your decision the game continues. On your turn, you can also click the exploits you have at the risk of getting your account banned and losing your chips.
 
 Leveling is the act of changing tables that resets the exploits you have but increase the money you win in each turn. And the exploits available changes base in the table. You also need to make synergies for example if you are using the exploit to change the card, you should check the history of cards played so you don't change it to one already played thus being caught.  Or if you are counting cards is a good idea that when is high you can see the next flush of cards. 
 
@@ -296,40 +296,36 @@ The meta part is that you actually feel like you are doing the complex gambling.
 
 ## _Level Design_
 
----
-
-_(Note : These sections can safely be skipped if they&#39;re not relevant, or you&#39;d rather go about it another way. For most games, at least one of them should be useful. But I&#39;ll understand if you don&#39;t want to use them. It&#39;ll only hurt my feelings a little bit.)_
-
+In Gambling Problem the different poker tables function as the different levels. The starting table the Green Mat Table is the perfect place to learn how to play Texas Hold'em poker (if the player doesn't know how it works) and to get acquainted with the exploit cards they are dealt. 
 ### **Themes**
 
-1. Forest
+1. Table 1 (green mat)
     1. Mood
-        1. Dark, calm, foreboding
+        1. Calm and inviting (introduction table to poker)
+        2. Still tense to not lose all your money
     2. Objects
         1. _Ambient_
-            1. Fireflies
-            2. Beams of moonlight
-            3. Tall grass
+            1. Other players
+            2. Chill house/electronic music
         2. _Interactive_
-            1. Wolves
-            2. Goblins
-            3. Rocks
-2. Castle
+            1. Cards
+            2. Exploits
+            3. Buttons (raise, stay, fold, etc)
+2. Table 2 (blue mat)
     1. Mood
-        1. Dangerous, tense, active
+        1. Dangerous, tense
+        2. Players are not friendly
     2. Objects
         1. _Ambient_
-            1. Rodents
-            2. Torches
+            1. Other players feel more experienced
+            2. A more active edm track
             3. Suits of armor
         2. _Interactive_
             1. Guards
             2. Giant rats
             3. Chests
 
-_(example)_
-
-### **Game Flow**
+_(example)_### **Game Flow**
 #### Tutorial
 1. Notification dm got 
 2. Player is presented the main page 
