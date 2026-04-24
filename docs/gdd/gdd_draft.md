@@ -87,7 +87,7 @@ This is a project for the course of _Software Construction and Decision-Making_ 
 
 A high-stakes poker roguelike where your money is your life. Build a deck of illegal exploits that let you manipulate cards, cheat the table, and outplay both the casino and the mafia. Take risky missions, break the rules, and push your luck but , try not to get banned, but if you lose it all, you don’t just go broke, you die.
 
-We are trying to make this an immersive experience. We achieve this being a meta game. You are the main character that it's playing online poker. The consequence of your desitions fell real to you. The game will be displayed as a typical desktop screen in where you can receive emails, DMs. You use a TUI in your terminal and use your browser to play. 
+We are trying to make this an immersive experience. We achieve this being a meta game. You are the main character that it's playing online poker. The consequence of your desitions fell real to you. The game will be displayed as a typical desktop screen in where you can receive emails, DMs. You use a TUI (terminal user interface) and use your browser to play. 
 
 #### Description
 
@@ -284,19 +284,79 @@ Our game is base in click events the only need of a key press event (as this mom
 
 ### **Mechanics**
 
-The key factor is that we are making the already fun game of poker and adding some twists. The idea is for players constantly try new strategies and different routes to progress. Also track their progress and contrast.  
+The key factor is that we are making the already fun game of Texas hold'em and adding some twists. The idea is for players constantly try new strategies and different routes to progress. They can compare their result with other players and change them accordingly.  
 
-The game starts as normal poker with 2 random exploits unlocked. The way to progress is by winning rounds a get to certain threshold in money. If you get to them, you can level to tables with higher bitting so you win much more pear turn and unlock new exploits. 
+The game starts as normal poker with 2 random exploits unlocked. The way to progress is by winning rounds a get to certain threshold of money. If you get to them, you can level to higher betting tables in wish you win much more pear turn and unlock new exploits. 
 
-The limitation is that you change table and only can take one exploit with you. This as it add the need to buy the exploits again. The casino instance keeps track of how much exploits are used and the rounds played. If you trigger a soft reset you lose the chips and the exploits that you were using. The difference is that the money in the is safe so you could instantly buy them back and also use different kind of exploits in the beginning.  
+The limitation is that you change table and only can take one exploit with you. This as it add the need to buy the exploits again. The casino instance keeps track of how much exploits and how much round have been played. When you use to many exploits in small amount of turn you will trigger a soft reset. If you trigger a soft reset you lose the chips and the exploits that you were using until that point. With the difference is that the money in the is safe so you could instantly buy them back and also use different kind of exploits in the beginning.  
 
-But if the game was just to continue playing without purpose it would be boring. The other twist is the mafia; you need to keep in check your loans by withdrawing ang paying. It determines the amount of rounds you have to pay (might vary in some internal logic as current level). If the loans are not paid in time the game ends because they go to you house and kill you.   
+But if the game was just to continue playing without purpose it would be boring. The other twist is the mafia; you need to keep in check your loans by withdrawing ang paying. The interest are really high so is a real challenge. The mafia also determines the amount of rounds you have to pay (might vary in some internal logic depending on the current level). If the loans are not paid in time the game ends because they go to you house and kill you.   
 
-The meta part is that you actually feel like you are doing the complex gambling. You could evaluate your current strategies, compare them with other players, see what exploits are useful, check if you are behind.  
+The meta part is that you actually feel like you are doing the complex gambling. You could evaluate your current strategies, compare them with other players, see what exploits are useful, check if you are behind. It feels not different to the real deal. 
+
+### Exploit
+
+Interface required for every exploit:
+- init(events[])
+- kill()
+- trigger()
+- playerId: string
+Exploits are divided in low, high and critical in that order.  
+
+Provisional exploits:
+- No reshuffle [ high ] \
+  Disables that the card are shuffle on every round change.
+
+- Count cards [ low ] \
+  Like in blackjack. it is not useful without the no shuffle exploit.
+
+- Change current hand random [ high ] \
+  Player hand redraw.
+
+- See coming card [ high ] \
+  Peak the current deck cards array
+
+- See card played history [ low ] \
+  Save and stack of all the cards played.
+
+- Save a card [ critical ] \
+  Draws card to change current create exploit to use the card that was picked by user
+
+- Remove player [ critical ] \
+  Remove a player from the players array.
+
+- Disconnect player [ high ] \
+  Mark player as disconnected. Overwrite the _change turn_ method to skip player in the current round only.
+
+- Change to random strong (A, K, Q, J) [ high ] \
+  Pick random card in that range of high cards then update the deck to that
+
+- Change to x card [ critical ] \
+  Put that card in players hand and trigger event to check if card was already played.
+
+- Change the coming card [ high ] \
+  Change the deck card to x
+
+- Change username [ critical ] \
+  Reset the casino awareness
+
+- Change suit [ high ] \
+  Change the suit of the player card or the coming card
+
+- See flop [ low ] \
+  See the 3 card that will be placed at the beginning
+
+- See a player's cards [ high ] \
+  Pick a player and see their current hand
+
+- Trigger full view [ critical ] \
+  See all the players cards all the time.
+
 
 ## _Level Design_
 
 In Gambling Problem the different poker tables function as the different levels. The starting table the Green Mat Table is the perfect place to learn how to play Texas Hold'em poker (if the player doesn't know how it works) and to get acquainted with the exploit cards they are dealt. 
+
 ### **Themes**
 
 1. Table 1 (green mat)
@@ -336,6 +396,8 @@ _(example)_### **Game Flow**
 
 #### Game Loop
 
+![Game Loop diagram ](assets/game-loop.png)
+##### Poker loop
 1. ¿Continue playing?
 2. round + 1
 3. flop and hand cards 
@@ -350,7 +412,7 @@ _(example)_### **Game Flow**
 12. round end 
 13. restart loop
 
-![Game loop diagram](assets/game-loop.png)
+![Poker loop diagram](assets/poker-loop.png)
 ## _Development_
 
 ---
@@ -379,83 +441,27 @@ Is important to say that we need to implement a why to know if game instance mus
 
 Elements: 
 - Session: {isPaused: boolean, refreshToken:string} 
-  - killSession()
+  - killSession() : void
 - Deck:class
   - PokerMaster
 - White list of exploits: string[]
 - attachedExploits: Exploit[]
 - currentLevel: number
 - EventHandler:class(hardReset)
-  - Must have EventHandlerClient
+  - AttachEventHandlerClient(): never
 - Players:class
   - private players: Payer[] 
-  - addPlayer(playerId)
-  - attachPlayerHook(playerSession)
-  - attachExploitsHook(exploitSession)
-- abstract hardReset()
-
-### Exploit 
-
-Interface required for every exploit:
-- init(eventos?)
-- kill()
-- trigger()
-- playerId: string
-
-Note: might be necessary to have an abstract Deck factory for card manipulation without changing other things. 
-
-Provisional exploits:
-
-- No reshuffle \
-Disables that the card are shuffle on every round change. 
-
-- Count cards \
-Like in blackjack. it is not useful without the no shuffle exploit. 
-
-- Change current hand (to random) \
-Player hand redraw. 
-
-- See coming card \
-Peak the current deck cards array
-
-- See card played history \
-Save and stack of all the cards played. 
-
-- Save a card \
-Draws card to change current create exploit to use the card that was picked by user
-
-- Remove player \
-Remove a player from the players array.  
-
-- Disconnect player \
-Mark player as disconnected. Overwrite the _change turn_ method to skip player in the current round only.
-
-- Change to random strong (A, K, Q, J) \
-Pick random card in that range then update the deck to that 
-
-- Change to x card \
-Put that card in players hand and trigger event to check if card was already played. 
-
-- Change the coming card \
-Change the deck card to x
-
-- Change username \
-Reset the casino awareness 
-
-- Change suit \
-Change the suit of the player card or the coming card
-
-- See flop \
-See the 3 card that will be placed at the beginning
-
-- See a player's cards \
-Pick a player and see their current hand
-
-- Trigger full view \
-See all the players cards all the time. 
+  - addPlayer(playerId) : never
+  - attachPlayerHook(playerSession): never
+  - attachExploitsHook(exploitSession): never
+- abstract hardReset(): void
+- toJson(): JSONString
+  * So that we can save the game state in db
 
 ### ExploitsEventManager
-Facade that abstract the hook logic and session attachment to communicate the events in the server to client. In this  
+Encapsulates the event handling (producers and consumers), it has a set of event keywords with its consumers attach with a callback to react to it. 
+
+Must have a method so that we can attach the event client facade that communicates the events to the client instance of the game. 
 
 ### Player
 Encapsulates the player info in current session. Might change in the future for multiplayer's sessions. 
@@ -480,7 +486,9 @@ This class encapsulates the logic of tracking loan payment. It tracks rounds pla
 Tracks exploits used and cooldown of account. Basically if the conditions are meets trigger the soft reset. As we develop we tune the criteria for this to happen.  
 
 ### EventManager 
-This is the way to propagate event between children. Thinking of making a factory for creation and mitigation of the parameter drilling. We create and EventManagerClient class that encapsulates the communication of client and server.
+This is the way to propagate event between children. Thinking of making a factory for creation and mitigation of the parameter drilling. 
+
+We create and EventManagerClient class that encapsulates the communication of client and server, acting as a facade for the webhook and session logic.
 
 ### Sessions
 We are going to abstract the creation and attachment of hook to game session. As the hook may disconnect in this way we use a facade to make event manager communicate the event to client. Wen connections are made or restore it wraps the EventClientManager to send the event through the hook. We need to have a _strategy_ base contract for this class so that we add the ExploitsHook and The PlayerHook.
@@ -615,3 +623,12 @@ _(define the main activities and the expected dates when they should be finished
 8. design music
 
 _(example)_
+
+## Provisional Stack 
+Our project is a monorepo manage by turbo repo, its primary language will be TypeScript in a node environment.
+
+We are thinking of having a cache build with redis that is a key value database. It gave us flexibility to save JSON data as needed. 
+
+Have a frontend build with an SPA React application. This allows us to have a state managed by zustand that will be connected to the backend via Webhook. The Webhook connection will be an event manager that the React components can ack upon. For necessary routing and server rendering will be using TankStackRouter. 
+
+For long term database we have a mysql instance that will connect with drizzle orm to a express server that manage additional logic.
