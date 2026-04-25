@@ -358,7 +358,7 @@ Provisional exploits:
 In Gambling Problem the different poker tables function as the different levels. The starting table the Green Mat Table is the perfect place to learn how to play Texas Hold'em poker (if the player doesn't know how it works) and to get acquainted with the exploit cards they are dealt. 
 
 ### **Themes**
-
+The game is simulating an online casino so the levels and themes are going to be casino themed, so there are going to be different tables, with chairs for and chips for decoration
 1. Table 1 (green mat)
     1. Mood
         1. Calm and inviting (introduction table to poker)
@@ -366,24 +366,99 @@ In Gambling Problem the different poker tables function as the different levels.
     2. Objects
         1. _Ambient_
             1. Other players
-            2. Chill house/electronic music
+            2. Pristine green mat, standard issue for poker
+            3. Poker Chair
+            4. Poker Chips
+            5. Other player's portraits (NPCs)
         2. _Interactive_
             1. Cards
             2. Exploits
             3. Buttons (raise, stay, fold, etc)
+            4. Dms for missions
+            5. Terminal
+      3. Sound
+         1. _Ambient_
+            1. Chill house/edm
+            2. player chatter (mumbling)
+         2. _Interactive_sounds_
+            1. Heartbeat
+            2. Footsteps
+           
 2. Table 2 (blue mat)
     1. Mood
         1. Dangerous, tense
         2. Players are not friendly
     2. Objects
         1. _Ambient_
-            1. Other players feel more experienced
-            2. A more active edm track
-            3. Suits of armor
+            1. Blue mat
+            2. The mat is a bit used
+            3. Poker Chair
+            4. Poker Chips
+            5. Other player's portraits (NPCs)
         2. _Interactive_
-            1. Guards
-            2. Giant rats
-            3. Chests
+            1. Cards
+            2. Exploits
+            3. Buttons (raise, stay, fold, etc)
+            4. Dms for missions
+            5. Terminal
+   3. Sound
+         1. _Ambient_
+             1. More active edm song, drops the house elements
+             2. player chatter (mumbling)
+         2. _Interactive_sounds_
+             1. Heartbeat
+             2. Footsteps
+3. Table 3 (red mat)
+    1. Mood
+        1. Players are out for your head
+        2. Gloomy players, they want your money
+    2. Objects
+        1. _Ambient_
+            1. Red table poker mat
+            2. Less illumination, for tense ambient
+            3. Very used an weathered table and mat
+            4. Poker Chair
+            5. Poker Chips
+            6. Other player's portraits (NPCs)
+        2. _Interactive_
+            1. Cards
+            2. Exploits
+            3. Buttons (raise, stay, fold, etc)
+            4. Dms for missions
+            5. Terminal
+   3. Sound
+      1. _Ambient_
+            1. High tempo EDM Track
+            2. Tense player silence (not technically a sound but used for unnerving the player)
+      2. _Interactive_sounds_
+            1. Heartbeat
+            2. Footsteps
+3. Table 4 (black mat: Mafia boss )
+    1. Mood
+        1. Eerie
+        2. Last stand
+        3. Your life is on the line
+    2. Objects
+        1. _Ambient_
+            1. Black mat, with mafia decoration
+            2. Money on the table
+            3. Poker Chips
+            4. Poker chair
+            5. Other player's portraits (NPCs)
+        2. _Interactive_
+            1. Cards
+            2. Exploits
+            3. Buttons (raise, stay, fold, etc)
+            4. Dms for missions
+            5. Terminal
+      3. Sound
+         1. _Ambient_
+            1. Combination of all tracks and motifs, signifying the end
+            2. Boss evil laughs
+         2. _Interactive_sounds_
+            1. Heartbeat
+            2. Footsteps
+               
 
 _(example)_### **Game Flow**
 #### Tutorial
@@ -516,62 +591,46 @@ Well-designed feedback, both good (e.g. leveling up) and bad (e.g. being hit), a
 ### **Graphics Needed**
 
 1. Characters
-    1. Human-like
-        1. Goblin (idle, walking, throwing)
-        2. Guard (idle, walking, stabbing)
-        3. Prisoner (walking, running)
-    2. Other
-        1. Wolf (idle, walking, running)
-        2. Giant Rat (idle, scurrying)
-2. Blocks
-    1. Dirt
-    2. Dirt/Grass
-    3. Stone Block
-    4. Stone Bricks
-    5. Tiled Floor
-    6. Weathered Stone Block
-    7. Weathered Stone Bricks
+    1. Human
+        1. Main character
+        2. Random online players (portraits, profile picture-like)
+        3. Mafia boss
+ 
+2. Poker Tables
+    1. Red used and weathered table
+    2. Green mat pristene table
+    3. Blue mat almost new table
+    4. Black mat Mafia table
 3. Ambient
-    1. Tall Grass
-    2. Rodent (idle, scurrying)
-    3. Torch
-    4. Armored Suit
-    5. Chains (matching Weathered Stone Bricks)
+    1. Poker chips
+    2. Poker chairs or normal chairs
+    3. Loose money bills
+    4. Stacked money bills
+    5. Player Portrais (goes in hand with the character assets)
     6. Blood stains (matching Weathered Stone Bricks)
-4. Other
-    1. Chest
-    2. Door (matching Stone Bricks)
-    3. Gate
-    4. Button (matching Weathered Stone Bricks)
-
-_(example)_
-
-
 ## _Sounds/Music_
 
 ---
 
 ### **Style Attributes**
+The music that is going to be used is going to be in the Electronic genre, with subgenres such as house and EDM. As this is an online casino with hacker exploits, this fits the vibe. The instruments that are going to bu used are mostly drum machines, bass synths, and paino synths, to really get that dystopian/Hacker/Exciting vibe when needed. No specific key is going to be used, but it will be centered around one, so that in the final poker match, the motifs of previous levels can be heard, to get a throwback.
 
-Again, consistency is key. Define that consistency here. What kind of instruments do you want to use in your music? Any particular tempo, key? Influences, genre? Mood?
-
-Stylistically, what kind of sound effects are you looking for? Do you want to exaggerate actions with lengthy, cartoony sounds (e.g. mario&#39;s jump), or use just enough to let the player know something happened (e.g. mega man&#39;s landing)? Going for realism? You can use the music style as a bit of a reference too.
-
- Remember, auditory feedback should stand out from the music and other sound effects so the player hears it well. Volume, panning, and frequency/pitch are all important aspects to consider in both music _and_ sounds - so plan accordingly!
+Effects as card shuffling, moving cards, electronic buzzes, chips stacking and many others are going to be used. The ones related to the casino aspect of the game are going to be used to immerse you in the world of online gambling, while the ones relating to the hecker world are more focused on electronic buzzes and notifications, things you mght hear in a computer. For the Immersive game part, we'll have footsteps play in the backround to make the tention rise as maybe the mafia is at your doorstep and heartbeats when you are close to losing.
 
 ### **Sounds Needed**
 
 1. Effects
-    1. Soft Footsteps (dirt floor)
-    2. Sharper Footsteps (stone floor)
-    3. Soft Landing (low vertical velocity)
-    4. Hard Landing (high vertical velocity)
-    5. Glass Breaking
-    6. Chest Opening
-    7. Door Opening
+    1. Cards shuffling
+    2. Cards dealt
+    3. Player folds
+    4. Player raises
+    5. Cards turning
+    6. Explit used (some electronic buzz)
+    7. Player disconnect (Exploit based)
+    8. Footsteps
 2. Feedback
-    1. Relieved &quot;Ahhhh!&quot; (health)
-    2. Shocked &quot;Ooomph!&quot; (attacked)
+    1. Heartbeat (louder if about to lose); (Winning/Losing state)
+    2. Coins dropped; (Gained money)
     3. Happy chime (extra life)
     4. Sad chime (died)
 
@@ -579,14 +638,11 @@ _(example)_
 
 ### **Music Needed**
 
-1. Slow-paced, nerve-racking &quot;forest&quot; track
-2. Exciting &quot;castle&quot; track
-3. Creepy, slow &quot;dungeon&quot; track
-4. Happy ending credits track
-5. Rick Astley&#39;s hit #1 single &quot;Never Gonna Give You Up&quot;
-
-_(example)_
-
+1. Chill house/EDM track
+2. Edm track 120 bpm major key 
+3. EDM track 150 bpm other major key
+4. EDM track 150 bpm minor relative key to the first track
+5. House track for credits;
 
 ## _Schedule_
 
