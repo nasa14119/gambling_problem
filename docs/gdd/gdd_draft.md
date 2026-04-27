@@ -185,6 +185,14 @@ This version is play by drawing 2 cards to each player then every player has a t
     If the player fold it automatically loses the change to take the current pool of money. Wen the player pays it consider still in the game.
     If a player pay the cash pool increase and has a chance to win it. 
 The cycle will be done for the _turn_ (4 cards in the table) and the _river_ (5 cards in the table). When all the turn are play and bets made the players show their cards and see who has the highest conviction between the table and their cards. The player who has the highest takes all the cash pool. 
+ You’re very close—just needs some cleanup and a few rule clarifications. Here’s a **corrected and polished version in English**:
+
+---
+
+In Texas Hold’em poker, betting follows a structured sequence where one player can place the first bet, and the others must respond by either calling (matching the current bet), raising (increasing the bet), or folding (leaving the hand). A key rule is that any raise must be at least as large as the previous increase; for example, if a player bets $10 and another raises to $30 (a $20 increase), the next player must raise by at least $20 more (making the total bet $50). In no-limit games, players can raise up to all of their chips (all-in), and there is no limit to the number of raises as long as players have chips. A betting round ends when all remaining players have either matched the highest bet or folded, and all bets are collected into the pot, which is awarded to the winner.
+
+There are two main betting structures: no-limit and limit poker. In no-limit, players can raise freely following the minimum raise rule, with no cap on the number of raises. In limit poker, however, there is a fixed number of raises per round, typically capped at four (bet, raise, re-raise, and final raise). Additionally, the bet size is fixed: in the first two rounds (preflop and flop), players use a smaller bet size, and in the last two rounds (turn and river), the bet size doubles. For example, if the small bet is $2, then in the later rounds the minimum raise would be $4.
+
 ![Poker Rank](assets/poker-rank.jpeg)
 
 full rule book: [rules](https://bicyclecards.com/how-to-play/texas-holdem-poker) \
