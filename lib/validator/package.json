@@ -1,0 +1,14 @@
+{
+  "name": "@repo/validator",
+  "exports": {
+    "./user-validator": "./user-validator.ts",
+    "./db-env": "./db-env.ts"
+  },
+  "scripts": {
+    "test": "vitest"
+  },
+  "dependencies": {
+    "vitest": "^4.1.5",
+    "zod": "^4.3.6"
+  }
+}

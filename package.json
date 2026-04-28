@@ -1,0 +1,45 @@
+{
+  "name": "gambling-problem",
+  "version": "0.0.0",
+  "author": "Nicolas Amaya - Pablo Paz",
+  "description": "card game",
+  "scripts": {
+    "init": "cat bin/init.sh | sh",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:server": "turbo run dev --filter=server",
+    "db:start": "turbo run db:start --filter=db",
+    "db:stop": "turbo run db:stop --filter=db",
+    "db:clear": "turbo run db:clear --filter=db",
+    "db:restart": "turbo run db:restart --filter=db",
+    "db:migration": "turbo run db:migration --filter=db",
+    "check-types": "turbo run check-types"
+  },
+  "devDependencies": {
+    "turbo": "^2.9.6",
+    "typescript": "5.9.2"
+  },
+  "workspaces": [
+    "apps/*",
+    "lib/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nasa14119/card_game.git"
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "private": true,
+  "keywords": [],
+  "license": "ISC",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "homepage": "https://github.com/nasa14119/card_game#readme",
+  "bugs": {
+    "url": "https://github.com/nasa14119/card_game/issues"
+  },
+  "packageManager": "npm@11.6.2"
+}

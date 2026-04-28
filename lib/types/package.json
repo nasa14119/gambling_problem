@@ -1,0 +1,16 @@
+{
+  "name": "@repo/types",
+  "exports": {
+    "./server": "./server.ts",
+    "./client": "./client.ts",
+    "./db": "./db.ts",
+    ".": "./app.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@repo/ts-config": "*"
+  },
+  "type": "module"
+}

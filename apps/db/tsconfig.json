@@ -1,0 +1,10 @@
+{
+  "extends": "@repo/ts-config",
+  "compilerOptions": {
+    "paths": {
+      "env": ["./env.ts"],
+      "@schemas": ["./drizzle/schema.ts"]
+    },
+    "types": ["node"]
+  }
+}

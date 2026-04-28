@@ -1,0 +1,27 @@
+{
+  "name": "db",
+  "version": "0.0.0",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "db:start": "docker compose up -d",
+    "db:stop": "docker compose stop",
+    "db:clear": "docker compose down",
+    "db:restart": "docker compose restart",
+    "db:pull": "npx drizzle-kit pull",
+    "db:migration": "cat ./migration/init.sh | sh"
+  },
+  "type": "module",
+  "dependencies": {
+    "drizzle-orm": "^0.45.2",
+    "mysql2": "^3.22.3",
+    "redis": "^5.12.1",
+    "@repo/validator": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "drizzle-kit": "^0.31.10",
+    "@repo/ts-config": "*"
+  }
+}

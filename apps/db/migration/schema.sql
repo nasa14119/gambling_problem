@@ -1,0 +1,3 @@
+CREATE TABLE test3 (
+  name VARCHAR(10) NOT NULL PRIMARY KEY
+); 

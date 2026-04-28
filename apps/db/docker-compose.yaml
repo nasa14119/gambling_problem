@@ -1,0 +1,24 @@
+networks:
+  app-network-public:
+    driver: bridge
+name: gambling-problem-db
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    env_file:
+      - mysql.env
+    networks:
+      - app-network-public
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - ${PWD}/data/mysql:/var/lib/mysql
+  redis:
+    image: redis:latest
+    container_name: cache-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network-public
