@@ -94,7 +94,7 @@ We are trying to make this an immersive experience. We achieve this being a meta
 
 #### Description
 
-For some reason you get the contact of some guys that are infiltrated in an online casino. They way they operate is that they lend you money and give you access to P&oslash;KER_FACE. This TUI (Terminal User Interface) gives you many exploits (that are not cheap) that increase your chances of becoming a millionaire. 
+For some reason, you get the contact of some guys who are infiltrated in an online casino. The way they operate is that they lend you money and give you access to PøKER_FACE. This TUI (Terminal User Interface) gives you many exploits (that are not cheap) that increase your chances of becoming a millionaire.
 
 As you play you need to keep your loans in check because this mafia guys are not messing around, and they will kill you. They also can give you access to higher betting tables, but the only problem is that when you change tables you leave behind the exploits you already bought, except for one of your choice. Other way to earn more money is that they [the mafia], may offer you to back your bet 2x, 3x, 4x, depending, but remember that in that same proportions you can lose, as sorts of missions.
 
@@ -150,7 +150,7 @@ Turn: every time the player is prompted to place a bet.
 
 Run: defined as the moment the game instance is terminated.
 
-Back bet: common practice in the gambling world in witch people outside the casino offer you to multiply in some amount your returns. For example, you place a bet for 10k and be offer 3x they will pay you 20k extras if you win. But you could also lose 30k.
+Back bet: common practice in the gambling world in witch people outside the casino offer you to multiply, in some amount, your returns. For example, you place a bet for 10k and be offer 3x they will pay you 20k extras if you win. But you could also lose 30k instead of 10k.
 
 Flop: initial face up of tree cards
 
@@ -162,38 +162,39 @@ River: the last card is turn
 
 Fold: the act of not paying the current bet and losing the money placed
 
-Blind: the minimal bet to play, is pay before you can see your cards
+Blind: the minimal bet to play. Is pay before you can see your cards
 
 ### **Gameplay**
 
-As previously mentioned the main objective is to make the most amount of money without dying, climbing the different tables, while also being careful in how you use exploits. In practice, you have a limited number of turns that can be increased if you play your cards right. The way you play is in a casino website where you can play Texas hold'em poker. Before you start the round add money to the table to bet and pay the blind. After you can now buy exploits or use them in you after you got your cards. You play normally with the only limitation is that after this point in your turn you can't buy more exploits.  
+As previously mentioned the main objective is to make the most amount of money without dying, climbing the different tables, while also being careful in how you use exploits. In practice, you have a limited number of turns that can be increased if you play your cards right. The way you play is on a casino website where you can play Texas hold'em poker. Before you start the round add money to the table to bet and pay the blind. After you can now buy exploits or use them in you after you got your cards. You play normally with the only limitation is that after this point in your turn you can't buy more exploits.  
 
 
-Leveling is the act of changing tables that resets the exploits you have bought, letting you keep one, also increasing the blind and the possibility to win more each round. And also, the exploits available changes based in the table and rank, meaning the higher you get, the more powerful exploits you get to "keep", meaning you can buy them in lower tables in future runs. There are synergies between exploits, for example if you are using the exploit to change the card, you should check the cards that are coming so you don't change it to one that is already in play thus being caught.
+Leveling is the act of changing tables that resets the exploits you have bought, letting you keep one, also increasing the blind and the possibility to win more each round. And also, the exploits available changes based in the table and rank, meaning the higher you get, the more powerful exploits you get to "keep unlocked", meaning you can buy them in lower tables in future runs. There are synergies between exploits, for example if you are using the exploit to change the card, you should check the cards that are coming so you don't change it to one that is already in play thus being caught.
 
 Every game must feel unique and there is no one strategies, is up to you how you manage your resources.
 
-The indicators that you are making mad the mafia boss is that some exploits can start to fail, strange things happening in your game... and then you start hearing things at home, until suddenly they get to you and shut you. That is how you can end your round. 
+The indicators that you are making the mafia boss mad are that some exploits can start to fail; maybe you couldn't see other players' hands in that round... and then you start hearing things at home, until suddenly they get to you and shoot you. That is how you can end your round.
 
-For the casino it should be difficult for you to know if you are being caught thus the tension builds on every turn and before using exploits. 
+For the casino it should be difficult for you to know if you are being caught thus the tension builds on every turn and before using any exploit. 
 
-For the TCG aspect, the exploits will work as _"cards"_. Better exploits are harder to find and have less probability of appearing when winning in a table. Some exploits can have a small chance of disappearing of your exploit deck after being used (usually specified in the exploit description). Each exploit card will have some icon representing what the exploit does.
+For the TCG aspect, the exploits will work as _"cards."_ Better exploits are harder to find and appear in higher betting tables. Each exploit card will have some icon representing what the exploit does.
 
-The game is a roguelike experience, this meaning that losing doesn't restart your progress. In this game you have a casino account that can be banned, which means you lose the money/chips that were in the account. You don't lose the money outside the banned account. Then there is the "real" death of the run part, where the mafia gets mad at you, they get to your house and end you, which means you lose it all your progress. Being how far in the tables you've gone and all of your money. But the tun loss is not for nothing as the discovery of powerful exploits is not lost at all. The more you play the game the more exploits you find. The first time you play you have basic exploits like lets say change card and disconnect player, and as you advance you discover change suit. Now there is a chance that when restarting the game when killed by the mafia, you may start with change suit instead of disconnect.
+The game is a roguelike experience, this meaning that losing doesn't restart your progress. In this game you have a casino account that can be banned, which means you lose the money/chips that were in the account. 
+
+You don't lose the money outside the banned account. Then there is the "real" death of the run, where the mafia gets mad at you, they get to your house and end you, which means you lose it all your progress. Being how far in the tables you've gone and all of your money. 
+
+But the tun loss is not for nothing as the discovery of powerful exploits is not lost at all. The more you play the game the more exploits you find. The first time you play you have basic exploits like lets say change card and disconnect player, and as you advance you discover change suit. Now there is a chance that when restarting the game when killed by the mafia, you may start with change suit instead of disconnect.
 
 #### Texas Hold'em 
-This version is play by drawing 2 cards to each player then every player has a turn to place a bet. Then tree cards are turn (that's call the floop). After there is a second round of turn in witch players can raise, pay or fold: 
-    If player raises the bet then other players have a turn again to raise it more, pay or fold.
-    If the player fold it automatically loses the change to take the current pool of money. Wen the player pays it consider still in the game.
-    If a player pay the cash pool increase and has a chance to win it. 
-The cycle will be done for the _turn_ (4 cards in the table) and the _river_ (5 cards in the table). When all the turn are play and bets made the players show their cards and see who has the highest conviction between the table and their cards. The player who has the highest takes all the cash pool. 
- You’re very close—just needs some cleanup and a few rule clarifications. Here’s a **corrected and polished version in English**:
+This version is play by drawing 2 cards to each player then every player has a turn to place a bet. Betting follows a structured sequence where one player can place the first bet, and the others must respond by either calling (matching the current bet), raising (increasing the bet), or folding (leaving the hand). A key rule is that any raise must be at least as large as the previous increase; for example, if a player bets $10 and another raises to $30 (a $20 increase), the next player must raise by at least $20 more (making the total bet $50). 
 
----
+Then tree cards are turn (that's call the floop). After, there is a second round of turn in witch players can raise, pay or fold.
 
-In Texas Hold’em poker, betting follows a structured sequence where one player can place the first bet, and the others must respond by either calling (matching the current bet), raising (increasing the bet), or folding (leaving the hand). A key rule is that any raise must be at least as large as the previous increase; for example, if a player bets $10 and another raises to $30 (a $20 increase), the next player must raise by at least $20 more (making the total bet $50). In no-limit games, players can raise up to all of their chips (all-in), and there is no limit to the number of raises as long as players have chips. A betting round ends when all remaining players have either matched the highest bet or folded, and all bets are collected into the pot, which is awarded to the winner.
+The cycle will be done for the _turn_ (4 cards in the table) and the _river_ (5 cards in the table). When all the turn are play and bets made the players show their cards and see who has the highest conviction between the table and their cards. The player who has the highest takes all the cash pool.
 
-There are two main betting structures: no-limit and limit poker. In no-limit, players can raise freely following the minimum raise rule, with no cap on the number of raises. In limit poker, however, there is a fixed number of raises per round, typically capped at four (bet, raise, re-raise, and final raise). Additionally, the bet size is fixed: in the first two rounds (preflop and flop), players use a smaller bet size, and in the last two rounds (turn and river), the bet size doubles. For example, if the small bet is $2, then in the later rounds the minimum raise would be $4.
+In no-limit games, players can raise up to all of their chips (all-in), and there is no limit to the number of raises as long as players have chips. A betting round ends when all remaining players have either matched the highest bet or folded, and all bets are collected into the pot, which is awarded to the winner.
+
+In limit poker, however, there is a fixed number of raises per round, typically capped at four (bet, raise, re-raise, and final raise). Additionally, the bet size is fixed: in the first two rounds (preflop and flop), players use a smaller bet size, and in the last two rounds (turn and river), the bet size doubles. For example, if the small bet is $2, then in the later rounds the minimum raise would be $4.
 
 ![Poker Rank](assets/poker-rank.jpeg)
 
@@ -248,44 +249,6 @@ The pause page will be the content blur and a simple continue of leave button.
 ### Computer screen
 ![Computer screen](assets/Computer.png)
 
-### Backend Analytics
-
-For our game the most important aspect is the money earned at the end of the run. Also, how much time it took to do that. We time stamp the start of the run at the server level. The client sends the end of run event to the server. At that moment it takes the stamp and subtracts to the previous one saved, we are aware that this fails to check for pauses or other edge cases, if a more robust implementation is needed can be added later. With the end of run event, the points are saved to the leader board table with the associated user, if logged in, if not it will simply not save the run. This table must be ordered by points in an efficient way. 
-
-The idea is to trigger event that a DB controller is hearing as middleware, for the other analytics, as exploits bought and exploits use. It also works to be the source of truth of the inventory of the player's run. This makes it temper proof. 
-
-We are considering using a cache to save the state of the game in case of disconnections, or in general for games that have not ended and the player wants to continue playing after. From there, build the game instance.  
-
-In the long term database:  
-- Time of the run
-- Exploits bought 
-- Exploits used 
-- Money win in total 
-- Money spend 
-- Total earnings
-- User id
-
-Cache: 
-- Playing games 
-
-Views: 
-- Best 50 players 
-
-User cache:
-- Player record run 
-- Player time played in general
-- Player runs made
-- Player recent history (last 20 games in summary)
-- Playing session
-
-The game will have a trigger where if the runs enters in the top 50 runs, it will update the top 50 runs and insert it in its respective place.
-
-### Event Driven Architecture 
-
-This is because we want a flexible system for constant changes in its logic if ever needed. Exploits are hearing all that is happening, also the bank and the database controller, and others. Exploits might change the deck or the player attributes. 
-
-The bank instance in the Player is the one that checks if the exploit can be bought and will apply the changes at the server side level.
-
 #### Provisional events: 
 This can be extended if necessary. 
 
@@ -311,31 +274,44 @@ Exploit Events
 
 ### **Controls**
 
-Our game is based in click events the only need of a key press event (as this moment) is for the pause screen. There will be buttons for the actions you can take in the poker game such as raising, folding and calling. The raise button will prompt the user to type the amount The exploits will function by clicking on them and a play button will appear.
+Our game is based in click events the only need of a key press event (as this moment) is for the pause screen. There will be buttons for the actions you can take in the poker game such as raising, folding and calling. The raise button will prompt the user to input the amount. Exploits will function by clicking on them and a play button will appear if it can be trigger.
 
 ### **Mechanics**
 
 The key factor is that we are taking the already fun game of Texas Hold’em and adding some twists. The idea is for players to constantly try new strategies and explore different paths to progress. They can compare their results with other players and adjust their approach accordingly.
 
-The game starts like a normal poker match, but with two random exploits unlocked. The way to progress is by winning rounds and reaching certain money thresholds. Once you reach them, you can move up to higher betting tables, where you can win much more per turn and unlock new exploits.
+The game starts like a normal poker match, but with two random exploits unlocked. The objective is to win rounds and reach certain money thresholds. Once you reach them, you can move up to higher betting tables, where you can increase your earnings per turn and unlock new exploits.
 
 A limitation is that when you change tables, you can only take one exploit with you. This adds the need to buy the other exploits again. The casino instance keeps track of how many exploits have been used and how many rounds have been played. If you use too many exploits in a small number of turns, you will trigger a soft reset. When this happens, you lose the chips and the exploits you were using at that moment. However, your overall money is safe, so you can quickly buy them back or try different combinations of exploits from the start.
 
-If the game were just about continuing to play without purpose, it would become boring. That’s where the other twist comes in: the mafia. You need to manage your loans by withdrawing and repaying them. The interest rates are very high, making it a real challenge. The mafia also determines how many rounds you have to repay the loan (this may vary depending on internal logic and your current level). If the loan is not paid on time, the game ends—they come to your house and kill you.
+If the game were just about continuing to play without purpose, it would become boring. That’s where the other twist comes in: the mafia. You need to manage your loans by withdrawing and repaying them. The interest rates are very high, making it a real challenge to overcome. 
+
+The mafia also determines how many rounds you have to repay the loan (this may vary depending on internal logic and your current level). If the loan is not paid on time, the game ends—they come to your house and kill you.
 
 The meta aspect is that it makes you feel like you are engaging in complex gambling. You can evaluate your current strategies, compare them with other players, see which exploits are useful, and check if you are falling behind. It feels very close to the real experience.
 
+See the development section to see details in how the Mafia, and Casino are model.  
+
 ---
 #### Provisional Thresholds
-Intermediate levels exist for unlocking exploits and the blind will only only grow when the end of the level is reached. The price in here is to determine how much it will cost to go through the level. When finishing a level you can change tables to confront harder and more knowledgable oponents, which in turn will grant you more money amd the chance to get better exploits in your journey.
+Intermediate levels exist for unlocking exploits and the blind will only grow when the end of the level is reached. The price in here is to determine how much it will cost to go through the level. When finishing a level you can change tables to confront harder and more knowledgable oponents, which in turn will grant you more money amd the chance to get better exploits in your journey.
+
+We have 5 level for now and the blind increase: 
+- O to 1 no blind
+- 2 \$500 blind
+- 3 \$1000 blind
+- 4 \$5000 blind
+- 5 \$10000 blind and last increase in it 
+
+Players unlock exploits on every level change in the following form:
 
 Level 0 to Level 1\
-from \$0 to \$1,000 -> no blind
+from \$0 to \$1,000
 
 Level 1 to Level 1.5\
 from \$1,000 to \$5,000
 
-Level 1.5 to Level 2 -> \$500 blind \
+Level 1.5 to Level 2
 from \$5,000 to \$10,000
 
 Level 2 to Level 2.25 \
@@ -344,7 +320,7 @@ from \$10,000 to \$30,000
 Level 2.25 to Level 2.75 \
 from \$30,000 to \$70,000
 
-Level 2.75 to Level 3 -> \ $1000 blind \
+Level 2.75 to Level 3
 from \$70,000 to \$250,000
 
 Level 3 to 3.10 \
@@ -356,7 +332,7 @@ from \$270,000 to \$300,000
 Level 3.5 to 3.75 \
 from \$300,000 to \$400,000 
 
-Level 3.75 to 4 -> \$5,000 blind \
+Level 3.75 to 4
 from \$400,000 to \$500,000
 
 Level 4 to 4.10 \
@@ -387,7 +363,7 @@ Interface required for every exploit:
 - kill()
 - trigger()
 - playerId: string
-- 
+
 Exploits are divided in low, high and critical order. This classification means that a low level exploit is not the most powerful, but can be used more before getting detected by the casino, high level exploits are the more balanced ones as they have good but not too powerful effects and do raise the casino awareness but not too high as a critical exploit would do. Critical level exploits are the most powerful ones, but they raise the casino awareness too much and some might have downsides to them (if there is time to code it).
 
 Other way to view the exploits rarities:
@@ -402,29 +378,29 @@ Provisional exploits:
 - Count cards [ low ] \
   Like in blackjack. It is not useful without the no shuffle exploit.
 
-- Change current hand random [ high ] \
+- Change current hand random [ low ] \
   Player hand redraw.
 
 - See coming card [ high ] \
-  Peak the current deck cards array
+  Peak the current deck cards array. See the next card that will be turned.
 
 - See card played history [ low ] \
-  Save and stack of all the cards played.
+  Save and stack of all the cards played. Probably will need a cooldown or max uses before rebuy. 
 
 - Save a card [ critical ] \
-  Draws card to change current create exploit to use the card that was picked by user
+  Draws card to save current, create exploit to use the card that was picked by user later.
 
 - Remove player [ critical ] \
-  Remove a player from the players array.
+  Remove a player from the players array. Remove a player from the round. 
 
 - Disconnect player [ high ] \
-  Mark player as disconnected. Overwrite the _change turn_ method to skip player in the current round only.
+  Mark player as disconnected. Overwrite the _change turn_ method to skip player in the current/his turn one time only.
 
 - Change to random strong (A, K, Q, J) [ high ] \
-  Pick random card in that range of high cards then update the deck to that
+  Pick random card in that range of high cards then update the deck. 
 
 - Change to x card [ critical ] \
-  Put that card in players hand and trigger event to check if card was already played.
+  Put that card in players hand and trigger event to check if card was already played. This card can cause the casino to trigger a soft reset if card already in play (other player has it, or in the table).
 
 - Change the coming card [ high ] \
   Change the deck card to x
@@ -442,7 +418,7 @@ Provisional exploits:
   Pick a player and see their current hand
 
 - Trigger full view [ critical ] \
-  See all the players cards all the time.
+  See all the players' cards all the time. Might stop working in some scenarios.
 
 
 ## _Level Design_
@@ -543,13 +519,38 @@ The game is simulating an online casino so the levels and themes are going to be
             3. Buttons (raise, stay, fold, etc)
             4. Dms for missions
             5. Terminal
-      3. Sound
-         1. _Ambient_
+    3. Sound
+       1. _Ambient_
             1. Combination of all tracks and motifs, signifying the end
             2. Boss evil laughs
-         2. _Interactive_sounds_
+       2. _Interactive_sounds_
             1. Heartbeat
             2. Footsteps
+5. Table 5 (dark theme end)
+    1. Mood
+        1. Calm
+        2. Relax
+        3. You are playing for fun
+    2. Objects
+        1. _Ambient_
+            1. Black mat, with mafia decoration changed
+            2. Money on the table
+            3. Poker Chips
+            4. Poker chair
+            5. Other player's portraits (NPCs)
+        2. _Interactive_
+            1. Cards
+            2. Exploits
+            3. Buttons (raise, stay, fold, etc)
+            4. Dms for ending the run
+            5. Terminal
+    3. Sound
+        1. _Ambient_
+            1. Cool music
+        2. _Interactive_sounds_
+            1. Heartbeat 
+            2. Footsteps   
+            3. Knocking at the door 
                
 
 ### **Game Flow**
@@ -559,37 +560,44 @@ The game is simulating an online casino so the levels and themes are going to be
 3. Poker face use (how to see exploit description)
 4. Display of money that must be paid
 5. See the bank page (describe the main info of that page like who much money they have) 
-6. First round
+6. First round with help to see all the buttons 
 
 #### Game Loop
 
 ![Game Loop diagram ](assets/game-loop.png)
+
+#### Main Loop 
+![Main Loop diagram](assets/main-loop.png)
+
 ##### Poker loop
 1. ¿Continue playing?
-2. round + 1
-3. flop and hand cards 
-4. place bet (if turn)
-5. { end turn event } 
-6. change player { event trigger }  
-7. repeat until all place bet / fold 
-8. turn (use the Bet state machine)
-9. river (use the Bet state machine)
-10. determine winner 
-11. give chips 
-12. round end 
-13. restart loop
+2. The round counter will increase
+3. Remove the blind from the chips of player
+4. flop and hand cards to players  
+5. place bet (if turn)
+6. (sends the _end turn_ event to other objects)
+7. change player (_change even_ trigger to objects to react)
+8. this will repeat util all players have a turn
+9. _turn_ (use the \*_bet state machine_)
+10. river (use the _bet state machine_)
+11. determine winner 
+12. give chips 
+13. round end 
+14. restart loop
+
+\*Bet State Machine: System to check if a bet has been raised and make the still-playing players take turns until the end state is reached. 
 
 ![Poker loop diagram](assets/poker-loop.png)
 
+All the diagram can be seen with [excalidraw.com](https://excalidraw.com/#json=FbraV8ld1WbYg_H4pBqwe,rdBoxXYdxYZg3IJbj2MhGA)
+
 ## _Development_
 ---
-### Cache
+### Event Driven Architecture
 
-- Sessions
-  - Attributes of the run
-- 50 best runs 
-- Exploits Meta Data info 
-  - Prices and other info that could be necessary
+This is because we want a flexible system for constant changes in its logic if ever needed. Exploits are hearing all that is happening, also the bank and the database controller, and others. Exploits might change the deck or the player attributes.
+
+The bank instance in the Player is the one that checks if the exploit can be bought and will apply the changes at the server side level.
 
 ### Init 
 
@@ -647,10 +655,12 @@ This class is encapsulation of the storage, manage of exploits, and history of t
 This class is encapsulation of the logic of validation of exploit bough and addition to inventory. Also, money and chips storage of player.
 
 #### Mafia 
-This class encapsulates the logic of tracking loan payment. It tracks rounds played and money paid. If the back bet is activated makes the changes needed. It must trigger the hard reset logic. 
+This class encapsulates the logic of tracking loan payment. It do this by tracking rounds played and money paid. 
+
+If the back bet is activated, it makes the changes needed to multiply losses or winnings. It must trigger the hard reset logic in the player if the round played is overdue the permitted time or the player can't pay the blind.
 
 #### Casino 
-Tracks exploits used and cooldown of account. Basically if the conditions are meets trigger the soft reset. As we develop we tune the criteria for this to happen.  
+Tracks exploits used and the cooldown of the account. Basically, if the conditions are met, it triggers a soft reset. As we develop, we tune the _awareness_ criteria for this to happen. The idea is to make it so that, as you play more rounds without exploits, it is less aware than if you use them all at once.
 
 ### EventManager 
 This is the way to propagate event between children. Thinking of making a factory for creation and mitigation of the parameter drilling. 
@@ -669,6 +679,39 @@ Singleton with the db connection attach, with the method for saving what's neede
 
 ### Cache 
 The cache needs to be tune but must be the model controller for redis connection for thing as best 50 runs, best run of current players, games instances (in memory), etc.
+
+### Backend Analytics
+
+For our game the most important aspect is the money earned at the end of the run. Also, how much time it took to do that. We time stamp the start of the run at the server level. The client sends the end of run event to the server. At that moment it takes the stamp and subtracts to the previous one saved, we are aware that this fails to check for pauses or other edge cases, if a more robust implementation is needed can be added later. With the end of run event, the points are saved to the leader board table with the associated user, if logged in, if not it will simply not save the run. This table must be ordered by points in an efficient way.
+
+The idea is to trigger event that a DB controller is hearing as middleware, for the other analytics, as exploits bought and exploits use. It also works to be the source of truth of the inventory of the player's run. This makes it temper proof.
+
+We are considering using a cache to save the state of the game in case of disconnections, or in general for games that have not ended and the player wants to continue playing after. From there, build the game instance.
+
+In the long term database:
+- Time of the run
+- Exploits bought
+- Exploits used
+- Money win in total
+- Money spend
+- Total earnings
+- User id
+
+Cache:
+- Playing games
+
+Views:
+- Best 50 players
+- Exploits Meta data (Prices)
+
+User cache:
+- Player record run
+- Player time played in general
+- Player runs made
+- Player recent history (last 20 games in summary)
+- Playing session
+
+The game will have a trigger where if the runs enters in the top 50 runs, it will update the top 50 runs and insert it in its respective place.
 
 ## _Graphics_
 
@@ -726,9 +769,7 @@ Effects as card shuffling, moving cards, electronic buzzes, chips stacking and m
     2. Coins dropped; (Gained money)
     3. Happy chime (extra life)
     4. Sad chime (died)
-
-_(example)_
-
+    
 ### **Music Needed**
 
 1. Chill house/EDM track
@@ -741,43 +782,50 @@ _(example)_
 
 ---
 
-_(define the main activities and the expected dates when they should be finished. This is only a reference, and can change as the project is developed)_
-
-1. develop base classes
-    1. base entity
-        1. base player
-        2. base enemy
-        3. base block
-2. base app state
-      1. game world
-      2. menu world
-3. develop player and basic block classes
-    1. physics / collisions
-4. find some smooth controls/physics
-5. develop other derived classes
-    1. blocks
-        1. moving
-        2. falling
-        3. breaking
-        4. cloud
-    2. enemies
-        1. soldier
-        2. rat
-        3. etc.
-6. design levels
-    1. introduce motion/jumping
-    2. introduce throwing
-    3. mind the pacing, let the player play between lessons
-7. design sounds
-8. design music
-
-_(example)_
+1. Initial config 
+   1. Configure front end packages 
+   2. Configure backend express server 
+   3. Configure db management / deploy
+   4. Define validator and constants 
+2. Core development 
+   1. Game instance
+   2. Add essentials classes
+      - Mafia 
+      - Casino 
+      - Players 
+      - Player 
+      - AbstractExploit 
+   3. Implement plugin system for exploits 
+   4. Implement additional logic (add exploits subclasses)
+   5. Implement Event Manager
+      - With EventMangerClient Listener
+   6. Implement DB listeners for cache
+3. Implement session service
+   1. Creating Webhook Server 
+   2. Game instance singleton 
+      - add logic for cleanups 
+   3. Game auto save state 
+   4. Implement cache (of database current endpoints)
+   5. Implement auth 
+   6. Link auth with session logic
+4. Connect react zustand state with webhook to session 
+   - Manage Game Events 
+   - Manage Exploits Events 
+5. Implement all ui aspects
+   1. Table 
+   2. Loader of static assets 
+   3. Card system 
+   4. Exploit system 
+6. Implement Leaderboard dashboard 
+   - Define api endpoints for the data
+   - _Tan Stack Query_ system base for data fetching and display
+   \* this information might need to be server render. 
 
 ## Provisional Stack 
-Our project is a monorepo manage by turbo repo, its primary language will be TypeScript in a node environment.
+Our project is a monorepo manage by turbo repo, its primary language will be TypeScript in a node environment. Using docker compose for managig our two databases. 
 
-We are thinking of having a cache build with redis that is a key value database. It gave us flexibility to save JSON data as needed. 
+We are thinking of having a cache build with redis that is a key value database base in memory. It gave us flexibility to save JSON data as needed. And fast fetching for critical data.  
 
-Have a frontend build with an SPA React application. This allows us to have a state managed by zustand that will be connected to the backend via Webhook. The Webhook connection will be an event manager that the React components can ack upon. For necessary routing and server rendering will be using TankStackRouter. 
+Have a frontend build with an SPA React application. This allows us to have a state managed by zustand that will be connected to the backend via Webhook. Also add flexibility with reusable components and complex state management. The Webhook connection will be an event manager that the React components can listen to and ack upon. For necessary routing and server rendering will be using TankStackRouter. 
 
 For long term database we have a mysql instance that will connect with drizzle orm to a express server that manage additional logic.
