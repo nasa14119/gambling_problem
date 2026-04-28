@@ -46,8 +46,6 @@ This is a project for the course of _Software Construction and Decision-Making_ 
     * [Terminal](#terminal-1)
     * [Main character](#main-character)
     * [Computer screen](#computer-screen)
-    * [Backend Analytics](#backend-analytics)
-    * [Event Driven Architecture](#event-driven-architecture-)
       * [Provisional events:](#provisional-events-)
     * [**Controls**](#controls)
     * [**Mechanics**](#mechanics)
@@ -55,11 +53,13 @@ This is a project for the course of _Software Construction and Decision-Making_ 
     * [Exploit](#exploit)
   * [_Level Design_](#_level-design_)
     * [**Themes**](#themes)
+    * [**Game Flow**](#game-flow)
       * [Tutorial](#tutorial)
       * [Game Loop](#game-loop)
+      * [Main Loop](#main-loop-)
         * [Poker loop](#poker-loop)
-  * [_Development_](#_development_)
-    * [Cache](#cache)
+  * [Development_](_development_)
+    * [Event Driven Architecture](#event-driven-architecture)
     * [Init](#init-)
     * [Game Instance](#game-instance)
     * [ExploitsEventManager](#exploitseventmanager)
@@ -72,6 +72,7 @@ This is a project for the course of _Software Construction and Decision-Making_ 
     * [Sessions](#sessions)
     * [DB Manager](#db-manager-)
     * [Cache](#cache-)
+    * [Backend Analytics](#backend-analytics)
   * [_Graphics_](#_graphics_)
     * [**Style Attributes**](#style-attributes)
     * [**Graphics Needed**](#graphics-needed)
@@ -81,7 +82,7 @@ This is a project for the course of _Software Construction and Decision-Making_ 
     * [**Music Needed**](#music-needed)
   * [_Schedule_](#_schedule_)
   * [Provisional Stack](#provisional-stack-)
-    
+
 ## _Game Design_
 
 ---
@@ -294,7 +295,7 @@ See the development section to see details in how the Mafia, and Casino are mode
 
 ---
 #### Provisional Thresholds
-Intermediate levels exist for unlocking exploits and the blind will only grow when the end of the level is reached. The price in here is to determine how much it will cost to go through the level. When finishing a level you can change tables to confront harder and more knowledgable oponents, which in turn will grant you more money amd the chance to get better exploits in your journey.
+Intermediate levels exist for unlocking exploits and the blind will only grow when the end of the level is reached. The price in here is to determine how much it will cost to go through the level. When finishing a level you can change tables to confront harder and more knowledge opponents, which in turn will grant you more money amd the chance to get better exploits in your journey.
 
 We have 5 level for now and the blind increase: 
 - O to 1 no blind
@@ -592,7 +593,9 @@ The game is simulating an online casino so the levels and themes are going to be
 All the diagram can be seen with [excalidraw.com](https://excalidraw.com/#json=FbraV8ld1WbYg_H4pBqwe,rdBoxXYdxYZg3IJbj2MhGA)
 
 ## _Development_
+
 ---
+
 ### Event Driven Architecture
 
 This is because we want a flexible system for constant changes in its logic if ever needed. Exploits are hearing all that is happening, also the bank and the database controller, and others. Exploits might change the deck or the player attributes.
@@ -720,7 +723,7 @@ The game will have a trigger where if the runs enters in the top 50 runs, it wil
 ### **Style Attributes**
 
 
-The colors that are going to be used, are going to be muted colors, so that ity gives the game a sense of danger and eerieness. The ones used in the concepts were just to see how the concept would look like. These colors will be complemeted by a pixel artstyle with semidetailed portraits and game assets to keep taht eerie and tense vibe.
+The colors that are going to be used, are going to be muted colors, so that ity gives the game a sense of danger and eeriness. The ones used in the concepts were just to see how the concept would look like. These colors will be complemented by a pixel artstyle with semi detailed portraits and game assets to keep that eerie and tense vibe.
 
 
 ### **Graphics Needed**
@@ -730,11 +733,11 @@ The colors that are going to be used, are going to be muted colors, so that ity 
         1. Main character
         2. Random online players (portraits, profile picture-like)
         3. Mafia npcs
-      #Note: NPCs won't have dialogue, htey're just to give the game a bit of character
+      #Note: NPCs won't have dialogue, they're just to give the game a bit of character
  
 2. Poker Tables
     1. Red used and weathered table
-    2. Green mat pristene table
+    2. Green mat pristine table
     3. Blue mat almost new table
     4. Black mat Mafia table
 3. Ambient
@@ -742,7 +745,7 @@ The colors that are going to be used, are going to be muted colors, so that ity 
     2. Poker chairs or normal chairs
     3. Loose money bills
     4. Stacked money bills
-    5. Player Portrais (goes in hand with the character assets)
+    5. Player Portraits (goes in hand with the character assets)
     6. Blood stains (matching Weathered Stone Bricks)
 ## _Sounds/Music_
 
@@ -761,7 +764,7 @@ Effects as card shuffling, moving cards, electronic buzzes, chips stacking and m
     3. Player folds
     4. Player raises
     5. Cards turning
-    6. Explit used (some electronic buzz)
+    6. Exploit used (some electronic buzz)
     7. Player disconnect (Exploit based)
     8. Footsteps
 2. Feedback
@@ -800,6 +803,7 @@ Effects as card shuffling, moving cards, electronic buzzes, chips stacking and m
    5. Implement Event Manager
       - With EventMangerClient Listener
    6. Implement DB listeners for cache
+   7. Implement Bot system
 3. Implement session service
    1. Creating Webhook Server 
    2. Game instance singleton 
