@@ -293,6 +293,8 @@ The meta aspect is that it makes you feel like you are engaging in complex gambl
 
 See the development section to see details in how the Mafia, and Casino are model.  
 
+Monte Carlo in poker AI works by simulating many possible outcomes of a hand to estimate the chance of winning. The AI randomly completes the unknown cards (like opponents’ hands and future community cards) thousands of times, plays out each scenario, and counts how often it wins. From this, it calculates a win probability and uses it to decide whether to fold, call, or raise. This is adjustable, so creating different difficulties for each respective table is adjustable through this. 
+
 ---
 #### Provisional Thresholds
 Intermediate levels exist for unlocking exploits and the blind will only grow when the end of the level is reached. The price in here is to determine how much it will cost to go through the level. When finishing a level you can change tables to confront harder and more knowledge opponents, which in turn will grant you more money amd the chance to get better exploits in your journey.
