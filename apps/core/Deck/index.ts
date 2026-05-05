@@ -1,8 +1,9 @@
 import { getRandomDeck } from "./lib/index.cjs";
-import { type Card, getCardName } from "./Card.ts";
+import { getCardName } from "./Card.ts";
+import { type Card } from "@repo/types";
 import pokersolver, { type Hand } from "./lib/pokersolver.ts";
 type PlayerCards = [Card, Card];
-export type Player = { playerId: string; cards: PlayerCards };
+import { Player } from "../Players/Player";
 const pokersolverWinners = pokersolver.Hand.winners;
 export class Deck {
   cards: number[];
@@ -34,6 +35,11 @@ export class Deck {
   cardWasPlayed(card: Card) {
     return this.history.has(card) || this.playersHistory.has(card);
   }
+  getPickNextCard(nextCard: number = 1): Card[] {
+    const cards = this.cards.slice(this.position, this.position + nextCard);
+    const cardNamed = cards.map<Card>(getCardName);
+    return cardNamed;
+  }
   resetHistory() {
     this.history = new Set();
   }
@@ -53,7 +59,7 @@ export class Deck {
     this.addPlayersHistory(cards);
     return cards;
   }
-  flush(): Card[] {
+  flop(): Card[] {
     const cards = this.getCards(3);
     this.addHistory(cards);
     this.gameState.push(...cards);
@@ -74,13 +80,16 @@ export class Deck {
     this.gameState.push(nextCard);
     return this.gameState;
   }
-  getCardsHand(player: Player): Hand {
+  private getCardsHand(player: Player): Hand {
+    if (!player.cards) throw new Error("Player has no cards");
     const cards = [...player.cards, ...this.gameState];
     const cardsSolved = pokersolver.Hand.solve(cards) as Hand;
     cardsSolved.id = player.playerId;
     return cardsSolved;
   }
-  determineWinner(players: Player[]): Array<Player & { for: string }> {
+  determineWinner(
+    players: Player[],
+  ): Array<{ playerId: Player["playerId"]; for: string }> {
     if (players.length < 2) throw new Error("At least 2 players are required");
     const playersCache: Record<string, Player> = {};
     const playersHands = players.map<Hand>((player) => {
@@ -90,7 +99,8 @@ export class Deck {
     let winners = pokersolverWinners(playersHands);
     return winners.map((w) => {
       const { id: winnerId, name } = w;
-      return { ...playersCache[winnerId], for: name };
+      const player = { ...playersCache[winnerId], for: name };
+      return { playerId: player.playerId, for: name };
     });
   }
 }

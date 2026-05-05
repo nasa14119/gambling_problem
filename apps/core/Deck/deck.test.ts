@@ -1,6 +1,6 @@
 import { Deck, type Player } from ".";
 import { test, expect } from "vitest";
-import { getCardName, getCardHash, type Card } from "./Card";
+import type { Card } from "@repo/types";
 test("shuffle", () => {
   const deck = new Deck();
   deck.shuffle();
@@ -52,7 +52,7 @@ test("History", () => {
   expect(player.filter((c) => !deck.history.has(c))).toStrictEqual(player);
   expect(game.filter((c) => deck.history.has(c))).toStrictEqual(game);
 });
-const fourOfKind: Card[] = ["SA", "HA", "CA", "DA", "C4"];
+const fourOfKind: Card[] = ["As", "Ah", "Ac", "Ad", "4c"];
 
 test("Determine winner", () => {
   const deck = new Deck();

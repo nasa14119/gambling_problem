@@ -1,2 +1,9 @@
 export type ExploitId = "todo" | "example";
-export type Events = "todo";
+
+export class ErrorInTurn extends Error {
+  public readonly type;
+  constructor(msg: string, type: "INVALID_INPUT" | "TIME_EXEDED") {
+    super(msg);
+    this.type = type;
+  }
+}

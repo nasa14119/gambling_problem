@@ -16,23 +16,8 @@ const fullDeck = [
     268471337, 268454953, 268446761, 268442665      // A
 ];
 */
-type Suit = "c" | "d" | "h" | "s";
-type Num =
-  | "2"
-  | "3"
-  | "4"
-  | "5"
-  | "6"
-  | "7"
-  | "8"
-  | "9"
-  | "T"
-  | "J"
-  | "Q"
-  | "K"
-  | "A";
-export type Card = `${Num}${Suit}`;
 
+import type { Card, Num, Suit } from "@repo/types";
 const suits: Record<Suit, number> = { c: 0, d: 1, h: 2, s: 3 };
 const ranks: Record<Num, number> = {
   2: 0,
