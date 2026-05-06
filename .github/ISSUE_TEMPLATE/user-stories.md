@@ -8,15 +8,6 @@ assignees: ''
 ---
 
 ---
-name: User Stories
-about: 'user stories that need to be added to the game'
-title: "Feat : "
-labels: ''
-assignees: ''
-
----
-
----
 ## Story
 about: Structured issue description for GitHub Projects
 ---
