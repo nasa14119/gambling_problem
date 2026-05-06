@@ -1,18 +1,19 @@
 echo "SETUP OF ENV FILES"
-if [ ! -f ".env" ]; then 
+if [ ! -f .env ]; then 
   printf "\e[31m.env FILE NOT FOUND\e[0m\n"
-  exit
+  exit 1
 fi
 MYSQL_PORT=3306
 SERVER_DEV_PORT=3000
 SERVER_PORT=80
-source .env
+source ./.env
 
 # DB 
 DB_PATH="./apps/db"
 DB_PATH_SQL="${DB_PATH}/mysql.env"
 
 > $DB_PATH_SQL
+echo MYSQL_PORT=$MYSQL_PORT >> $DB_PATH_SQL
 echo MYSQL_ROOT_PASSWORD=\"$MYSQL_ROOT_PASSWORD\" >> $DB_PATH_SQL
 echo MYSQL_DATABASE=\"$MYSQL_DATABASE\" >> $DB_PATH_SQL
 
