@@ -25,19 +25,18 @@ export class Game {
       },
       true,
     );
+    this.eventManager.on({
+      eventId: "round:end",
+      listener: this.players.resetForNewRound,
+    });
   }
   private waitForEvent<T extends GameEvents>(event: T) {
     return new Promise<void>((res) =>
       this.eventManager.on({ eventId: event, listener: () => res() }, true),
     );
   }
-  private getPlaingPlayers() {
-    const players = this.players.session();
-    const plaingPlayers = players.filter((p) => !p.isFold);
-    return plaingPlayers;
-  }
   determineWinner({ moneyPot }: { moneyPot: number }) {
-    const players = this.getPlaingPlayers();
+    const players = this.players.getPlaingPlayers();
     if (players.length === 0) return;
     if (players.length < 2) {
       players[0].bank.addChips(moneyPot);
@@ -59,11 +58,11 @@ export class Game {
     await this.waitForEvent("deck:cards_deal");
     await this.turnSystem.startTurn(this.players.session());
     this.deck.flop();
-    await this.turnSystem.startTurn(this.getPlaingPlayers());
+    await this.turnSystem.startTurn(this.players.getPlaingPlayers());
     this.deck.turn();
-    await this.turnSystem.startTurn(this.getPlaingPlayers());
+    await this.turnSystem.startTurn(this.players.getPlaingPlayers());
     this.deck.river();
-    await this.turnSystem.startTurn(this.getPlaingPlayers());
+    await this.turnSystem.startTurn(this.players.getPlaingPlayers());
     this.eventManager.on(
       { eventId: "turn:end", listener: this.determineWinner.bind(this) },
       true,

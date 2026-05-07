@@ -21,4 +21,13 @@ export class Players {
     if (!player) throw new Error("Player not found");
     player.turn();
   }
+  getPlaingPlayers() {
+    const players = this.session();
+    return players.filter((p) => !p.isFold);
+  }
+  resetForNewRound() {
+    for (const key of this.players.keys()) {
+      this.players.get(key)!.isFold = false;
+    }
+  }
 }
