@@ -4,15 +4,18 @@ networks:
 name: gambling-problem-db
 services:
   mysql:
-    image: mysql:latest
+    image: mysql:8.0
     container_name: mysql
     restart: always
-    env_file:
-      - mysql.env
     networks:
       - app-network-public
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_HOST: "127.0.0.1"
+      MYSQL_PORT: "3306"
     ports:
-      - "${MYSQL_PORT}:3306"
+      - "${MYSQL_HOST}:${MYSQL_PORT}:3306"
     volumes:
       - ${PWD}/data/mysql:/var/lib/mysql
   redis:

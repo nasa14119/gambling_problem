@@ -1,7 +1,8 @@
 import { z } from "zod";
 const ENV = z.object(
   {
-    DATABASE_URL: z.string(),
+    MYSQL_ROOT_PASSWORD: z.string(),
+    MYSQL_HOST: z.string(),
     MYSQL_PORT: z.coerce.number(),
     MYSQL_DATABASE: z.string(),
   },

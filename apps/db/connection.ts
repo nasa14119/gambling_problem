@@ -1,4 +1,12 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import { env } from "env";
-const { DATABASE_URL } = env;
-export const db = drizzle(DATABASE_URL);
+import mysql from "mysql2/promise";
+
+const client = mysql.createPool({
+  user: "root", // MUST BE ROOT AND MUST BE PASSED IN THE CONNECTION PARAM
+  host: env.MYSQL_HOST,
+  port: env.MYSQL_PORT,
+  password: env.MYSQL_ROOT_PASSWORD,
+  database: env.MYSQL_DATABASE,
+});
+export const db = drizzle({ client });
