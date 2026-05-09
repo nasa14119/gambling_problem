@@ -1,7 +1,7 @@
 import { Card } from "@repo/types";
 import { EventManager } from "./EventsManager";
 import type { TurnOptions, PlayerHand } from "@repo/types";
-import type { Player } from "../Players/Player";
+import type { Player } from "../types";
 export type GameEventPayloads = {
   "round:start": Player[];
   "round:start_turn": Player[];
@@ -10,9 +10,9 @@ export type GameEventPayloads = {
   "game:state_change": Card[];
   "deck:cards_deal": undefined;
   "deck:shuffle": undefined;
-  "deck:turn": undefined;
-  "deck:river": undefined;
-  "deck:flush": number[];
+  "deck:flush": Card[];
+  "deck:turn": Card[];
+  "deck:river": Card[];
   "deck:update_player_hand": PlayerHand;
   "player:validbet": { type: TurnOptions; chips: number; player: Player };
   "player:insuficientfunds": { min: number; player: Player };

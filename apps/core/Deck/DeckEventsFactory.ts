@@ -1,4 +1,5 @@
-import type { Card, Player } from "@repo/types";
+import type { Card } from "@repo/types";
+import type { Player } from "../types";
 import { Deck } from ".";
 import { GameEventManager } from "../Events/GameEventManager";
 
@@ -23,15 +24,15 @@ export class DeckEventsManager extends Deck {
     });
   }
   flop(): Card[] {
-    this.manager.emit("game:state_change", this.flop());
+    this.manager.emit("deck:flush", super.flop());
     return this.gameState;
   }
   turn(): Card[] {
-    this.manager.emit("game:state_change", this.turn());
+    this.manager.emit("deck:turn", super.turn());
     return this.gameState;
   }
   river(): Card[] {
-    this.manager.emit("game:state_change", this.river());
+    this.manager.emit("deck:river", super.river());
     return this.gameState;
   }
 }

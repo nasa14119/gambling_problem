@@ -1,4 +1,5 @@
-import { Deck, type Player } from ".";
+import { Deck } from ".";
+import type { Player } from "../types";
 import { test, expect } from "vitest";
 import type { Card } from "@repo/types";
 test("shuffle", () => {

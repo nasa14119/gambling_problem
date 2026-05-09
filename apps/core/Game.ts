@@ -70,8 +70,10 @@ export class Game {
     this.eventManager.emit("round:end", undefined);
   }
   addPlayer(id: string) {
-    const player = new Player(id);
-    player.manager = this.eventManager.createManage();
+    const player = new Player({
+      manager: this.eventManager.createManage(),
+      playerId: id,
+    });
     this.players.attachPlayer(player);
   }
 }

@@ -3,7 +3,7 @@ import {
   GameEventPayloads,
   GameEvents,
 } from "../Events/GameEventManager";
-import { Player } from "../Players/Player";
+import type { Player } from "../types";
 export class TurnSystem {
   moneyPot: number = 0;
   manger: GameEventManager;

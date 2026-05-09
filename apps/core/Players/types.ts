@@ -1,0 +1,27 @@
+import { PlayerHand } from "@repo/types";
+import { type Bank } from "./Bank";
+import { GameEventManager } from "../Events/GameEventManager";
+
+export const VALID_ACTIONS: ReadonlySet<string> = new Set([
+  "fold",
+  "raise",
+  "pay",
+]);
+
+export const DEFAULTS = {
+  money: 1000,
+  chips: 0,
+} as const;
+export type PlayerOptions = Partial<typeof DEFAULTS>;
+
+export type PlayerConstructor = {
+  playerId: string;
+  manager: ReturnType<GameEventManager["createManage"]>;
+};
+export interface Player {
+  playerId: string;
+  cards: PlayerHand;
+  bank: Bank;
+  isFold: boolean;
+  turn: () => Promise<void>;
+}

@@ -1,41 +1,54 @@
 import { PlayerHand, TurnOptions } from "@repo/types";
-import { type GameEventManagerType } from "../Events/GameEventManager";
-import { Bank } from "../Bank";
+import type { GameEventPayloads } from "../Events/GameEventManager";
+import { Bank } from "./Bank";
 import { ErrorInTurn } from "../types";
+import type {
+  Player as IPlayer,
+  PlayerOptions,
+  PlayerConstructor,
+} from "./types";
+import { DEFAULTS, VALID_ACTIONS } from "./types";
 const PLAYER_TURN_TIME_MILISECONDS = 30 * 1000;
 type UserInput = {
   type: TurnOptions;
   player: Player;
   chips: number;
 };
-const VALID_ACTIONS = new Set(["fold", "raise", "pay"]);
-export class Player {
+export class Player implements IPlayer {
   playerId: string;
-  manager!: ReturnType<GameEventManagerType["createManage"]>;
-  cards: PlayerHand;
-  bank = new Bank(1000, 100);
-  constructor(playerId: string) {
-    this.playerId = playerId;
-    this.cards = null;
-  }
+  cards: PlayerHand = null;
   isFold = false;
+  bank: Bank;
+  private removeListener: PlayerConstructor["manager"]["remove"];
+  private sendInput: (payload: GameEventPayloads["player:validbet"]) => void;
+  private manager: PlayerConstructor["manager"];
+  constructor(
+    { playerId, manager }: PlayerConstructor,
+    options?: PlayerOptions,
+  ) {
+    this.playerId = playerId;
+    const { money, chips } = { ...DEFAULTS, ...options };
+    this.bank = new Bank(money, chips);
+    this.sendInput = manager.getEmiter("player:validbet");
+    this.removeListener = manager.remove.bind(manager);
+    this.manager = manager;
+  }
   async turn() {
     const {
       promise: userInpPromise,
       resolve: valueFun,
       reject: cancelTurn,
     } = Promise.withResolvers<UserInput>();
-    const sendInput = this.manager.getEmiter("player:validbet");
     let timeOutId: number;
     let id: string;
     // This function will only run if time is exeded
     const handleTimeExeded = () => {
-      this.manager.emit("player:input", {
+      this.sendInput({
         chips: 0,
         player: this,
         type: "fold",
       });
-      this.manager.remove("player:input", id);
+      this.removeListener("player:input", id);
       cancelTurn(new ErrorInTurn("Time exeded", "TIME_EXEDED"));
     };
     timeOutId = setTimeout(handleTimeExeded, PLAYER_TURN_TIME_MILISECONDS);
@@ -54,12 +67,12 @@ export class Player {
       if (!VALID_ACTIONS.has(type))
         throw new ErrorInTurn("Invalid action", "INVALID_INPUT");
       if (type === "fold") {
-        sendInput({ type, chips: 0, player: this });
+        this.sendInput({ type, chips: 0, player: this });
         return;
       }
       // This will check that the user has the chips he whants to bet
       const chips = this.bank.getChips(userInputChips);
-      sendInput({ type, chips, player: this });
+      this.sendInput({ type, chips, player: this });
     } catch (e) {
       const { type, message } = e as ErrorInTurn;
       if (type === "INVALID_INPUT") {

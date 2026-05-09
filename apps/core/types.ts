@@ -1,3 +1,5 @@
+import type { Player } from "./Players/types";
+
 export type ExploitId = "todo" | "example";
 
 export class ErrorInTurn extends Error {
@@ -7,3 +9,4 @@ export class ErrorInTurn extends Error {
     this.type = type;
   }
 }
+export { Player };
