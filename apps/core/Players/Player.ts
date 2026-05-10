@@ -1,25 +1,22 @@
-import { PlayerHand, TurnOptions } from "@repo/types";
+import { PlayerHand } from "@repo/types";
 import type { GameEventPayloads } from "../Events/GameEventManager";
 import { Bank } from "./Bank";
-import { ErrorInTurn } from "../types";
+import { ErrorInTurn, UserInput } from "../types";
 import type {
   Player as IPlayer,
   PlayerOptions,
   PlayerConstructor,
 } from "./types";
+import { Timer } from "../lib/TimerGame";
 import { DEFAULTS, VALID_ACTIONS } from "./types";
-const PLAYER_TURN_TIME_MILISECONDS = 30 * 1000;
-type UserInput = {
-  type: TurnOptions;
-  player: Player;
-  chips: number;
-};
+
+const PLAYER_TURN_TIME_SECONDS = 60;
+
 export class Player implements IPlayer {
   playerId: string;
   cards: PlayerHand = null;
   isFold = false;
   bank: Bank;
-  private removeListener: PlayerConstructor["manager"]["remove"];
   private sendInput: (payload: GameEventPayloads["player:validbet"]) => void;
   private manager: PlayerConstructor["manager"];
   constructor(
@@ -30,40 +27,41 @@ export class Player implements IPlayer {
     const { money, chips } = { ...DEFAULTS, ...options };
     this.bank = new Bank(money, chips);
     this.sendInput = manager.getEmiter("player:validbet");
-    this.removeListener = manager.remove.bind(manager);
     this.manager = manager;
   }
-  async turn() {
-    const {
-      promise: userInpPromise,
-      resolve: valueFun,
-      reject: cancelTurn,
-    } = Promise.withResolvers<UserInput>();
-    let timeOutId: number;
-    let id: string;
-    // This function will only run if time is exeded
-    const handleTimeExeded = () => {
-      this.sendInput({
-        chips: 0,
-        player: this,
-        type: "fold",
-      });
-      this.removeListener("player:input", id);
-      cancelTurn(new ErrorInTurn("Time exeded", "TIME_EXEDED"));
-    };
-    timeOutId = setTimeout(handleTimeExeded, PLAYER_TURN_TIME_MILISECONDS);
-    // this function will be envoke if the event of player input is got
-    const handleInput = (args: UserInput) => {
-      clearTimeout(timeOutId);
-      valueFun(args);
-    };
-    id = this.manager.on(
-      { eventId: "player:input", listener: handleInput },
+  private async getUserInput() {
+    const { promise, resolve, reject } = Promise.withResolvers<UserInput>();
+    const id = this.manager.on(
+      {
+        eventId: "player:input",
+        listener: (payload) => {
+          resolve(payload);
+          time.cancel();
+        },
+      },
       true,
     );
+    const time = new Timer({
+      manager: this.manager,
+      time: PLAYER_TURN_TIME_SECONDS,
+      player: this,
+      onEnd: () => {
+        const fold: UserInput = {
+          player: this,
+          type: "fold",
+          chips: 0,
+        };
+        this.manager.emit("player:validbet", fold);
+        this.manager.remove("player:input", id);
+        reject(new ErrorInTurn("Time exeded", "TIME_EXEDED"));
+      },
+    });
+    return await promise;
+  }
+  async turn() {
     try {
       // This will have the user input only if valid
-      const { type, chips: userInputChips } = await userInpPromise;
+      const { type, chips: userInputChips } = await this.getUserInput();
       if (!VALID_ACTIONS.has(type))
         throw new ErrorInTurn("Invalid action", "INVALID_INPUT");
       if (type === "fold") {
@@ -83,7 +81,7 @@ export class Player implements IPlayer {
         this.manager.emit("player:turn", this.playerId);
         return;
       }
-      if (type == "TIME_EXEDED") {
+      if (type === "TIME_EXEDED") {
         this.manager.emit("player:timeexeded", this);
         return;
       }

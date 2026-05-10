@@ -1,3 +1,4 @@
+import { TurnOptions } from "@repo/types";
 import type { Player } from "./Players/types";
 
 export type ExploitId = "todo" | "example";
@@ -9,4 +10,10 @@ export class ErrorInTurn extends Error {
     this.type = type;
   }
 }
+export type UserInput = {
+  type: TurnOptions;
+  player: Player;
+  chips: number;
+};
+
 export { Player };

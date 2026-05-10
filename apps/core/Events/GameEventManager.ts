@@ -1,7 +1,7 @@
 import { Card } from "@repo/types";
 import { EventManager } from "./EventsManager";
-import type { TurnOptions, PlayerHand } from "@repo/types";
-import type { Player } from "../types";
+import type { PlayerHand } from "@repo/types";
+import type { Player, UserInput } from "../types";
 export type GameEventPayloads = {
   "round:start": Player[];
   "round:start_turn": Player[];
@@ -14,12 +14,14 @@ export type GameEventPayloads = {
   "deck:turn": Card[];
   "deck:river": Card[];
   "deck:update_player_hand": PlayerHand;
-  "player:validbet": { type: TurnOptions; chips: number; player: Player };
+  "player:validbet": UserInput;
   "player:insuficientfunds": { min: number; player: Player };
   "player:turn": Player["playerId"];
-  "player:input": { type: TurnOptions; chips: number; player: Player };
+  "player:input": UserInput;
   "player:timeexeded": Player;
   "player:invalid_input": { error: string; player: Player };
+  pause: undefined;
+  resume: undefined;
 };
 export type GameEvents = keyof GameEventPayloads;
 export type GameEventManagerType = EventManager<GameEventPayloads>;
