@@ -1,3 +1,6 @@
+import { Card } from "@repo/types";
+import { Player } from "../types";
+
 type Event<T extends string, K> = {
   eventId: T;
   listener: (payload: K) => void;
@@ -25,4 +28,11 @@ export interface EventManager<Payloads extends Record<string, any>> {
     once?: boolean,
   ): string[];
   remove<T extends EventKey<Payloads>>(event: T, id: string): void;
+  removeTransmiter(id: string): void;
+  createTransmitter(event: (param: any) => void): string;
 }
+export type GameWinnerPayload = {
+  moneyWin: number;
+  gameState: Card[];
+  winners: { player: Player; for: string }[];
+};

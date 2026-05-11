@@ -28,6 +28,34 @@ export class Player implements IPlayer {
     this.bank = new Bank(money, chips);
     this.sendInput = manager.getEmiter("player:validbet");
     this.manager = manager;
+    this.manager.on({
+      eventId: "player:deposit",
+      listener: ({ chips, player }) => {
+        if (player.playerId !== this.playerId) return;
+        try {
+          this.bank.deposit(chips);
+        } catch (e) {
+          this.manager.emit("player:invalid_input", {
+            error: "Can't process deposit",
+            player,
+          });
+        }
+      },
+    });
+    this.manager.on({
+      eventId: "player:withdraw",
+      listener: ({ chips, player }) => {
+        if (player.playerId !== this.playerId) return;
+        try {
+          this.bank.withdraw(chips);
+        } catch (e) {
+          this.manager.emit("player:invalid_input", {
+            error: "Can't process withdraw",
+            player,
+          });
+        }
+      },
+    });
   }
   private async getUserInput() {
     const { promise, resolve, reject } = Promise.withResolvers<UserInput>();
@@ -61,10 +89,11 @@ export class Player implements IPlayer {
   async turn() {
     try {
       // This will have the user input only if valid
-      const { type, chips: userInputChips } = await this.getUserInput();
+      const { type, chips: userInputChips, player } = await this.getUserInput();
+      if (player.playerId !== this.playerId) return;
       if (!VALID_ACTIONS.has(type))
         throw new ErrorInTurn("Invalid action", "INVALID_INPUT");
-      if (type === "fold") {
+      if (type === "fold" || type === "check") {
         this.sendInput({ type, chips: 0, player: this });
         return;
       }
@@ -87,5 +116,12 @@ export class Player implements IPlayer {
       }
       throw new Error("Unexpected error happend getting" + message);
     }
+  }
+  getData() {
+    return {
+      playerId: this.playerId,
+      isFold: this.isFold,
+      cards: this.cards,
+    };
   }
 }

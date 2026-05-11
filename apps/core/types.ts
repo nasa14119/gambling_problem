@@ -16,4 +16,5 @@ export type UserInput = {
   chips: number;
 };
 
+export type Transmiter = (eventId: string, payload?: Record<any, any>) => void;
 export { Player };

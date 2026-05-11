@@ -24,7 +24,7 @@ export class DeckEventsManager extends Deck {
     });
   }
   flop(): Card[] {
-    this.manager.emit("deck:flush", super.flop());
+    this.manager.emit("deck:flop", super.flop());
     return this.gameState;
   }
   turn(): Card[] {

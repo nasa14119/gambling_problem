@@ -4,6 +4,7 @@ import { DeckEventsManager } from "./Deck/DeckEventsFactory.ts";
 import { Player } from "./Players/Player.ts";
 import { Players } from "./Players/index.ts";
 import { TurnSystem } from "./Deck/TurnSystem.ts";
+import { GameFacade } from "./GameFacade.ts";
 export class Game {
   id: string;
   eventManager = new GameEventManager();
@@ -18,22 +19,19 @@ export class Game {
       eventId: "player:turn",
       listener: (id) => this.players.playerTurn(id),
     });
-    this.eventManager.on(
-      {
-        eventId: "deck:cards_deal",
-        listener: () => this.turnSystem.startTurn(this.players.session()),
-      },
-      true,
-    );
     this.eventManager.on({
       eventId: "round:end",
-      listener: this.players.resetForNewRound,
+      listener: this.players.resetForNewRound.bind(this.players),
     });
   }
   private waitForEvent<T extends GameEvents>(event: T) {
     return new Promise<void>((res) =>
       this.eventManager.on({ eventId: event, listener: () => res() }, true),
     );
+  }
+  attachClient(player: Player["playerId"], send: () => void) {
+    const facade = new GameFacade({ gameParam: this, player, send });
+    return facade;
   }
   determineWinner({ moneyPot }: { moneyPot: number }) {
     const players = this.players.getPlaingPlayers();
@@ -43,6 +41,14 @@ export class Game {
       return;
     }
     const winners = this.deck.determineWinner(players);
+    this.eventManager.emit("round:winners", {
+      moneyWin: moneyPot / winners.length,
+      gameState: this.deck.gameState,
+      winners: winners.map((w) => ({
+        player: this.players.getPlayer(w.playerId),
+        for: w.for,
+      })),
+    });
     if (winners.length < 2) {
       this.players.getPlayer(winners[0].playerId).bank.addChips(moneyPot);
       return;
@@ -55,7 +61,7 @@ export class Game {
 
   async startRound() {
     this.eventManager.emit("round:start", this.players.session());
-    await this.waitForEvent("deck:cards_deal");
+    this.waitForEvent("deck:cards_deal");
     await this.turnSystem.startTurn(this.players.session());
     this.deck.flop();
     await this.turnSystem.startTurn(this.players.getPlaingPlayers());
@@ -63,10 +69,7 @@ export class Game {
     await this.turnSystem.startTurn(this.players.getPlaingPlayers());
     this.deck.river();
     await this.turnSystem.startTurn(this.players.getPlaingPlayers());
-    this.eventManager.on(
-      { eventId: "turn:end", listener: this.determineWinner.bind(this) },
-      true,
-    );
+    this.determineWinner({ moneyPot: this.turnSystem.moneyPot });
     this.eventManager.emit("round:end", undefined);
   }
   addPlayer(id: string) {
@@ -77,32 +80,3 @@ export class Game {
     this.players.attachPlayer(player);
   }
 }
-// const game = new Game();
-// game.addPlayer("player:1");
-// game.addPlayer("palyer:2");
-// game.init();
-// game.startRound();
-// game.eventManager.createListeners(
-//   ["turn:end", "player:invalid_input", "player:insuficientfunds"],
-//   (event, payload) => console.log({ event, payload }),
-// );
-// const send = game.eventManager.createEmiter("player:input");
-// let player: Player | undefined;
-// game.eventManager.on({
-//   eventId: "player:turn",
-//   listener: (payload) => {
-//     player = game.players.players.get(payload);
-//   },
-// });
-// // First round
-// send({ type: "raise", chips: 10, player: player! });
-
-// await new Promise((res) => setTimeout(res, 1000));
-// send({ type: "pay", chips: 10, player: player! });
-
-// // Second round
-// await new Promise((res) => setTimeout(res, 1000));
-// send({ type: "pay", chips: 0, player: player! });
-
-// await new Promise((res) => setTimeout(res, 1000));
-// send({ type: "pay", chips: 0, player: player! });

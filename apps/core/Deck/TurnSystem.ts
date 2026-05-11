@@ -14,6 +14,10 @@ export class TurnSystem {
   constructor(manager: GameEventManager) {
     this.manger = manager;
     this.changeTurn = this.manger.createEmiter("player:turn");
+    this.manger.on({
+      eventId: "round:end",
+      listener: () => (this.moneyPot = 0),
+    });
   }
   // This fuction will wait to a specific event and kill the event in the process
   private waitForEvent<T extends GameEvents>(event: T) {
@@ -24,18 +28,29 @@ export class TurnSystem {
   async startTurn(turns: Player[]) {
     this.turn_queue = turns;
     this.waiting_queue = [];
+    this.players_pots = {};
+    let canCheck = true;
     let min = -Infinity;
     while (this.turn_queue.length > 0) {
       const [current, ...rest] = this.turn_queue;
-
       // Pop front
       this.turn_queue = rest;
 
       // Emit turn have changed to the player that was on front
       this.changeTurn(current.playerId);
-      console.log(current.playerId);
-      console.log(min);
       const { type, chips } = await this.waitForEvent("player:validbet");
+      if (type === "check" && canCheck) {
+        this.waiting_queue = [current, ...this.waiting_queue];
+        continue;
+      }
+      if (type === "check") {
+        this.manger.emit("player:invalid_input", {
+          error: "Can't check if players have raise",
+          player: current,
+        });
+        this.turn_queue = [current, ...rest];
+        continue;
+      }
       if (type === "fold") {
         current.isFold = true;
         continue;
@@ -60,6 +75,7 @@ export class TurnSystem {
       }
       // Only raise if really new min
       if (type === "raise" && this.players_pots[current.playerId] > min) {
+        canCheck = false;
         this.turn_queue.push(...this.waiting_queue);
         this.waiting_queue = [current];
         min = this.players_pots[current.playerId];
@@ -81,5 +97,6 @@ export class TurnSystem {
 
     // Emiting the end of the turn
     this.manger.emit("turn:end", { moneyPot: this.moneyPot });
+    return;
   }
 }

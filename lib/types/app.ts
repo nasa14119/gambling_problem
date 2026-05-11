@@ -30,4 +30,4 @@ export type Player = {
   playerId: string;
   cards: PlayerHand;
 };
-export type TurnOptions = "fold" | "raise" | "pay";
+export type TurnOptions = "fold" | "raise" | "pay" | "check";

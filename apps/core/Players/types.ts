@@ -6,6 +6,7 @@ export const VALID_ACTIONS: ReadonlySet<string> = new Set([
   "fold",
   "raise",
   "pay",
+  "check",
 ]);
 
 export const DEFAULTS = {
@@ -13,7 +14,11 @@ export const DEFAULTS = {
   chips: 0,
 } as const;
 export type PlayerOptions = Partial<typeof DEFAULTS>;
-
+export type PlayerData = {
+  playerId: string;
+  isFold: boolean;
+  cards: PlayerHand;
+};
 export type PlayerConstructor = {
   playerId: string;
   manager: ReturnType<GameEventManager["createManage"]>;
@@ -24,4 +29,5 @@ export interface Player {
   bank: Bank;
   isFold: boolean;
   turn: () => Promise<void>;
+  getData: () => PlayerData;
 }

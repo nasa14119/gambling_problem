@@ -8,9 +8,16 @@ export class Bank {
     this.chips = chips;
   }
   deposit(amount: number) {
-    if (amount > this.chips) throw new Error("Value is not allow");
-    this.money += amount;
+    if (amount > this.money || amount <= 0)
+      throw new ErrorInTurn("Value is not allow", "INVALID_INPUT");
+    this.money -= amount;
+    this.chips += amount;
+  }
+  withdraw(amount: number) {
+    if (amount > this.chips || amount <= 0)
+      throw new ErrorInTurn("Value is not allow", "INVALID_INPUT");
     this.chips -= amount;
+    this.money += amount;
   }
   getChips(amount: number) {
     if (amount > this.chips)

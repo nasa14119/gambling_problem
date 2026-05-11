@@ -9,10 +9,11 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@repo/types": "*",
     "@repo/ts-config": "*",
+    "@repo/types": "*",
     "uuid": "^14.0.0",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.5",
+    "zod": "^3.25.76"
   },
   "keywords": [],
   "author": "",

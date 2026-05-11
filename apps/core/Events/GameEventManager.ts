@@ -2,6 +2,7 @@ import { Card } from "@repo/types";
 import { EventManager } from "./EventsManager";
 import type { PlayerHand } from "@repo/types";
 import type { Player, UserInput } from "../types";
+import { GameWinnerPayload } from "./types";
 export type GameEventPayloads = {
   "round:start": Player[];
   "round:start_turn": Player[];
@@ -10,7 +11,7 @@ export type GameEventPayloads = {
   "game:state_change": Card[];
   "deck:cards_deal": undefined;
   "deck:shuffle": undefined;
-  "deck:flush": Card[];
+  "deck:flop": Card[];
   "deck:turn": Card[];
   "deck:river": Card[];
   "deck:update_player_hand": PlayerHand;
@@ -20,6 +21,9 @@ export type GameEventPayloads = {
   "player:input": UserInput;
   "player:timeexeded": Player;
   "player:invalid_input": { error: string; player: Player };
+  "player:withdraw": { chips: number; player: Player };
+  "player:deposit": { chips: number; player: Player };
+  "round:winners": GameWinnerPayload;
   pause: undefined;
   resume: undefined;
 };

@@ -4,8 +4,12 @@ export abstract class EventManager<
   T extends Record<string, any>,
 > implements IEventManager<T> {
   _eventsListeners: IEventManager<T>["_eventsListeners"] = {};
+  _eventsTransmiters: [string, (param: any) => void][] = [];
   emit: IEventManager<T>["emit"] = (eventId, payload) => {
     const listeners = this._eventsListeners[eventId];
+    this._eventsTransmiters.forEach(([_, transmiter]) => {
+      transmiter({ eventId, payload });
+    });
     if (!listeners) return;
     Array.from(listeners).forEach(([_, listener]) => listener(payload!));
   };
@@ -21,6 +25,14 @@ export abstract class EventManager<
       return id;
     }
     this._eventsListeners[eventId]!.set(id, listener);
+    return id;
+  };
+  createTransmitter: IEventManager<T>["createTransmitter"] = (param) => {
+    if (typeof param !== "function")
+      throw new Error("transmitter must be a function");
+
+    const id = uuid();
+    this._eventsTransmiters.push([id, param]);
     return id;
   };
   createListeners: IEventManager<T>["createListeners"] = (
@@ -52,4 +64,9 @@ export abstract class EventManager<
       remove: this.remove.bind(this),
     };
   };
+  removeTransmiter(id: string): void {
+    this._eventsTransmiters = this._eventsTransmiters.filter(
+      ([id]) => id !== id,
+    );
+  }
 }
