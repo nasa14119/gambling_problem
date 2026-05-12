@@ -19,6 +19,12 @@ export class Bank {
     this.chips -= amount;
     this.money += amount;
   }
+  getMoneyValue() {
+    return this.money;
+  }
+  getChipsValue() {
+    return this.chips;
+  }
   getChips(amount: number) {
     if (amount > this.chips)
       throw new ErrorInTurn(

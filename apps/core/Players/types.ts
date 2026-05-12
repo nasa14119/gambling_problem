@@ -18,6 +18,8 @@ export type PlayerData = {
   playerId: string;
   isFold: boolean;
   cards: PlayerHand;
+  money: number;
+  chips: number;
 };
 export type PlayerConstructor = {
   playerId: string;

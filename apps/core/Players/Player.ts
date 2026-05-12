@@ -122,6 +122,8 @@ export class Player implements IPlayer {
       playerId: this.playerId,
       isFold: this.isFold,
       cards: this.cards,
+      money: this.bank.getMoneyValue(),
+      chips: this.bank.getChipsValue(),
     };
   }
 }
