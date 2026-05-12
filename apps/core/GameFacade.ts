@@ -21,7 +21,6 @@ const validatePayload = (eventId: string, payload: unknown) => {
           z.literal("pay"),
           z.literal("check"),
         ]),
-        player: z.string(),
         chips: z.number(),
       })
       .safeParse(payload) as z.SafeParseReturnType<
@@ -41,10 +40,13 @@ export class GameFacade {
   game: Game;
   player: Player;
   private send: Props["send"];
+  private conection: string;
   constructor({ gameParam, player, send }: Props) {
     this.game = gameParam;
     this.player = this.game.players.getPlayer(player);
-    this.game.eventManager.createTransmitter(this.sendPayload.bind(this));
+    this.conection = this.game.eventManager.createTransmitter(
+      this.sendPayload.bind(this),
+    );
     this.send = send;
   }
   sendPayload<T extends GameEvents>({ eventId, payload }: GameEventPayload<T>) {
@@ -137,6 +139,12 @@ export class GameFacade {
     // console.log("unhandle " + eventId);
   }
   handleInput(input: string) {
+    try {
+      JSON.parse(input);
+    } catch {
+      this.send("Error parsing JSON DATA");
+      return;
+    }
     const { eventId, payload } = JSON.parse(input);
     if (!eventId || typeof eventId !== "string") return;
     if (SIGNALS.has(eventId as GameEvents)) {
@@ -164,5 +172,8 @@ export class GameFacade {
       });
       return;
     }
+  }
+  terminate() {
+    this.game.eventManager.removeTransmiter(this.conection);
   }
 }

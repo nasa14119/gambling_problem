@@ -1,10 +1,10 @@
 import { v4 as uuid } from "uuid";
-import { GameEventManager, GameEvents } from "./Events/GameEventManager.ts";
-import { DeckEventsManager } from "./Deck/DeckEventsFactory.ts";
-import { Player } from "./Players/Player.ts";
-import { Players } from "./Players/index.ts";
-import { TurnSystem } from "./Deck/TurnSystem.ts";
-import { GameFacade } from "./GameFacade.ts";
+import { GameEventManager, GameEvents } from "./Events/GameEventManager";
+import { DeckEventsManager } from "./Deck/DeckEventsFactory";
+import { Player } from "./Players/Player";
+import { Players } from "./Players/index";
+import { TurnSystem } from "./Deck/TurnSystem";
+import { GameFacade } from "./GameFacade";
 export class Game {
   id: string;
   eventManager = new GameEventManager();
@@ -29,7 +29,10 @@ export class Game {
       this.eventManager.on({ eventId: event, listener: () => res() }, true),
     );
   }
-  attachClient(player: Player["playerId"], send: () => void) {
+  attachClient(
+    player: Player["playerId"],
+    send: (payload: string) => void,
+  ): GameFacade {
     const facade = new GameFacade({ gameParam: this, player, send });
     return facade;
   }

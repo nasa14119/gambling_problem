@@ -15,6 +15,6 @@ export type UserInput = {
   player: Player;
   chips: number;
 };
-
+export { type GameFacade } from "./GameFacade";
 export type Transmiter = (eventId: string, payload?: Record<any, any>) => void;
 export { Player };
