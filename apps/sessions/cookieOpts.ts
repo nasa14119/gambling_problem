@@ -6,6 +6,6 @@ const MILISECONDS = 1000,
 export const COOKIES_OPTS: CookieOptions = {
   httpOnly: true,
   secure: true,
-  sameSite: "strict",
+  sameSite: "lax",
   maxAge: MILISECONDS * MINUTES * HOURS * DAYS,
 };

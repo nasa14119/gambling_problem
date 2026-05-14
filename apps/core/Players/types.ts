@@ -11,7 +11,7 @@ export const VALID_ACTIONS: ReadonlySet<string> = new Set([
 
 export const DEFAULTS = {
   money: 1000,
-  chips: 0,
+  chips: 1000,
 } as const;
 export type PlayerOptions = Partial<typeof DEFAULTS>;
 export type PlayerData = {

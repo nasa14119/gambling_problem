@@ -1,5 +1,4 @@
-
-@import "tailwindcss";
+@import 'tailwindcss';
 
 * {
   box-sizing: border-box;
@@ -12,6 +11,8 @@ body,
 }
 
 body {
+  min-height: 100dvh;
   margin: 0;
+  background-color: #000;
+  color: #f2f2f2;
 }
-

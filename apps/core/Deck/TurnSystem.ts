@@ -10,6 +10,7 @@ export class TurnSystem {
   turn_queue: Player[] = [];
   waiting_queue: Player[] = [];
   players_pots: Record<string, number> = {};
+  playerPlaing: Player["playerId"] | null = null;
   changeTurn;
   constructor(manager: GameEventManager) {
     this.manger = manager;
@@ -38,6 +39,7 @@ export class TurnSystem {
 
       // Emit turn have changed to the player that was on front
       this.changeTurn(current.playerId);
+      this.playerPlaing = current.playerId;
       const { type, chips } = await this.waitForEvent("player:validbet");
       if (type === "check" && canCheck) {
         this.waiting_queue = [current, ...this.waiting_queue];
@@ -73,6 +75,14 @@ export class TurnSystem {
         this.waiting_queue = [current, ...this.waiting_queue];
         continue;
       }
+      if (type === "raise" && this.players_pots[current.playerId] <= min) {
+        this.turn_queue = [current, ...rest];
+        this.manger.emit("player:insuficientfunds", {
+          min,
+          player: current,
+        });
+        continue;
+      }
       // Only raise if really new min
       if (type === "raise" && this.players_pots[current.playerId] > min) {
         canCheck = false;
@@ -81,7 +91,6 @@ export class TurnSystem {
         min = this.players_pots[current.playerId];
         continue;
       }
-
       // This case shoulde'nt be accessible
       // Thinking of adding a roolback system for invalid inputs
       this.turn_queue = [current, ...rest];
@@ -97,6 +106,7 @@ export class TurnSystem {
 
     // Emiting the end of the turn
     this.manger.emit("turn:end", { moneyPot: this.moneyPot });
+    this.playerPlaing = null;
     return;
   }
 }

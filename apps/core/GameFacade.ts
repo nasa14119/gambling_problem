@@ -16,7 +16,7 @@ const validatePayload = (eventId: string, payload: unknown) => {
     const value = z
       .object({
         type: z.union([
-          z.literal("flop"),
+          z.literal("fold"),
           z.literal("raise"),
           z.literal("pay"),
           z.literal("check"),
@@ -48,6 +48,39 @@ export class GameFacade {
       this.sendPayload.bind(this),
     );
     this.send = send;
+    // Sending the player's cards
+    if (this.player.cards !== null) {
+      this.sendPayload({
+        eventId: "round:start",
+        payload: this.game.players.session(),
+      });
+    }
+    // Sending the message that the playes is on turn
+    if (this.game.turnSystem.playerPlaing !== null) {
+      this.sendPayload({
+        eventId: "player:turn",
+        payload: this.game.turnSystem.playerPlaing,
+      });
+    }
+    // Sending the current money pot
+    if (this.game.turnSystem.moneyPot !== 0) {
+      this.sendPayload({
+        eventId: "turn:end",
+        payload: { moneyPot: this.game.turnSystem.moneyPot },
+      });
+    }
+    // Sending the players money pot
+    for (const [playerId, moneyPot] of Object.entries(
+      this.game.turnSystem.players_pots,
+    )) {
+      this.sendPayload({
+        eventId: "player:placedbet",
+        payload: {
+          chips: moneyPot,
+          player: playerId,
+        },
+      });
+    }
   }
   sendPayload<T extends GameEvents>({ eventId, payload }: GameEventPayload<T>) {
     // Errors in turn
@@ -105,7 +138,6 @@ export class GameFacade {
     // Players bet
     if (eventId === "player:validbet") {
       const payloadBet = payload as GameEventPayloads["player:validbet"];
-      if (payloadBet.player.playerId === this.player.playerId) return;
       this.send(
         JSON.stringify({
           eventId,
@@ -135,6 +167,9 @@ export class GameFacade {
         }),
       );
       return;
+    }
+    if (eventId === "deck:cards_deal") {
+      this.send(JSON.stringify({ eventId, payload: this.player.cards }));
     }
     // console.log("unhandle " + eventId);
   }

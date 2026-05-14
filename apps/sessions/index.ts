@@ -24,7 +24,6 @@ export function wsSever(app: express.Application) {
 
   appWithWs.post("/api/game/new/singlePlayer", (req, res) => {
     const game = new GameSinglePlayer();
-    console.log(req.body);
     const { playerId, token } = z
       .object({
         token: z.string().optional().nullable().default(null),
@@ -43,10 +42,65 @@ export function wsSever(app: express.Application) {
       return;
     }
   });
+  appWithWs.post("/api/game/new/prototype", (req, res) => {
+    const { sessionId } = req.cookies;
+    if (sessionId && sessions.sessionExists(sessionId)) {
+      res.sendStatus(204);
+      return;
+    }
+    const game = new GameSinglePlayer();
+    const { success, data, error } = z
+      .object({
+        players: z.array(z.string()),
+      })
+      .safeParse(req.body);
+    if (!success) return res.status(400).send(error.errors);
+    for (const player of data.players) {
+      game.addPlayer(player);
+    }
+    game.init();
+    res.cookie("sessionId", sessions.newGame(game));
+    res.sendStatus(200);
+  });
+  appWithWs.ws("/api/game/connect/prototype", (ws, req) => {
+    const { sessionId } = req.cookies;
+    if (!sessionId) return ws.close(1003, "No sessionId");
+    const playerId = req.query.playerId as string | undefined;
+    if (!playerId) return ws.close(1003, "No playerId");
+    const facade = sessions.connectGame(sessionId, {
+      playerId,
+      send: ws.send.bind(ws),
+    });
+    if (facade.player.cards !== null) {
+      ws.send(
+        JSON.stringify({
+          eventId: "deck:cards_deal",
+          payload: facade.player.cards,
+        }),
+      );
+      if (facade.game.deck.gameState.length > 0) {
+        ws.send(
+          JSON.stringify({
+            eventId: { 3: "deck:flop", 4: "deck:turn", 5: "deck:river" }[
+              facade.game.deck.gameState.length
+            ],
+            payload: facade.game.deck.gameState,
+          }),
+        );
+      }
+    }
+    ws.on("message", (mss, isBinary) => {
+      if (isBinary) return;
+      facade.handleInput(mss.toString("utf8"));
+    });
+    ws.on("error", () => {
+      facade.terminate();
+    });
+  });
   appWithWs.ws("/api/game/connect", (ws, req) => {
     2;
     const { sessionId } = req.cookies;
-    const playerId = req.query.playerId ?? "guest";
+    const playerId = (req.query.playerId ?? "guest") as string;
     if (!sessionId) return ws.close(1003, "No sessionId");
     try {
       const facade = sessions.connectGame(sessionId, {

@@ -23,6 +23,7 @@ export type GameEventPayloads = {
   "player:invalid_input": { error: string; player: Player };
   "player:withdraw": { chips: number; player: Player };
   "player:deposit": { chips: number; player: Player };
+  "player:placedbet": { chips: number; player: Player["playerId"] };
   "round:winners": GameWinnerPayload;
   pause: undefined;
   resume: undefined;

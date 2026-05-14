@@ -15,6 +15,9 @@ class Singleton {
     this.sessions.set(prefix + id, game);
     return prefix + id;
   }
+  sessionExists(sessionId: string) {
+    return this.sessions.has(sessionId);
+  }
   connectGame(
     sessionId: string,
     { playerId, send }: { playerId: string; send: (payload: string) => void },

@@ -22,6 +22,10 @@ export class DeckEventsManager extends Deck {
       eventId: "round:start",
       listener: this.startRound.bind(this),
     });
+    this.manager.on({
+      eventId: "round:end",
+      listener: () => (this.gameState = []),
+    });
   }
   flop(): Card[] {
     this.manager.emit("deck:flop", super.flop());
