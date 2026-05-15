@@ -9,7 +9,7 @@ type PlaingStore = {
   >
   turn: string | null
   setPlayers: (id: string, players: PlaingStore['players'][string]) => void
-  setTurn: (id: string) => void
+  setTurn: (id: string | null) => void
 }
 export const usePlaingStore = create<PlaingStore>((set) => ({
   players: {},
@@ -23,14 +23,9 @@ export const usePlaingStore = create<PlaingStore>((set) => ({
   setTurn: (id) => set({ turn: id }),
 }))
 
-export const useUpdatePlayer = (
-  id: string,
-  fun: PlaingStore['players'][string],
-) => {
-  const setPlayer = usePlaingStore((state) => state.setPlayers)
-  setPlayer(id, fun)
+export const useUpdatePlayer = (id: string) => {
   const setTurn = usePlaingStore((state) => state.setTurn)
-  return { setTurn: () => setTurn(id) }
+  return { setTurn: (clear = false) => (clear ? setTurn(null) : setTurn(id)) }
 }
 
 export const useEventSender = () => {

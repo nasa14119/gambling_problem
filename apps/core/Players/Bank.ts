@@ -19,6 +19,10 @@ export class Bank {
     this.chips -= amount;
     this.money += amount;
   }
+  canPay(amount: number) {
+    if (this.chips === 0) return false;
+    return this.chips - amount > 0;
+  }
   getMoneyValue() {
     return this.money;
   }

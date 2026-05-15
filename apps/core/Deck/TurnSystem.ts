@@ -30,28 +30,32 @@ export class TurnSystem {
     this.turn_queue = turns;
     this.waiting_queue = [];
     this.players_pots = {};
+    const turn_pots: Record<string, number> = {};
     let canCheck = true;
     let min = -Infinity;
     this.manager.emit("turn:start", undefined);
     while (this.turn_queue.length > 0) {
       const [current, ...rest] = this.turn_queue;
+
+      // This function make the current player retry to play
+      const retry = () => (this.turn_queue = [current, ...rest]);
       // Pop front
       this.turn_queue = rest;
 
       // Emit turn have changed to the player that was on front
       this.changeTurn(current.playerId);
       this.playerPlaing = current.playerId;
-      const { type, chips } = await this.waitForEvent("player:validbet");
+      let { type, chips } = await this.waitForEvent("player:validbet");
       if (type === "check" && canCheck) {
         this.waiting_queue = [current, ...this.waiting_queue];
         continue;
       }
       if (type === "check") {
+        retry();
         this.manager.emit("player:invalid_input", {
           error: "Can't check if players have raise",
           player: current,
         });
-        this.turn_queue = [current, ...rest];
         continue;
       }
       if (type === "fold") {
@@ -60,21 +64,37 @@ export class TurnSystem {
       }
       // From here the player whats to continue in the game
       // Gets the current player money pot added if empty start with 0
-      const playerMoney = this.players_pots[current.playerId] ?? 0;
+      const playerMoney = turn_pots[current.playerId] ?? 0;
+      // Money in this turn
+      const playerMoneyInTurn = playerMoney + chips;
+      turn_pots[current.playerId] = playerMoneyInTurn;
+
       // Add the inputted chips to player money pot
       this.players_pots[current.playerId] = playerMoney + chips;
-      if (playerMoney + chips < min) {
+      if (playerMoneyInTurn < min) {
         // Emits error for player wrong input (This shoulde'nt happen at this point it should be catched in a earlier stage)
-        this.turn_queue = [current, ...rest];
         this.manager.emit("player:insuficientfunds", {
           min: min - this.players_pots[current.playerId],
           player: current,
         });
+        retry();
         continue;
       }
+      if (type === "pay" && playerMoneyInTurn > min) {
+        type = "raise";
+      }
       // We know that the players current pot is greater on equal to min
-      if (type === "pay") {
+      if (type === "pay" && playerMoneyInTurn === min) {
+        // This is the success path when pay
         this.waiting_queue = [current, ...this.waiting_queue];
+        continue;
+      }
+      if (type === "pay") {
+        this.manager.emit("player:insuficientfunds", {
+          min: min - playerMoneyInTurn,
+          player: current,
+        });
+        retry();
         continue;
       }
       // Only raise if really new min
@@ -87,11 +107,11 @@ export class TurnSystem {
       }
       // This case shoulde'nt be accessible
       // Thinking of adding a roolback system for invalid inputs
-      this.turn_queue = [current, ...rest];
+      retry();
       this.manager.emit("player:insuficientfunds", { min, player: current });
     }
     // Getting the total pot made in turn
-    const turnPot = Object.values(this.players_pots).reduce(
+    const turnPot = Object.values(turn_pots).reduce(
       (prev, crr) => prev + crr,
       0,
     );
@@ -99,7 +119,7 @@ export class TurnSystem {
     this.moneyPot += turnPot;
 
     // Emiting the end of the turn
-    this.manager.emit("turn:end", { moneyPot: this.moneyPot });
+    this.manager.emit("turn:end", { moneyPot: turnPot });
     this.playerPlaing = null;
     return;
   }

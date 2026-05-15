@@ -97,6 +97,10 @@ export class Player implements IPlayer {
         this.sendInput({ type, chips: 0, player: this });
         return;
       }
+      if (userInputChips === 0 && type === "pay") {
+        this.sendInput({ type, chips: 0, player: this });
+        return;
+      }
       // This will check that the user has the chips he whants to bet
       const chips = this.bank.getChips(userInputChips);
       this.sendInput({ type, chips, player: this });

@@ -1,3 +1,4 @@
+import { usePlaingStore } from '#/plaingStore'
 import { useCallback, useEffect, useState } from 'react'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 
@@ -16,9 +17,7 @@ export type SendEvent = ({
 }) => void
 export const useSocket = ({
   playerId,
-}: Props):
-  | [{ data: Data; sendEvent: SendEvent }, true]
-  | [{ data: null; sendEvent: SendEvent }, false] => {
+}: Props): [{ data: Data | null; sendEvent: SendEvent }, boolean] => {
   // Making hook to the websocket client
   const { lastJsonMessage, readyState, sendJsonMessage } = useWebSocket<
     Data | undefined
@@ -26,25 +25,23 @@ export const useSocket = ({
     shouldReconnect: () => true,
     queryParams: { playerId },
   })
-  const sendEvent: SendEvent = useCallback(
-    (param) => {
-      sendJsonMessage(param)
-    },
-    [sendJsonMessage],
-  )
+  const setPlayer = usePlaingStore((state) => state.setPlayers)
   const [data, setData] = useState<Data | null>(null)
+  useEffect(() => {
+    sendJsonMessage({ hola: 'mundo' })
+    setPlayer(playerId, sendJsonMessage)
+  }, [sendJsonMessage])
   useEffect(() => {
     if (!lastJsonMessage) return
     setData(() => lastJsonMessage)
   }, [lastJsonMessage])
   const isConnected = readyState === ReadyState.OPEN && data !== null
-  return isConnected
-    ? [
-        {
-          data,
-          sendEvent,
-        },
-        true,
-      ]
-    : [{ data: null, sendEvent }, false]
+  return [
+    {
+      data,
+      sendEvent: sendJsonMessage,
+    },
+    isConnected,
+  ]
 }
+export type useSocketValue = ReturnType<typeof useSocket>

@@ -47,6 +47,8 @@ export function wsSever(app: express.Application) {
     if (sessionId && sessions.sessionExists(sessionId)) {
       res.sendStatus(204);
       return;
+    } else {
+      res.clearCookie("sessionId");
     }
     const game = new GameSinglePlayer();
     const { success, data, error } = z
@@ -64,7 +66,8 @@ export function wsSever(app: express.Application) {
   });
   appWithWs.ws("/api/game/connect/prototype", (ws, req) => {
     const { sessionId } = req.cookies;
-    if (!sessionId) return ws.close(1003, "No sessionId");
+    if (!sessionId || !sessions.sessionExists(sessionId))
+      return ws.close(1003, "No sessionId");
     const playerId = req.query.playerId as string | undefined;
     if (!playerId) return ws.close(1003, "No playerId");
     const facade = sessions.connectGame(sessionId, {
@@ -93,7 +96,8 @@ export function wsSever(app: express.Application) {
       if (isBinary) return;
       facade.handleInput(mss.toString("utf8"));
     });
-    ws.on("error", () => {
+    ws.on("error", (e) => {
+      console.error(e);
       facade.terminate();
     });
   });

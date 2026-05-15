@@ -1,11 +1,15 @@
-import { useSocket } from '#/hooks/useSocket'
+import type { useSocketValue } from '#/hooks/useSocket'
 import { useUpdatePlayer } from '#/plaingStore'
 import type { PlayerHand } from '@repo/types'
 import { useEffect, useState } from 'react'
 
-export const usePlayerEvents = (playerId: string) => {
-  const [{ data, sendEvent }, isConnected] = useSocket({ playerId })
-  const { setTurn } = useUpdatePlayer(playerId, sendEvent)
+type Props = {
+  playerId: string
+  socket: useSocketValue
+}
+export const usePlayerEvents = ({ playerId, socket }: Props) => {
+  const [{ data, sendEvent }, isConnected] = socket
+  const { setTurn } = useUpdatePlayer(playerId)
   const [cards, setCard] = useState<PlayerHand>(null)
   const [isActive, setIsActive] = useState(false)
   const [placedBet, setPlacedBet] = useState(0)
@@ -30,6 +34,7 @@ export const usePlayerEvents = (playerId: string) => {
     }
     if (eventId === 'round:end') {
       setPlacedBet(0)
+      setIsActive(false)
     }
     if (eventId === 'player:turn') {
       setIsActive(false)
@@ -43,6 +48,10 @@ export const usePlayerEvents = (playerId: string) => {
       (eventId === 'player:validbet' && payload.player === playerId)
     ) {
       setPlacedBet((prev) => prev + payload.chips)
+      setPlayerMoney(({ chips, money }) => ({
+        money,
+        chips: chips - payload.chips,
+      }))
       setHasError(false)
     }
     if (
@@ -51,6 +60,18 @@ export const usePlayerEvents = (playerId: string) => {
     ) {
       setHasError(true)
       console.error(data)
+    }
+    if (eventId === 'round:winners') {
+      const { winners } = payload as {
+        winners: { playerId: string; chips: number }[]
+      }
+      const isWinner = winners.filter((w) => w.playerId === playerId)
+      if (isWinner.length > 0) {
+        setPlayerMoney((prev) => ({
+          ...prev,
+          chips: isWinner[0].chips,
+        }))
+      }
     }
   }, [data])
   return { isConnected, cards, isActive, placedBet, hasError, playerMoney }

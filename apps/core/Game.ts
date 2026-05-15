@@ -38,28 +38,34 @@ export class Game {
   }
   determineWinner({ moneyPot }: { moneyPot: number }) {
     const players = this.players.getPlaingPlayers();
+    const sendwinners = this.eventManager.createEmiter("round:winners");
     if (players.length === 0) return;
     if (players.length < 2) {
       players[0].bank.addChips(moneyPot);
+      sendwinners({
+        gameState: this.deck.gameState,
+        moneyWin: moneyPot,
+        winners: [{ for: "default", player: players[0] }],
+      });
       return;
     }
     const winners = this.deck.determineWinner(players);
-    this.eventManager.emit("round:winners", {
-      moneyWin: moneyPot / winners.length,
-      gameState: this.deck.gameState,
-      winners: winners.map((w) => ({
-        player: this.players.getPlayer(w.playerId),
-        for: w.for,
-      })),
-    });
     if (winners.length < 2) {
       this.players.getPlayer(winners[0].playerId).bank.addChips(moneyPot);
-      return;
+    } else {
+      moneyPot /= winners.length;
+      winners.forEach((w) =>
+        this.players.getPlayer(w.playerId).bank.addChips(moneyPot),
+      );
     }
-    moneyPot /= winners.length;
-    winners.forEach((w) =>
-      this.players.getPlayer(w.playerId).bank.addChips(moneyPot),
-    );
+    sendwinners({
+      gameState: this.deck.gameState,
+      moneyWin: moneyPot,
+      winners: winners.map((w) => ({
+        for: w.for,
+        player: this.players.getPlayer(w.playerId),
+      })),
+    });
   }
 
   async startRound() {
