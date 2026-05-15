@@ -16,32 +16,34 @@ export function PlayerCard({
   hasError = false,
 }: Props) {
   return (
-    <div className="flex gap-x-2 relative">
-      {cards === null ? (
-        <>
-          <CardCover scale={1.5} />
-          <CardCover scale={1.5} />
-        </>
-      ) : (
-        <>
-          <Card
-            card={cards[0]}
-            scale={1.5}
-            className={[
-              isActive && 'outline-2 outline-green-400',
-              hasError && 'outline-2 outline-red-400',
-            ]}
-          />
-          <Card
-            card={cards[1]}
-            scale={1.5}
-            className={[
-              isActive && 'outline-2 outline-green-400',
-              hasError && 'outline-2 outline-red-400',
-            ]}
-          />
-        </>
-      )}
+    <div className="flex flex-col justify-center items-center gap-y-2 relative">
+      <div className="flex gap-x-2 ">
+        {cards === null ? (
+          <>
+            <CardCover scale={1.4} />
+            <CardCover scale={1.4} />
+          </>
+        ) : (
+          <>
+            <Card
+              card={cards[0]}
+              scale={1.4}
+              className={[
+                isActive && 'outline-2 outline-green-400',
+                hasError && 'outline-2 outline-red-400',
+              ]}
+            />
+            <Card
+              card={cards[1]}
+              scale={1.4}
+              className={[
+                isActive && 'outline-2 outline-green-400',
+                hasError && 'outline-2 outline-red-400',
+              ]}
+            />
+          </>
+        )}
+      </div>
       {children}
     </div>
   )

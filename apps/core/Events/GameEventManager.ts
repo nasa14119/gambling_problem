@@ -6,6 +6,7 @@ import { GameWinnerPayload } from "./types";
 export type GameEventPayloads = {
   "round:start": Player[];
   "round:start_turn": Player[];
+  "turn:start": undefined;
   "turn:end": { moneyPot: number };
   "round:end": undefined;
   "game:state_change": Card[];

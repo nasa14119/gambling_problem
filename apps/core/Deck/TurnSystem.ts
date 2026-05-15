@@ -6,16 +6,16 @@ import {
 import type { Player } from "../types";
 export class TurnSystem {
   moneyPot: number = 0;
-  manger: GameEventManager;
+  manager: GameEventManager;
   turn_queue: Player[] = [];
   waiting_queue: Player[] = [];
   players_pots: Record<string, number> = {};
   playerPlaing: Player["playerId"] | null = null;
   changeTurn;
   constructor(manager: GameEventManager) {
-    this.manger = manager;
-    this.changeTurn = this.manger.createEmiter("player:turn");
-    this.manger.on({
+    this.manager = manager;
+    this.changeTurn = this.manager.createEmiter("player:turn");
+    this.manager.on({
       eventId: "round:end",
       listener: () => (this.moneyPot = 0),
     });
@@ -23,7 +23,7 @@ export class TurnSystem {
   // This fuction will wait to a specific event and kill the event in the process
   private waitForEvent<T extends GameEvents>(event: T) {
     return new Promise<GameEventPayloads[T]>((res) =>
-      this.manger.on({ eventId: event, listener: res }, true),
+      this.manager.on({ eventId: event, listener: res }, true),
     );
   }
   async startTurn(turns: Player[]) {
@@ -32,6 +32,7 @@ export class TurnSystem {
     this.players_pots = {};
     let canCheck = true;
     let min = -Infinity;
+    this.manager.emit("turn:start", undefined);
     while (this.turn_queue.length > 0) {
       const [current, ...rest] = this.turn_queue;
       // Pop front
@@ -46,7 +47,7 @@ export class TurnSystem {
         continue;
       }
       if (type === "check") {
-        this.manger.emit("player:invalid_input", {
+        this.manager.emit("player:invalid_input", {
           error: "Can't check if players have raise",
           player: current,
         });
@@ -64,7 +65,8 @@ export class TurnSystem {
       this.players_pots[current.playerId] = playerMoney + chips;
       if (playerMoney + chips < min) {
         // Emits error for player wrong input (This shoulde'nt happen at this point it should be catched in a earlier stage)
-        this.manger.emit("player:insuficientfunds", {
+        this.turn_queue = [current, ...rest];
+        this.manager.emit("player:insuficientfunds", {
           min: min - this.players_pots[current.playerId],
           player: current,
         });
@@ -73,14 +75,6 @@ export class TurnSystem {
       // We know that the players current pot is greater on equal to min
       if (type === "pay") {
         this.waiting_queue = [current, ...this.waiting_queue];
-        continue;
-      }
-      if (type === "raise" && this.players_pots[current.playerId] <= min) {
-        this.turn_queue = [current, ...rest];
-        this.manger.emit("player:insuficientfunds", {
-          min,
-          player: current,
-        });
         continue;
       }
       // Only raise if really new min
@@ -94,7 +88,7 @@ export class TurnSystem {
       // This case shoulde'nt be accessible
       // Thinking of adding a roolback system for invalid inputs
       this.turn_queue = [current, ...rest];
-      this.manger.emit("player:insuficientfunds", { min, player: current });
+      this.manager.emit("player:insuficientfunds", { min, player: current });
     }
     // Getting the total pot made in turn
     const turnPot = Object.values(this.players_pots).reduce(
@@ -105,7 +99,7 @@ export class TurnSystem {
     this.moneyPot += turnPot;
 
     // Emiting the end of the turn
-    this.manger.emit("turn:end", { moneyPot: this.moneyPot });
+    this.manager.emit("turn:end", { moneyPot: this.moneyPot });
     this.playerPlaing = null;
     return;
   }

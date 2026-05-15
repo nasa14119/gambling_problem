@@ -18,26 +18,30 @@ export function AdminPlayer({ playerId }: Props) {
   const [isActive, setIsActive] = useState(false)
   const [placedBet, setPlacedBet] = useState(0)
   const [hasError, setHasError] = useState(false)
+  const [playerMoney, setPlayerMoney] = useState({ chips: 0, money: 0 })
   useEffect(() => {
     if (!isConnected || !data) return
     const { eventId, payload } = data
     if (eventId === 'deck:cards_deal') {
       setCard(payload)
     }
-    if (eventId === 'round:end') {
-      setCard(null)
+    if (eventId === 'round:start') {
+      sendEvent({ eventId: 'player:info', payload: undefined })
+    }
+    if (eventId === 'player:info_data') {
+      setPlayerMoney({ chips: payload.chips, money: payload.money })
+      setCard(payload.cards)
     }
     if (eventId === 'user:turn') {
       setTurn()
     }
-    setStore(eventId, payload)
     if (eventId === 'player:turn') {
       setIsActive(false)
     }
     if (eventId === 'user:turn') {
       setIsActive(true)
     }
-    if (eventId === 'player:placedbet') {
+    if (eventId === 'player:placedbet' && playerId === payload.player) {
       setPlacedBet(payload.chips)
       setHasError(false)
     }
@@ -48,6 +52,7 @@ export function AdminPlayer({ playerId }: Props) {
       setHasError(true)
       console.error(payload.error)
     }
+    setStore(eventId, payload)
   }, [data])
   useEffect(() => {
     setEventSender(sendEvent)
@@ -60,6 +65,8 @@ export function AdminPlayer({ playerId }: Props) {
       hasError={hasError}
       isActive={isActive}
       placedBet={placedBet}
+      playerMoney={playerMoney}
+      playerId={playerId}
     />
   )
 }

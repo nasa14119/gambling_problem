@@ -69,20 +69,35 @@ export class GameFacade {
         payload: { moneyPot: this.game.turnSystem.moneyPot },
       });
     }
+  }
+  private getPlayersPots() {
     // Sending the players money pot
     for (const [playerId, moneyPot] of Object.entries(
       this.game.turnSystem.players_pots,
     )) {
-      this.sendPayload({
-        eventId: "player:placedbet",
-        payload: {
-          chips: moneyPot,
-          player: playerId,
-        },
-      });
+      this.send(
+        JSON.stringify({
+          eventId: "player:placedbet",
+          payload: {
+            chips: moneyPot,
+            player: playerId,
+          },
+        }),
+      );
     }
   }
   sendPayload<T extends GameEvents>({ eventId, payload }: GameEventPayload<T>) {
+    // Turn end
+    if (eventId === "turn:end") {
+      const data = payload as GameEventPayloads["turn:end"];
+      this.send(
+        JSON.stringify({
+          eventId: "turn:end",
+          payload: data,
+        }),
+      );
+      return;
+    }
     // Errors in turn
     if (
       eventId === "player:invalid_input" ||
@@ -181,6 +196,16 @@ export class GameFacade {
       return;
     }
     const { eventId, payload } = JSON.parse(input);
+    if (eventId === "player:info") {
+      this.send(
+        JSON.stringify({
+          eventId: "player:info_data",
+          payload: this.player.getData(),
+        }),
+      );
+      this.getPlayersPots();
+      return;
+    }
     if (!eventId || typeof eventId !== "string") return;
     if (SIGNALS.has(eventId as GameEvents)) {
       if (eventId === "round:start") {

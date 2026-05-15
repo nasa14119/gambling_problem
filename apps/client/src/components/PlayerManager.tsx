@@ -6,5 +6,5 @@ type Props = {
 }
 export function PlayerManager({ playerId }: Props) {
   const params = usePlayerEvents(playerId)
-  return <PlayerCardUI {...params} />
+  return <PlayerCardUI {...params} playerId={playerId} />
 }

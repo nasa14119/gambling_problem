@@ -10,14 +10,25 @@ export const usePlayerEvents = (playerId: string) => {
   const [isActive, setIsActive] = useState(false)
   const [placedBet, setPlacedBet] = useState(0)
   const [hasError, setHasError] = useState(false)
+  const [playerMoney, setPlayerMoney] = useState({ chips: 0, money: 0 })
   useEffect(() => {
     if (!isConnected || !data) return
     const { eventId, payload } = data
+    if (eventId === 'round:start') {
+      setCard(null)
+      sendEvent({ eventId: 'player:info', payload: undefined })
+    }
+    if (eventId === 'player:info_data') {
+      setPlayerMoney({ chips: payload.chips, money: payload.money })
+      setCard(payload.cards)
+    }
+    if (eventId === 'turn:start') {
+      setPlacedBet(0)
+    }
     if (eventId === 'deck:cards_deal') {
       setCard(payload)
     }
     if (eventId === 'round:end') {
-      setCard(null)
       setPlacedBet(0)
     }
     if (eventId === 'player:turn') {
@@ -31,7 +42,7 @@ export const usePlayerEvents = (playerId: string) => {
       (eventId === 'player:placedbet' && payload.player === playerId) ||
       (eventId === 'player:validbet' && payload.player === playerId)
     ) {
-      setPlacedBet(payload.chips)
+      setPlacedBet((prev) => prev + payload.chips)
       setHasError(false)
     }
     if (
@@ -39,7 +50,8 @@ export const usePlayerEvents = (playerId: string) => {
       'player:insuficientfunds' === eventId
     ) {
       setHasError(true)
+      console.error(data)
     }
   }, [data])
-  return { isConnected, cards, isActive, placedBet, hasError }
+  return { isConnected, cards, isActive, placedBet, hasError, playerMoney }
 }

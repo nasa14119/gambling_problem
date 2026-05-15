@@ -14,7 +14,7 @@ export class Players {
   }
   getPlayer(id: Player["playerId"]) {
     if (!this.players.has(id)) throw new Error("Player not found");
-    return this.players.get(id)!;
+    return this.players.get.bind(this.players)(id)!;
   }
   playerTurn(playerTurnId: Player["playerId"]) {
     const player = this.players.get(playerTurnId);
@@ -28,6 +28,7 @@ export class Players {
   resetForNewRound() {
     for (const key of this.players.keys()) {
       this.players.get(key)!.isFold = false;
+      this.players.get(key)!.cards = null;
     }
   }
 }

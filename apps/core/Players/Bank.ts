@@ -37,6 +37,6 @@ export class Bank {
     return amount;
   }
   addChips(amount: number) {
-    this.chips = amount;
+    this.chips += amount;
   }
 }
