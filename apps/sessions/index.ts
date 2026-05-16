@@ -64,6 +64,23 @@ export function wsSever(app: express.Application) {
     res.cookie("sessionId", sessions.newGame(game));
     res.sendStatus(200);
   });
+  appWithWs.post("/api/game/new/botlobbie", (req, res) => {
+    const { sessionId } = req.cookies;
+    if (sessionId && sessions.sessionExists(sessionId)) {
+      res.sendStatus(204);
+      return;
+    } else {
+      res.clearCookie("sessionId");
+    }
+    const game = new GameSinglePlayer();
+    game.addPlayer("player:admin");
+    for (let bot = 1; bot <= 4; bot++) {
+      game.addBot(`bot:${bot}`);
+    }
+    game.init();
+    res.cookie("sessionId", sessions.newGame(game));
+    res.sendStatus(200);
+  });
   appWithWs.ws("/api/game/connect/prototype", (ws, req) => {
     const { sessionId } = req.cookies;
     if (!sessionId || !sessions.sessionExists(sessionId))

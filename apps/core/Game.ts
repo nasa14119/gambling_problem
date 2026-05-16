@@ -3,6 +3,7 @@ import { GameEventManager, GameEvents } from "./Events/GameEventManager";
 import { DeckEventsManager } from "./Deck/DeckEventsFactory";
 import { Player } from "./Players/Player";
 import { Players } from "./Players/index";
+import { PokerBot } from "./Players/Bot";
 import { TurnSystem } from "./Deck/TurnSystem";
 import { GameFacade } from "./GameFacade";
 export class Game {
@@ -87,5 +88,13 @@ export class Game {
       playerId: id,
     });
     this.players.attachPlayer(player);
+  }
+  addBot(id: string) {
+    const bot = new PokerBot({
+      difficulty: "easy",
+      playerId: id,
+      manager: this.eventManager.createManage(),
+    });
+    this.players.attachPlayer(bot);
   }
 }
