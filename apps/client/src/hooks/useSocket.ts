@@ -1,5 +1,5 @@
 import { usePlaingStore } from '#/plaingStore'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 
 const SOCKET_URL = 'ws://localhost:3000/api/game/connect/prototype'
@@ -26,11 +26,10 @@ export const useSocket = ({
     queryParams: { playerId },
   })
   const setPlayer = usePlaingStore((state) => state.setPlayers)
-  const [data, setData] = useState<Data | null>(null)
   useEffect(() => {
-    sendJsonMessage({ hola: 'mundo' })
     setPlayer(playerId, sendJsonMessage)
   }, [sendJsonMessage])
+  const [data, setData] = useState<Data | null>(null)
   useEffect(() => {
     if (!lastJsonMessage) return
     setData(() => lastJsonMessage)
