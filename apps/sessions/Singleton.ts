@@ -1,4 +1,5 @@
-import { type Game } from "./interfaceGame";
+import { GameFacade } from "core/types";
+import { type Game } from "./interfaceGame.ts";
 import { v4 as uuid } from "uuid";
 class Singleton {
   private static instance: Singleton;
@@ -21,7 +22,7 @@ class Singleton {
   connectGame(
     sessionId: string,
     { playerId, send }: { playerId: string; send: (payload: string) => void },
-  ) {
+  ): GameFacade {
     if (!this.sessions.has(sessionId)) throw new Error("Session Id not found");
     const game = this.sessions.get(sessionId)!;
     return game.attachClient(playerId, send);
