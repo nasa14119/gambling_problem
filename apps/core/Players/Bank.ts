@@ -1,4 +1,4 @@
-import { ErrorInTurn } from "../types";
+import { ErrorInTurn } from "../types.ts";
 
 export class Bank {
   money: number = 0;

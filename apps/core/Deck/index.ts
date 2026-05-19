@@ -3,7 +3,7 @@ import { getCardName } from "./Card.ts";
 import { type Card } from "@repo/types";
 import pokersolver, { type Hand } from "./lib/pokersolver.ts";
 type PlayerCards = [Card, Card];
-import { Player } from "../types";
+import { Player } from "../types.ts";
 const pokersolverWinners = pokersolver.Hand.winners;
 export class Deck {
   cards: number[];

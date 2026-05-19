@@ -2,8 +2,8 @@ import {
   GameEventManager,
   GameEventPayloads,
   GameEvents,
-} from "../Events/GameEventManager";
-import type { Player } from "../types";
+} from "../Events/GameEventManager.ts";
+import type { Player } from "../types.ts";
 export class TurnSystem {
   moneyPot: number = 0;
   manager: GameEventManager;
@@ -119,6 +119,7 @@ export class TurnSystem {
       (prev, crr) => prev + crr,
       0,
     );
+
     // Adding turn pot to the global pot
     this.moneyPot += turnPot;
 

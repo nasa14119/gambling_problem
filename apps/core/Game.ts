@@ -1,10 +1,10 @@
 import { v4 as uuid } from "uuid";
-import { GameEventManager } from "./Events/GameEventManager";
-import { DeckEventsManager } from "./Deck/DeckEventsFactory";
-import { Player } from "./Players/Player";
-import { Players } from "./Players/index";
-import { TurnSystem } from "./Deck/TurnSystem";
-import { GameFacade } from "./GameFacade";
+import { GameEventManager, GameEvents } from "./Events/GameEventManager.ts";
+import { DeckEventsManager } from "./Deck/DeckEventsFactory.ts";
+import { Player } from "./Players/Player.ts";
+import { Players } from "./Players/index.ts";
+import { TurnSystem } from "./Deck/TurnSystem.ts";
+import { GameFacade } from "./GameFacade.ts";
 export class Game {
   id: string;
   eventManager = new GameEventManager();
@@ -72,7 +72,7 @@ export class Game {
     this.eventManager.emit("round:end", undefined);
   }
   canPlay() {
-    return this.players.getPlaingPlayers().length <= 1;
+    return this.players.getPlaingPlayers().length > 1;
   }
   async startRound() {
     this.eventManager.emit("round:start", this.players.session());

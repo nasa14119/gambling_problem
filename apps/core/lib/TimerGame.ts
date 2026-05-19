@@ -1,5 +1,8 @@
-import type { GameEventManager, GameEvents } from "../Events/GameEventManager";
-import { Player } from "../types";
+import type {
+  GameEventManager,
+  GameEvents,
+} from "../Events/GameEventManager.ts";
+import { Player } from "../types.ts";
 type Constructor = {
   /**@type {number} seconds of the timer */
   time: number;
@@ -14,7 +17,7 @@ export class Timer {
   private isPaused: boolean = false;
   private player: Constructor["player"];
   private ids: { [key in GameEvents]?: string } = {};
-  private interval: number = 0;
+  private interval: NodeJS.Timeout;
   constructor({ time, manager, onEnd, player }: Constructor) {
     this.player = player;
     this.time = time;

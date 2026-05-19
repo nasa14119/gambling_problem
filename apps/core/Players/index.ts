@@ -1,4 +1,4 @@
-import { type Player } from "../types";
+import { type Player } from "../types.ts";
 
 export class Players {
   players: Map<string, Player> = new Map();
