@@ -36,7 +36,10 @@ export class TurnSystem {
     this.manager.emit("turn:start", undefined);
     while (this.turn_queue.length > 0) {
       const [current, ...rest] = this.turn_queue;
-
+      if (rest.length <= 0 && this.waiting_queue.length <= 0) {
+        this.turn_queue = [];
+        break;
+      }
       // This function make the current player retry to play
       const retry = () => (this.turn_queue = [current, ...rest]);
       // Pop front
@@ -86,7 +89,7 @@ export class TurnSystem {
       // We know that the players current pot is greater on equal to min
       if (type === "pay" && playerMoneyInTurn === min) {
         // This is the success path when pay
-        this.waiting_queue = [current, ...this.waiting_queue];
+        this.waiting_queue = [...this.waiting_queue, current];
         continue;
       }
       if (type === "pay") {
@@ -110,6 +113,7 @@ export class TurnSystem {
       retry();
       this.manager.emit("player:insuficientfunds", { min, player: current });
     }
+
     // Getting the total pot made in turn
     const turnPot = Object.values(turn_pots).reduce(
       (prev, crr) => prev + crr,
