@@ -67,19 +67,36 @@ export class Game {
       })),
     });
   }
-
+  roundEnd() {
+    this.determineWinner({ moneyPot: this.turnSystem.moneyPot });
+    this.eventManager.emit("round:end", undefined);
+  }
+  canPlay() {
+    return this.players.getPlaingPlayers().length <= 1;
+  }
   async startRound() {
     this.eventManager.emit("round:start", this.players.session());
     this.waitForEvent("deck:cards_deal");
     await this.turnSystem.startTurn(this.players.session());
+    if (!this.canPlay()) {
+      this.roundEnd();
+      return;
+    }
     this.deck.flop();
     await this.turnSystem.startTurn(this.players.getPlaingPlayers());
+    if (!this.canPlay()) {
+      this.roundEnd();
+      return;
+    }
     this.deck.turn();
     await this.turnSystem.startTurn(this.players.getPlaingPlayers());
+    if (!this.canPlay()) {
+      this.roundEnd();
+      return;
+    }
     this.deck.river();
     await this.turnSystem.startTurn(this.players.getPlaingPlayers());
-    this.determineWinner({ moneyPot: this.turnSystem.moneyPot });
-    this.eventManager.emit("round:end", undefined);
+    this.roundEnd();
   }
   addPlayer(id: string) {
     const player = new Player({
