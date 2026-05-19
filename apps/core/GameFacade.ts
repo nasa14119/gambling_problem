@@ -1,6 +1,9 @@
-import { Game } from "./Game";
-import { GameEventPayloads, type GameEvents } from "./Events/GameEventManager";
-import type { Player } from "./types";
+import { Game } from "./Game.ts";
+import {
+  GameEventPayloads,
+  type GameEvents,
+} from "./Events/GameEventManager.ts";
+import type { Player } from "./types.ts";
 import { z } from "zod";
 export type GameEventPayload<T extends GameEvents> = {
   eventId: T;
