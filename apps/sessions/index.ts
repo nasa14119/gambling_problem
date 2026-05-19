@@ -2,7 +2,7 @@ import { GameSinglePlayer } from "core";
 import express from "express";
 import expressWs from "express-ws";
 import cookieParser from "cookie-parser";
-import sessions from "./Singleton";
+import sessions from "./Singleton.ts";
 import z from "zod";
 
 export function wsSever(app: express.Application) {
