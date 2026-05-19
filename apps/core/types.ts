@@ -18,3 +18,8 @@ export type UserInput = {
 export { type GameFacade } from "./GameFacade";
 export type Transmiter = (eventId: string, payload?: Record<any, any>) => void;
 export { Player };
+export {
+  GameEventPayloads,
+  GameEventManagerType,
+  GameEvents,
+} from "./Events/GameEventManager";
