@@ -27,17 +27,19 @@ export function wsSever(app: express.Application) {
     const { playerId, token } = z
       .object({
         token: z.string().optional().nullable().default(null),
-        playerId: z.string().optional().default("guest"),
+        playerId: z.string().optional().default("player:admin"),
       })
       .optional()
       .default({})
       .parse(req.body);
     game.addPlayer("player:1");
     game.addPlayer("player:2");
+    game.addPlayer("player:3");
+    game.addPlayer("player:4");
     game.init();
     if (!token) {
       res.cookie("sessionId", sessions.newGame(game, "guest:"));
-      // res.cookie("playerId", playerId);
+      res.cookie("playerId", playerId);
       res.sendStatus(200);
       return;
     }
@@ -104,7 +106,7 @@ export function wsSever(app: express.Application) {
   appWithWs.ws("/api/game/connect", (ws, req) => {
     2;
     const { sessionId } = req.cookies;
-    const playerId = (req.query.playerId ?? "guest") as string;
+    const playerId = (req.query.playerId ?? "player:admin") as string;
     if (!sessionId) return ws.close(1003, "No sessionId");
     try {
       const facade = sessions.connectGame(sessionId, {
