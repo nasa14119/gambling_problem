@@ -12,7 +12,7 @@ export const Route = createFileRoute('/game')({ component: CreateGame })
 function CreateGame() {
   const [isLoading, setLoading] = useState(true)
   useEffect(() => {
-    fetch('http://localhost:3000/api/game/new/prototype', {
+    fetch('http://localhost:3000/api/game/new/singlePlayer', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -49,7 +49,7 @@ function Game() {
         <PlayerManager playerId="player:4" />
       </div>
       <div>
-        <AdminPlayer playerId="player:5" />
+        <AdminPlayer playerId="player:admin" />
       </div>
       <StartRoundBtn />
       <InputPlayer />

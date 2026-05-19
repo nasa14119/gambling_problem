@@ -36,6 +36,7 @@ export function wsSever(app: express.Application) {
     game.addPlayer("player:2");
     game.addPlayer("player:3");
     game.addPlayer("player:4");
+    game.addPlayer(playerId);
     game.init();
     if (!token) {
       res.cookie("sessionId", sessions.newGame(game, "guest:"));
@@ -104,7 +105,6 @@ export function wsSever(app: express.Application) {
     });
   });
   appWithWs.ws("/api/game/connect", (ws, req) => {
-    2;
     const { sessionId } = req.cookies;
     const playerId = (req.query.playerId ?? "player:admin") as string;
     if (!sessionId) return ws.close(1003, "No sessionId");

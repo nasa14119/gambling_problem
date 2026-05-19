@@ -3,7 +3,6 @@ import type { PlayerHand } from '@repo/types'
 
 type Props = {
   cards: PlayerHand
-  isConnected: boolean
   hasError: boolean
   isActive: boolean
   placedBet: number
@@ -13,14 +12,12 @@ type Props = {
 
 export function PlayerCardUI({
   cards,
-  isConnected,
   hasError,
   isActive,
   placedBet,
   playerMoney,
   playerId,
 }: Props) {
-  if (!isConnected) return null
   return (
     <PlayerCard cards={cards} isActive={isActive} hasError={hasError}>
       {placedBet > 0 && (

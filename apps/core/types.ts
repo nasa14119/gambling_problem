@@ -1,6 +1,5 @@
-import { TurnOptions } from "@repo/types";
-import type { Player } from "./Players/types";
-
+import type { TurnOptions } from "@repo/types";
+import type { Player, PlayerData } from "./Players/types";
 export type ExploitId = "todo" | "example";
 
 export class ErrorInTurn extends Error {
@@ -17,8 +16,8 @@ export type UserInput = {
 };
 export { type GameFacade } from "./GameFacade";
 export type Transmiter = (eventId: string, payload?: Record<any, any>) => void;
-export { Player };
-export {
+export type { Player, PlayerData };
+export type {
   GameEventPayloads,
   GameEventManagerType,
   GameEvents,

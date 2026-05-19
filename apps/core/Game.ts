@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { GameEventManager, GameEvents } from "./Events/GameEventManager";
+import { GameEventManager } from "./Events/GameEventManager";
 import { DeckEventsManager } from "./Deck/DeckEventsFactory";
 import { Player } from "./Players/Player";
 import { Players } from "./Players/index";

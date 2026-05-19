@@ -1,39 +1,33 @@
-import { usePlaingStore } from '#/plaingStore'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
+import type { GameEvents } from '@repo/types/server'
+import type { EventPayload, EventSender } from '#/types'
+import { usePlaingStore } from '#/plaingStore'
 
-const SOCKET_URL = 'ws://localhost:3000/api/game/connect/prototype'
+const SOCKET_URL = 'ws://localhost:3000/api/game/connect'
 
-type Props = {
-  playerId: string
-}
-type Data = { eventId: string; payload: any }
-export type SendEvent = ({
-  eventId,
-  payload,
-}: {
-  eventId: string
-  payload: any
-}) => void
-export const useSocket = ({
-  playerId,
-}: Props): [{ data: Data | null; sendEvent: SendEvent }, boolean] => {
+type Data = EventPayload<GameEvents>
+
+export const useSocketStore = (): [
+  { data: Data | null; sendEvent: EventSender },
+  boolean,
+] => {
   // Making hook to the websocket client
   const { lastJsonMessage, readyState, sendJsonMessage } = useWebSocket<
     Data | undefined
   >(`${SOCKET_URL}`, {
     shouldReconnect: () => true,
-    queryParams: { playerId },
+    queryParams: { playerId: 'player:admin' },
   })
   const setPlayer = usePlaingStore((state) => state.setPlayers)
   const [data, setData] = useState<Data | null>(null)
   useEffect(() => {
-    setPlayer(playerId, sendJsonMessage)
-  }, [sendJsonMessage])
-  useEffect(() => {
     if (!lastJsonMessage) return
     setData(() => lastJsonMessage)
   }, [lastJsonMessage])
+  useEffect(() => {
+    setPlayer('player:admin', sendJsonMessage)
+  }, [sendJsonMessage])
   const isConnected = readyState === ReadyState.OPEN && data !== null
   return [
     {
@@ -43,4 +37,4 @@ export const useSocket = ({
     isConnected,
   ]
 }
-export type useSocketValue = ReturnType<typeof useSocket>
+export type useSocketValue = ReturnType<typeof useSocketStore>

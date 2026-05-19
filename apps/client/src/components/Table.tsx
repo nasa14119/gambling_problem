@@ -1,10 +1,10 @@
 import { Card } from '#/components/Card'
 import { CardCover } from '#/components/CardCover'
-import { useTableStore } from '#/store'
+import { useTableData } from '#/hooks/useTableData'
 
 const SCALE = 1.7
 export function Table() {
-  const table = useTableStore((state) => state.table)
+  const table = useTableData()
   if (!table) {
     return (
       <div className="flex gap-x-2">
