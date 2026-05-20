@@ -37,6 +37,7 @@ export class Game {
     return facade;
   }
   determineWinner({ moneyPot }: { moneyPot: number }) {
+    if (moneyPot <= 0) return;
     const players = this.players.getPlaingPlayers();
     const sendwinners = this.eventManager.createEmiter("round:winners");
     if (players.length === 0) return;
