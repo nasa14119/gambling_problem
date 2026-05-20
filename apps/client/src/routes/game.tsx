@@ -1,9 +1,3 @@
-import { AdminPlayer } from '#/components/AdminPlayer'
-import { InputPlayer } from '#/components/InputPlayer'
-import { PlayerManager } from '#/components/PlayerManager'
-import { Pot } from '#/components/Pot'
-import { StartRoundBtn } from '#/components/StartRoundBtn'
-import { Table } from '#/components/Table'
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 
@@ -36,24 +30,6 @@ function CreateGame() {
 }
 function Game() {
   return (
-    <main className="size-full  h-screen relative flex justify-center items-center flex-col gap-y-5">
-      <header>
-        <Table />
-      </header>
-      <div className="flex justify-between w-full px-[10%]">
-        <PlayerManager playerId="player:1" />
-        <PlayerManager playerId="player:2" />
-      </div>
-      <div className="flex justify-between w-full px-[10%]">
-        <PlayerManager playerId="player:3" />
-        <PlayerManager playerId="player:4" />
-      </div>
-      <div>
-        <AdminPlayer playerId="player:admin" />
-      </div>
-      <StartRoundBtn />
-      <InputPlayer />
-      <Pot />
-    </main>
+    <main className="size-full  h-screen relative flex justify-center items-center flex-col gap-y-5"></main>
   )
 }

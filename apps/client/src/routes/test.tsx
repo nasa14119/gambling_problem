@@ -1,18 +1,19 @@
-import { AdminPlayer } from '#/components/AdminPlayer'
-import { InputPlayer } from '#/components/InputPlayer'
-import { PlayerManager } from '#/components/PlayerManager'
-import { Pot } from '#/components/Pot'
-import { StartRoundBtn } from '#/components/StartRoundBtn'
-import { Table } from '#/components/Table'
+import { AdminPlayer } from '#/prototype_test/components/AdminPlayer'
+import { InputPlayer } from '#/prototype_test/components/InputPlayer'
+import { PlayerManager } from '#/prototype_test/components/PlayerManager'
+import { Pot } from '#/prototype_test/components/Pot'
+import { StartRoundBtn } from '#/prototype_test/components/StartRoundBtn'
+import { Table as TableUI } from '#/components/Table'
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
+import { useTableStore } from '#/prototype_test/store'
 
 export const Route = createFileRoute('/test')({ component: CreateGame })
 
 function CreateGame() {
   const [isLoading, setLoading] = useState(true)
   useEffect(() => {
-    fetch('http://localhost:3000/api/game/new/singlePlayer', {
+    fetch('http://localhost:3000/api/game/new/prototype', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -34,6 +35,10 @@ function CreateGame() {
   if (isLoading) return <div>Loading...</div>
   return <Game />
 }
+function Table() {
+  const table = useTableStore((s) => s.table)
+  return <TableUI table={table} />
+}
 function Game() {
   return (
     <main className="size-full  h-screen relative flex justify-center items-center flex-col gap-y-5">
@@ -49,7 +54,7 @@ function Game() {
         <PlayerManager playerId="player:4" />
       </div>
       <div>
-        <AdminPlayer playerId="player:admin" />
+        <AdminPlayer playerId="player:5" />
       </div>
       <StartRoundBtn />
       <InputPlayer />

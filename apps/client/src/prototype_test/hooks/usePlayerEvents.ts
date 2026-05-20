@@ -1,5 +1,5 @@
-import type { useSocketValue } from '#/hooks/useSocket'
-import { useUpdatePlayer } from '#/plaingStore'
+import type { useSocketValue } from '#/prototype_test/hooks/useSocket'
+import { useUpdatePlayer } from '#/prototype_test/plaingStore'
 import type { PlayerHand } from '@repo/types'
 import { useEffect, useState } from 'react'
 

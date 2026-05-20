@@ -1,5 +1,5 @@
 import { useEventListener } from '../eventsStore.tsx'
-import { useUpdatePlayer } from '#/plaingStore'
+import { useUpdatePlayer } from '#/prototype_test/plaingStore.ts'
 import type { PlayerHand } from '@repo/types'
 import { useEffect, useState } from 'react'
 import type { ClientEvents } from '#/types.ts'
