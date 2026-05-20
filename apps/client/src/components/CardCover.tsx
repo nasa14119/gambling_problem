@@ -27,7 +27,7 @@ export function CardCover({ className, scale = 1, ...rest }: Props) {
       {...rest}
     >
       <img
-        src="../../assets/coverCardSprite.png"
+        src="../assets/coverCardSprite.png"
         width={SPRITE_WIDTH * scale}
         style={{
           left,

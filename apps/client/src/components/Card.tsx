@@ -41,7 +41,7 @@ export function Card({ card, className, scale = 1, ...rest }: Props) {
       {...rest}
     >
       <img
-        src="../../assets/spriteCard.png"
+        src="../assets/spriteCard.png"
         width={SPRITE_WIDTH * scale}
         draggable={false}
         style={{
