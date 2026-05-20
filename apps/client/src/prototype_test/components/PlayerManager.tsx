@@ -1,6 +1,6 @@
 import { PlayerCardUI } from '#/components/PlayerCardUI'
-import { usePlayerEvents } from '#/hooks/usePlayerEvents'
-import { useSocket } from '#/hooks/useSocket'
+import { usePlayerEvents } from '#/prototype_test/hooks/usePlayerEvents'
+import { useSocket } from '#/prototype_test/hooks/useSocket'
 
 type Props = {
   playerId: string

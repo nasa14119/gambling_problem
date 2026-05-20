@@ -1,5 +1,5 @@
-import { usePlaingStore } from '#/plaingStore'
-import { useCallback, useEffect, useState } from 'react'
+import { usePlaingStore } from '#/prototype_test/plaingStore'
+import { useEffect, useState } from 'react'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 
 const SOCKET_URL = 'ws://localhost:3000/api/game/connect/prototype'
@@ -34,7 +34,7 @@ export const useSocket = ({
     if (!lastJsonMessage) return
     setData(() => lastJsonMessage)
   }, [lastJsonMessage])
-  const isConnected = readyState === ReadyState.OPEN && data !== null
+  const isConnected = readyState === ReadyState.OPEN
   return [
     {
       data,

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 import type { GameEvents } from '@repo/types/server'
 import type { EventPayload, EventSender } from '#/types'
-import { usePlaingStore } from '#/plaingStore'
 
 const SOCKET_URL = 'ws://localhost:3000/api/game/connect'
 
@@ -19,15 +18,11 @@ export const useSocketStore = (): [
     shouldReconnect: () => true,
     queryParams: { playerId: 'player:admin' },
   })
-  const setPlayer = usePlaingStore((state) => state.setPlayers)
   const [data, setData] = useState<Data | null>(null)
   useEffect(() => {
     if (!lastJsonMessage) return
     setData(() => lastJsonMessage)
   }, [lastJsonMessage])
-  useEffect(() => {
-    setPlayer('player:admin', sendJsonMessage)
-  }, [sendJsonMessage])
   const isConnected = readyState === ReadyState.OPEN && data !== null
   return [
     {

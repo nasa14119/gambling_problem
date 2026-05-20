@@ -1,4 +1,4 @@
-import { useTableStore } from '#/store'
+import { useTableStore } from '#/prototype_test/store'
 import { Fragment } from 'react'
 
 export function Pot() {

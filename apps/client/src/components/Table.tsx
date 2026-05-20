@@ -1,10 +1,12 @@
 import { Card } from '#/components/Card'
 import { CardCover } from '#/components/CardCover'
-import { useTableData } from '#/hooks/useTableData'
+import type { Card as CardType } from '@repo/types'
 
+type Props = {
+  table: null | (CardType | null)[]
+}
 const SCALE = 1.7
-export function Table() {
-  const table = useTableData()
+export function Table({ table }: Props) {
   if (!table) {
     return (
       <div className="flex gap-x-2">
