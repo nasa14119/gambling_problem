@@ -1,3 +1,4 @@
+import { Title } from './Title'
 import { cn } from '#/lib/utils'
 import { usePockerFace, usePockerFaceTrigger } from './store'
 import styles from './styles.module.css'
@@ -27,7 +28,9 @@ export function PockerFace() {
           <span className="aspect-square bg-yellow-700 rounded-full w-2"></span>
           <span className="aspect-square bg-green-700 rounded-full w-2"></span>
         </div>
-        <div className="min-w-full max-h-full overflow-y-scroll min-h-full bg-gray-800"></div>
+        <div className="min-w-full max-h-full overflow-y-scroll min-h-full bg-gray-800 font-mono">
+          <Title />
+        </div>
       </div>
       <div
         className={cn(
