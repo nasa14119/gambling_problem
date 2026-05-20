@@ -15,10 +15,46 @@ type BotTurnContext = {
 };
 
 const MIN_BOT_BET_CHIPS = 50;
-const OPEN_BET_CHANCE = 0.25;
-const RAISE_THRESHOLD = 0.75;
-const CALL_THRESHOLD = 0.45;
-const RAISE_CHIPS = 200;
+const DIFFICULTY_PROFILES: Record<
+  BotDifficulty,
+  {
+    simulations: number;
+    randomFoldChance: number;
+    callThreshold: number;
+    raiseThreshold: number;
+    openBetChance: number;
+    openBetChips: number;
+    raiseChips: number;
+  }
+> = {
+  easy: {
+    simulations: 100,
+    randomFoldChance: 0.3,
+    callThreshold: 0.5,
+    raiseThreshold: 0.82,
+    openBetChance: 0.15,
+    openBetChips: MIN_BOT_BET_CHIPS,
+    raiseChips: 100,
+  },
+  medium: {
+    simulations: 1000,
+    randomFoldChance: 0.12,
+    callThreshold: 0.45,
+    raiseThreshold: 0.75,
+    openBetChance: 0.35,
+    openBetChips: 100,
+    raiseChips: 200,
+  },
+  hard: {
+    simulations: 5000,
+    randomFoldChance: 0,
+    callThreshold: 0.4,
+    raiseThreshold: 0.68,
+    openBetChance: 0.55,
+    openBetChips: 150,
+    raiseChips: 300,
+  },
+};
 
 const CARD_VALUES: Record<Card[0], number> = {
   "2": 2,
@@ -68,7 +104,7 @@ export class PokerBot implements Player {
   constructor({ manager, difficulty, playerId }: BotConstructor) {
     this.playerId = playerId;
     this.manager = manager;
-    this.difficulty = difficulty;
+    this.difficulty = this.resolveDifficulty(difficulty);
     this.sendInput = manager.getEmiter("player:validbet");
     this.manager.on({
       eventId: "deck:flop",
@@ -152,16 +188,7 @@ export class PokerBot implements Player {
   }
 
   private getSimulationCount(): number {
-    switch (this.difficulty) {
-      case "easy":
-        return 100;
-      case "medium":
-        return 1000;
-      case "hard":
-        return 5000;
-      default:
-        return 1000;
-    }
+    return DIFFICULTY_PROFILES[this.difficulty].simulations;
   }
 
   private resetTurnBets() {
@@ -176,6 +203,14 @@ export class PokerBot implements Player {
       canCheck: chipsToCall === 0,
       chipsToCall,
     };
+  }
+
+  private resolveDifficulty(difficulty: BotDifficulty): BotDifficulty {
+    if (difficulty !== "easy") return difficulty;
+    const botNumber = Number(this.playerId.match(/\d+$/)?.[0] ?? 1);
+    if (botNumber >= 3) return "hard";
+    if (botNumber === 2) return "medium";
+    return "easy";
   }
 
   private runMonteCarloSimulation(
@@ -227,21 +262,16 @@ export class PokerBot implements Player {
     winRate: number,
     { canCheck, chipsToCall }: BotTurnContext,
   ): BotAction {
+    const profile = DIFFICULTY_PROFILES[this.difficulty];
     const canOpenBet = canCheck && this.bank.chips >= MIN_BOT_BET_CHIPS;
 
     if (canCheck) {
-      if (canOpenBet && winRate >= RAISE_THRESHOLD) {
-        return {
-          type: "raise",
-          chips: MIN_BOT_BET_CHIPS,
-        };
+      if (canOpenBet && winRate >= profile.raiseThreshold) {
+        return { type: "raise", chips: profile.openBetChips };
       }
 
-      if (canOpenBet && Math.random() < OPEN_BET_CHANCE) {
-        return {
-          type: "raise",
-          chips: MIN_BOT_BET_CHIPS,
-        };
+      if (canOpenBet && Math.random() < profile.openBetChance) {
+        return { type: "raise", chips: profile.openBetChips };
       }
 
       return { type: "check", chips: 0 };
@@ -251,18 +281,18 @@ export class PokerBot implements Player {
       return { type: "fold", chips: 0 };
     }
 
-    if (this.difficulty === "easy" && Math.random() < 0.3) {
+    if (Math.random() < profile.randomFoldChance) {
       return { type: "fold", chips: 0 };
     }
 
-    if (winRate > RAISE_THRESHOLD) {
-      const chips = Math.min(this.bank.chips, chipsToCall + RAISE_CHIPS);
+    if (winRate > profile.raiseThreshold) {
+      const chips = Math.min(this.bank.chips, chipsToCall + profile.raiseChips);
       if (chips > chipsToCall && chips >= MIN_BOT_BET_CHIPS) {
         return { type: "raise", chips };
       }
     }
 
-    if (winRate > CALL_THRESHOLD) {
+    if (winRate > profile.callThreshold) {
       return { type: "pay", chips: chipsToCall };
     }
 
