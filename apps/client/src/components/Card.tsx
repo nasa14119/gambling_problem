@@ -2,6 +2,7 @@ import type { Card } from '@repo/types'
 import type { ComponentProps } from 'react'
 import { cn } from '#/lib/utils'
 import type { ClassValue } from 'clsx'
+import spriteCard from '#/assets/spriteCard.png'
 
 // Parameters recived for the component
 type Props = {
@@ -41,7 +42,7 @@ export function Card({ card, className, scale = 1, ...rest }: Props) {
       {...rest}
     >
       <img
-        src="../assets/spriteCard.png"
+        src={spriteCard}
         width={SPRITE_WIDTH * scale}
         draggable={false}
         style={{
