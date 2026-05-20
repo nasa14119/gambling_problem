@@ -5,6 +5,8 @@ import { Player } from "./Players/Player.ts";
 import { Players } from "./Players/index.ts";
 import { TurnSystem } from "./Deck/TurnSystem.ts";
 import { GameFacade } from "./GameFacade.ts";
+import { PokerBot } from "./Players/Bot.ts";
+
 export class Game {
   id: string;
   eventManager = new GameEventManager();
@@ -105,5 +107,13 @@ export class Game {
       playerId: id,
     });
     this.players.attachPlayer(player);
+  }
+  addBot(id: string) {
+    const bot = new PokerBot({
+      difficulty: "easy",
+      playerId: id,
+      manager: this.eventManager.createManage(),
+    });
+    this.players.attachPlayer(bot);
   }
 }
