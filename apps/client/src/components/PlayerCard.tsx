@@ -1,5 +1,6 @@
 import { Card } from '#/components/Card'
 import { CardCover } from '#/components/CardCover'
+import { cn } from '#/lib/utils'
 
 import type { PlayerHand } from '@repo/types'
 import type { PropsWithChildren } from 'react'
@@ -9,6 +10,7 @@ type Props = {
   isActive?: boolean
   hasError?: boolean
   scale?: number
+  hasFold?: boolean
 } & PropsWithChildren
 export function PlayerCard({
   cards = null,
@@ -16,9 +18,18 @@ export function PlayerCard({
   children,
   hasError = false,
   scale = 1,
+  hasFold = false,
 }: Props) {
   return (
-    <div className="flex flex-col justify-center items-center gap-y-2 relative">
+    <div
+      className={cn(
+        'flex flex-col justify-center items-center gap-y-2 relative',
+        hasFold && 'opacity-50',
+      )}
+    >
+      {hasFold && (
+        <div className="absolute inset-0 backdrop-grayscale-100 z-10 "></div>
+      )}
       <div className="flex gap-x-2 ">
         {cards === null ? (
           <>
