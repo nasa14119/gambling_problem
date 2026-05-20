@@ -1,4 +1,4 @@
-import { cn } from '#/utils'
+import { cn } from '#/lib/utils'
 import type { ComponentProps } from 'react'
 import type { ClassValue } from 'clsx'
 import cardCoverSprite from '#/assets/coverCardSprite.png'

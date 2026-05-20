@@ -1,6 +1,6 @@
 import type { Card } from '@repo/types'
 import type { ComponentProps } from 'react'
-import { cn } from '#/utils'
+import { cn } from '#/lib/utils'
 import type { ClassValue } from 'clsx'
 import spriteCard from '#/assets/spriteCard.png'
 
