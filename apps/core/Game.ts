@@ -6,11 +6,16 @@ import { Players } from "./Players/index.ts";
 import { TurnSystem } from "./Deck/TurnSystem.ts";
 import { GameFacade } from "./GameFacade.ts";
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import { PokerBot } from "./Players/Bot.ts";
 import { GameState } from "@repo/types";
 
 >>>>>>> 3aab64dd (feat(Core): adding method to get current game state)
+=======
+import { PokerBot } from "./Players/Bot.ts";
+
+>>>>>>> 69c7f632 (merge: bringin changes to  bot)
 export class Game {
   id: string;
   eventManager = new GameEventManager();
@@ -123,5 +128,13 @@ export class Game {
       playerId: id,
     });
     this.players.attachPlayer(player);
+  }
+  addBot(id: string) {
+    const bot = new PokerBot({
+      difficulty: "easy",
+      playerId: id,
+      manager: this.eventManager.createManage(),
+    });
+    this.players.attachPlayer(bot);
   }
 }
