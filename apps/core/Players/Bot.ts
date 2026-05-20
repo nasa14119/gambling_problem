@@ -9,6 +9,16 @@ type BotAction = {
   type: TurnOptions;
   chips: number;
 };
+type BotTurnContext = {
+  canCheck: boolean;
+  chipsToCall: number;
+};
+
+const MIN_BOT_BET_CHIPS = 50;
+const OPEN_BET_CHANCE = 0.25;
+const RAISE_THRESHOLD = 0.75;
+const CALL_THRESHOLD = 0.45;
+const RAISE_CHIPS = 200;
 
 const CARD_VALUES: Record<Card[0], number> = {
   "2": 2,
@@ -52,8 +62,8 @@ export class PokerBot implements Player {
   isFold = false;
   private manager: BotConstructor["manager"];
   private sendInput: (payload: GameEventPayloads["player:validbet"]) => void;
-  private shouldCall = false;
-  private missingCallChips = 50;
+  private playerBets: Record<string, number> = {};
+  private currentBet = 0;
 
   constructor({ manager, difficulty, playerId }: BotConstructor) {
     this.playerId = playerId;
@@ -76,22 +86,21 @@ export class PokerBot implements Player {
       eventId: "round:end",
       listener: () => {
         this.table = [];
-        this.shouldCall = false;
-        this.missingCallChips = 50;
+        this.resetTurnBets();
       },
     });
     this.manager.on({
-      eventId: "player:invalid_input",
-      listener: ({ player }) => {
-        if (player.playerId === this.playerId) this.shouldCall = true;
-      },
+      eventId: "turn:start",
+      listener: () => this.resetTurnBets(),
     });
     this.manager.on({
-      eventId: "player:insuficientfunds",
-      listener: ({ min, player }) => {
-        if (player.playerId !== this.playerId) return;
-        this.shouldCall = true;
-        this.missingCallChips = Math.max(1, min);
+      eventId: "player:validbet",
+      listener: ({ chips, player, type }) => {
+        if (type === "check" || type === "fold" || chips <= 0) return;
+        const playerId = player.playerId;
+        const playerBet = (this.playerBets[playerId] ?? 0) + chips;
+        this.playerBets[playerId] = playerBet;
+        this.currentBet = Math.max(this.currentBet, playerBet);
       },
     });
   }
@@ -127,21 +136,18 @@ export class PokerBot implements Player {
 
   private getAction(): BotAction {
     if (!this.cards) return { type: "fold", chips: 0 };
-    if (!this.shouldCall) return { type: "check", chips: 0 };
 
     const winRate = this.runMonteCarloSimulation(
       this.cards,
       this.table,
       this.getSimulationCount(),
     );
-    const action = this.decideAction(winRate);
-    this.shouldCall = false;
-    this.missingCallChips = 50;
-    return action;
+    return this.decideAction(winRate, this.getTurnContext());
   }
 
   private pay(chips: number) {
-    if (chips <= 0 || this.bank.chips <= 0) return 0;
+    if (chips < MIN_BOT_BET_CHIPS || this.bank.chips < MIN_BOT_BET_CHIPS)
+      return 0;
     return this.bank.getChips(Math.min(chips, this.bank.chips));
   }
 
@@ -156,6 +162,20 @@ export class PokerBot implements Player {
       default:
         return 1000;
     }
+  }
+
+  private resetTurnBets() {
+    this.playerBets = {};
+    this.currentBet = 0;
+  }
+
+  private getTurnContext(): BotTurnContext {
+    const ownBet = this.playerBets[this.playerId] ?? 0;
+    const chipsToCall = Math.max(0, this.currentBet - ownBet);
+    return {
+      canCheck: chipsToCall === 0,
+      chipsToCall,
+    };
   }
 
   private runMonteCarloSimulation(
@@ -203,8 +223,31 @@ export class PokerBot implements Player {
     return cards.reduce((total, card) => total + CARD_VALUES[card[0]], 0);
   }
 
-  private decideAction(winRate: number): BotAction {
-    if (this.missingCallChips > this.bank.chips) {
+  private decideAction(
+    winRate: number,
+    { canCheck, chipsToCall }: BotTurnContext,
+  ): BotAction {
+    const canOpenBet = canCheck && this.bank.chips >= MIN_BOT_BET_CHIPS;
+
+    if (canCheck) {
+      if (canOpenBet && winRate >= RAISE_THRESHOLD) {
+        return {
+          type: "raise",
+          chips: MIN_BOT_BET_CHIPS,
+        };
+      }
+
+      if (canOpenBet && Math.random() < OPEN_BET_CHANCE) {
+        return {
+          type: "raise",
+          chips: MIN_BOT_BET_CHIPS,
+        };
+      }
+
+      return { type: "check", chips: 0 };
+    }
+
+    if (chipsToCall < MIN_BOT_BET_CHIPS || chipsToCall > this.bank.chips) {
       return { type: "fold", chips: 0 };
     }
 
@@ -212,12 +255,15 @@ export class PokerBot implements Player {
       return { type: "fold", chips: 0 };
     }
 
-    if (winRate > 0.75 && this.missingCallChips + 200 <= this.bank.chips) {
-      return { type: "raise", chips: this.missingCallChips + 200 };
+    if (winRate > RAISE_THRESHOLD) {
+      const chips = Math.min(this.bank.chips, chipsToCall + RAISE_CHIPS);
+      if (chips > chipsToCall && chips >= MIN_BOT_BET_CHIPS) {
+        return { type: "raise", chips };
+      }
     }
 
-    if (winRate > 0.45) {
-      return { type: "pay", chips: this.missingCallChips };
+    if (winRate > CALL_THRESHOLD) {
+      return { type: "pay", chips: chipsToCall };
     }
 
     return { type: "fold", chips: 0 };
