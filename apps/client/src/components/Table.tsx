@@ -1,15 +1,18 @@
 import { Card } from '#/components/Card'
 import { CardCover } from '#/components/CardCover'
+import { cn } from '#/lib/utils'
 import type { Card as CardType } from '@repo/types'
+import type { ComponentProps } from 'react'
 
 type Props = {
   table: null | (CardType | null)[]
+  className?: ComponentProps<'div'>['className']
 }
 const SCALE = 1.7
-export function Table({ table }: Props) {
+export function Table({ table, className }: Props) {
   if (!table) {
     return (
-      <div className="flex gap-x-2">
+      <div className={cn('flex gap-x-2', className)}>
         {Array.from({ length: 5 }, (_, i) => (
           <CardCover scale={SCALE} key={i} />
         ))}
@@ -17,7 +20,7 @@ export function Table({ table }: Props) {
     )
   }
   return (
-    <div className="flex gap-x-2">
+    <div className={cn('flex gap-x-2', className)}>
       {table[0] ? (
         <Card card={table[0]} scale={SCALE} />
       ) : (

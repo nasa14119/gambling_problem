@@ -1,14 +1,19 @@
 import { create } from 'zustand'
 
 type Store = {
-  state: boolean
-  setState: (state?: boolean) => void
+  state: 'idle' | 'open' | 'close'
+  setState: (state?: Store['state']) => void
 }
 export const usePockerFace = create<Store>((set) => ({
-  state: false,
+  state: 'idle',
   setState: (param) =>
     set(({ state }) => ({
-      state: typeof param === 'boolean' ? param : !state,
+      state:
+        typeof param !== 'undefined'
+          ? param
+          : state === 'open'
+            ? 'close'
+            : 'open',
     })),
 }))
 

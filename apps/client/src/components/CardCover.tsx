@@ -18,7 +18,7 @@ export function CardCover({ className, scale = 1, ...rest }: Props) {
   return (
     <div
       className={cn(
-        `bg-white rounded-xl relative overflow-hidden border border-black/20`,
+        `bg-white rounded-[5px]  relative overflow-hidden border border-black/20`,
         className,
       )}
       style={{

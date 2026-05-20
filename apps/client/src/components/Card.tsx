@@ -32,7 +32,7 @@ export function Card({ card, className, scale = 1, ...rest }: Props) {
   return (
     <div
       className={cn(
-        `bg-white rounded-xl relative overflow-hidden border border-black/20`,
+        `bg-white rounded-[10px] relative overflow-hidden border border-black/20`,
         className,
       )}
       style={{

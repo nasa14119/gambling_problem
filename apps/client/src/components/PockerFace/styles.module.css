@@ -1,5 +1,6 @@
 .main {
   --duration: 125ms;
+  opacity: 0;
 }
 @keyframes fade-in {
   from {
@@ -16,7 +17,7 @@
     transform: translateY(0);
   }
 }
-.main[data-state='true'] {
+.main[data-state='open'] {
   animation: forwards var(--duration) fade-in ease-in-out;
 }
 @keyframes fade-out {
@@ -29,8 +30,9 @@
     scale: 0.95;
     opacity: 0;
     transform: translateY(5%);
+    display: none;
   }
 }
-.main[data-state='false'] {
+.main[data-state='close'] {
   animation: forwards var(--duration) fade-out ease-in-out;
 }

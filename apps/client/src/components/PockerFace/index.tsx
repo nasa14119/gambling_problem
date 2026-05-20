@@ -20,7 +20,7 @@ export function PockerFace() {
         <div
           className={cn(
             'flex gap-x-2 h-10 px-5 items-center justify-end bg-gray-900',
-            !state && 'pointer-events-none',
+            state === 'close' && 'pointer-events-none',
           )}
         >
           <span className="aspect-square bg-red-700 rounded-full w-2"></span>
@@ -30,8 +30,12 @@ export function PockerFace() {
         <div className="min-w-full max-h-full overflow-y-scroll min-h-full bg-gray-800"></div>
       </div>
       <div
-        className={cn('z-40 fixed inset-0', !state && 'hidden')}
-        onClick={() => trigger(false)}
+        className={cn(
+          'z-40 fixed inset-0',
+          state === 'close' && 'hidden',
+          state === 'idle' && 'hidden',
+        )}
+        onClick={() => trigger('close')}
       ></div>
     </>
   )
