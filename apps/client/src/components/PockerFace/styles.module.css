@@ -1,0 +1,36 @@
+.main {
+  --duration: 125ms;
+}
+@keyframes fade-in {
+  from {
+    scale: 0.95;
+    opacity: 0;
+    transform: translateY(5%);
+  }
+  20% {
+    opacity: 1;
+  }
+  to {
+    scale: 1;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.main[data-state='true'] {
+  animation: forwards var(--duration) fade-in ease-in-out;
+}
+@keyframes fade-out {
+  from {
+    scale: 1;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    scale: 0.95;
+    opacity: 0;
+    transform: translateY(5%);
+  }
+}
+.main[data-state='false'] {
+  animation: forwards var(--duration) fade-out ease-in-out;
+}
