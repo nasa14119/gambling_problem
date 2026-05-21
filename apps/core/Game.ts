@@ -6,6 +6,7 @@ import { Players } from "./Players/index.ts";
 import { TurnSystem } from "./Deck/TurnSystem.ts";
 import { GameFacade } from "./GameFacade.ts";
 import { PokerBot } from "./Players/Bot.ts";
+import { GameState } from "@repo/types";
 
 export class Game {
   id: string;
@@ -13,8 +14,18 @@ export class Game {
   deck = new DeckEventsManager(this.eventManager);
   players = new Players();
   turnSystem = new TurnSystem(this.eventManager);
+  private isStarted = false;
   constructor() {
     this.id = uuid();
+  }
+  getState(id: string): GameState {
+    return {
+      isStarted: this.isStarted,
+      table: this.deck.gameState,
+      players: this.players.getPlayersData(),
+      user: this.players.getPlayer(id).getData(),
+      turn: this.turnSystem.getTurn(),
+    };
   }
   init() {
     this.eventManager.on({
@@ -71,6 +82,7 @@ export class Game {
     });
   }
   roundEnd() {
+    this.isStarted = false;
     this.determineWinner({ moneyPot: this.turnSystem.moneyPot });
     this.eventManager.emit("round:end", undefined);
   }
@@ -78,6 +90,7 @@ export class Game {
     return this.players.getPlaingPlayers().length > 1;
   }
   async startRound() {
+    this.isStarted = true;
     this.eventManager.emit("round:start", this.players.session());
     this.waitForEvent("deck:cards_deal");
     await this.turnSystem.startTurn(this.players.session());
