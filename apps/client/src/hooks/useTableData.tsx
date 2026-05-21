@@ -1,11 +1,14 @@
-import { useEventListener } from '#/eventsStore'
+import { useEventListener } from '#/stores/eventsStore'
+import { useGameState, useGameUpdate } from '#/stores/gameStore'
 import type { Card } from '@repo/types'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 type Table = null | (Card | null)[]
 export const useTableData = (): Table => {
+  const setState = useGameUpdate()
+  const { table: tableStore } = useGameState()
   const event = useEventListener()
-  const [table, setTable] = useState<Table>(null)
+  const setTable = (table: Table) => setState({ table })
   useEffect(() => {
     if (!event) return
     const { eventId, payload } = event
@@ -22,5 +25,5 @@ export const useTableData = (): Table => {
       setTable(null)
     }
   }, [event])
-  return table
+  return tableStore
 }

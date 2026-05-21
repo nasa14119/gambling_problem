@@ -16,11 +16,11 @@ router.post("/api/game/new/singlePlayer", (req, res) => {
     .optional()
     .default({})
     .parse(req.body);
-  game.addPlayer("player:1");
-  game.addPlayer("player:2");
-  game.addPlayer("player:3");
-  game.addPlayer("player:4");
-  game.addPlayer(playerId);
+  game.addBot("bot:1");
+  game.addBot("bot:2");
+  game.addBot("bot:3");
+  game.addBot("bot:4");
+  game.addBot(playerId);
   game.init();
   if (!token) {
     res.cookie("sessionId", sessions.newGame(game, "guest:"));

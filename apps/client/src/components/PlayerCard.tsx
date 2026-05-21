@@ -2,7 +2,7 @@ import { Card } from '#/components/Card'
 import { CardCover } from '#/components/CardCover'
 import { cn } from '#/lib/utils'
 
-import type { PlayerHand } from '@repo/types'
+import type { Card as CardType, PlayerHand } from '@repo/types'
 import type { PropsWithChildren } from 'react'
 
 type Props = {
@@ -20,6 +20,7 @@ export function PlayerCard({
   scale = 1,
   hasFold = false,
 }: Props) {
+  const playerCards = cards as CardType[]
   return (
     <div
       className={cn(
@@ -31,7 +32,7 @@ export function PlayerCard({
         <div className="absolute inset-0 backdrop-grayscale-100 z-10 "></div>
       )}
       <div className="flex gap-x-2 ">
-        {cards === null ? (
+        {cards === null || playerCards.length < 2 ? (
           <>
             <CardCover scale={scale} />
             <CardCover scale={scale} />

@@ -157,7 +157,7 @@ export class PokerBot implements Player {
             : action.type,
         chips,
       });
-    }, 2000);
+    }, 2_000);
   };
 
   getData: Player["getData"] = () => {
