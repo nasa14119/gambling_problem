@@ -37,13 +37,14 @@ export type TurnOptions = "fold" | "raise" | "pay" | "check";
 export type GameState = {
   isStarted: boolean;
   table: null | (Card | null)[];
-  players: Record<string, Omit<PlayerData, "playerId">>;
+  players: Record<string, Omit<PlayerData, "playerId" | "money">>;
   user: PlayerData;
   turn: {
     currentPlayer: string;
     minBet: number;
     playersPots: Record<PlayerData["playerId"], number>;
   } | null;
+  pot: number | null;
 };
 
 export type WinnersPayload = {

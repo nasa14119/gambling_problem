@@ -13,7 +13,7 @@ const DEFAULTS = {
   blind: -Infinity,
 };
 export class TurnSystem {
-  private _moneyPot: number = 0;
+  private _moneyPot: number | null = null;
   private manager: GameEventManager;
   private turn_queue: Player[] = [];
   private waiting_queue: Player[] = [];
@@ -28,7 +28,7 @@ export class TurnSystem {
     this.changeTurn = this.manager.createEmiter("player:turn");
     this.manager.on({
       eventId: "round:end",
-      listener: () => (this._moneyPot = 0),
+      listener: () => (this._moneyPot = null),
     });
     this.blind = blind;
     this.min = blind;
@@ -155,7 +155,7 @@ export class TurnSystem {
     );
 
     // Adding turn pot to the global pot
-    this._moneyPot += turnPot;
+    this._moneyPot = (this._moneyPot ?? 0) + turnPot;
 
     // Emiting the end of the turn
     this.manager.emit("turn:end", { moneyPot: turnPot });

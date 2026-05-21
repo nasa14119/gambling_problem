@@ -1,4 +1,4 @@
-import { GameState } from "@repo/types";
+import type { GameState } from "@repo/types";
 import { type Player } from "../types.ts";
 
 export class Players {
@@ -35,7 +35,7 @@ export class Players {
   getPlayersData() {
     const players: Partial<GameState["players"]> = {};
     for (const [key, player] of this.players.entries()) {
-      const { playerId, ...playerData } = player.getData();
+      const { playerId, money, ...playerData } = player.getData();
       players[key] = playerData;
     }
     return players as GameState["players"];

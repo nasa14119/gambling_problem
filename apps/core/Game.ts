@@ -1,5 +1,8 @@
 import { v4 as uuid } from "uuid";
-import { GameEventManager, GameEvents } from "./Events/GameEventManager.ts";
+import {
+  GameEventManager,
+  type GameEvents,
+} from "./Events/GameEventManager.ts";
 import { DeckEventsManager } from "./Deck/DeckEventsFactory.ts";
 import { Player } from "./Players/Player.ts";
 import { Players } from "./Players/index.ts";
@@ -9,7 +12,7 @@ import { GameFacade } from "./GameFacade.ts";
 <<<<<<< HEAD
 =======
 import { PokerBot } from "./Players/Bot.ts";
-import { GameState } from "@repo/types";
+import type { GameState } from "@repo/types";
 
 >>>>>>> 3aab64dd (feat(Core): adding method to get current game state)
 =======
@@ -33,12 +36,13 @@ export class Game {
       players: this.players.getPlayersData(),
       user: this.players.getPlayer(id).getData(),
       turn: this.turnSystem.getTurn(),
+      pot: this.turnSystem.moneyPot,
     };
   }
   init() {
     this.eventManager.on({
       eventId: "player:turn",
-      listener: (id) => this.players.playerTurn(id),
+      listener: (id: string) => this.players.playerTurn(id),
     });
     this.eventManager.on({
       eventId: "round:end",
@@ -91,7 +95,7 @@ export class Game {
   }
   roundEnd() {
     this.isStarted = false;
-    this.determineWinner({ moneyPot: this.turnSystem.moneyPot });
+    this.determineWinner({ moneyPot: this.turnSystem.moneyPot ?? 0 });
     this.eventManager.emit("round:end", undefined);
   }
   canPlay() {
