@@ -1,3 +1,5 @@
+import { PlayerData } from "core/types";
+
 export type Result<T, E> =
   | { success: true; data: T }
   | { success: false; error: E };
@@ -31,3 +33,21 @@ export type Player = {
   cards: PlayerHand;
 };
 export type TurnOptions = "fold" | "raise" | "pay" | "check";
+
+export type GameState = {
+  isStarted: boolean;
+  table: null | (Card | null)[];
+  players: Record<string, Omit<PlayerData, "playerId">>;
+  user: PlayerData;
+  turn: {
+    currentPlayer: string;
+    minBet: number;
+    playersPots: Record<PlayerData["playerId"], number>;
+  } | null;
+};
+
+export type WinnersPayload = {
+  winners: (PlayerData & { for: string })[];
+  gameState: Card[];
+  moneyWin: number;
+} | null;
