@@ -1,7 +1,8 @@
 import cors from "cors";
 import express from "express";
-import { wsSever } from "sessions";
 
+import { wsSever } from "./sessions/index.ts";
+import sessionRouter from "./sessions/session.routes.ts";
 const PORT = process.env.SERVER_PORT ?? 3000;
 const app = express();
 app.use(
@@ -11,6 +12,7 @@ app.use(
   }),
 );
 wsSever(app);
+app.use(sessionRouter);
 app.get("/", (_, res) => {
   res.sendStatus(200);
 });
