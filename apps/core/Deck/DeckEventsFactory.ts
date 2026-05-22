@@ -12,6 +12,8 @@ export class DeckEventsManager extends Deck {
   }
   startRound(players: Player[]) {
     if (players.length <= 0) return;
+    this.resetForNewRound();
+    this.manager.emit("deck:shuffle", undefined);
     players.forEach((player) => {
       player.cards = this.playerTurn();
     });

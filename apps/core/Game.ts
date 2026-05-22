@@ -1,8 +1,5 @@
 import { v4 as uuid } from "uuid";
-import {
-  GameEventManager,
-  type GameEvents,
-} from "./Events/GameEventManager.ts";
+import { GameEventManager } from "./Events/GameEventManager.ts";
 import { DeckEventsManager } from "./Deck/DeckEventsFactory.ts";
 import { Player } from "./Players/Player.ts";
 import { Players } from "./Players/index.ts";
@@ -40,11 +37,6 @@ export class Game {
       eventId: "round:end",
       listener: this.players.resetForNewRound.bind(this.players),
     });
-  }
-  private waitForEvent<T extends GameEvents>(event: T) {
-    return new Promise<void>((res) =>
-      this.eventManager.on({ eventId: event, listener: () => res() }, true),
-    );
   }
   attachClient(
     player: Player["playerId"],
@@ -94,9 +86,9 @@ export class Game {
     return this.players.getPlaingPlayers().length > 1;
   }
   async startRound() {
+    if (this.isStarted) return;
     this.isStarted = true;
     this.eventManager.emit("round:start", this.players.session());
-    this.waitForEvent("deck:cards_deal");
     await this.turnSystem.startTurn(this.players.session());
     if (!this.canPlay()) {
       this.roundEnd();
