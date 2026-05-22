@@ -43,6 +43,13 @@ export class Deck {
   resetHistory() {
     this.history = new Set();
   }
+  resetForNewRound() {
+    this.position = 0;
+    this.cards = getRandomDeck();
+    this.gameState = [];
+    this.history = new Set();
+    this.playersHistory = new Set();
+  }
   shuffle() {
     this.position = 0;
     this.cards = getRandomDeck();
@@ -50,6 +57,7 @@ export class Deck {
   private getCards(count: number): Card[] {
     if (count < 1) throw new Error("Count must be greater than 0");
     const cards = this.cards.slice(this.position, this.position + count);
+    if (cards.length !== count) throw new Error("Not enough cards in deck");
     this.position += count;
     return cards.map<Card>(getCardName);
   }

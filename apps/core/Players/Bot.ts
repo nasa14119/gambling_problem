@@ -1,6 +1,6 @@
 import type { Card, PlayerHand, TurnOptions } from "@repo/types";
 import type { GameEventPayloads } from "../Events/GameEventManager.ts";
-import { Bank } from "./Bank.ts";
+import { Bank } from "./BankBot.ts";
 import { DEFAULTS, type Player, type PlayerConstructor } from "./types.ts";
 
 type BotDifficulty = "easy" | "medium" | "hard";
@@ -93,7 +93,7 @@ export class PokerBot implements Player {
   difficulty: BotDifficulty;
   playerId: string;
   table: Card[] = [];
-  bank = new Bank(DEFAULTS.money, DEFAULTS.chips);
+  bank = new Bank(DEFAULTS.chips);
   cards: PlayerHand = null;
   isFold = false;
   private manager: BotConstructor["manager"];
@@ -165,8 +165,8 @@ export class PokerBot implements Player {
       playerId: this.playerId,
       cards: this.cards,
       isFold: this.isFold,
-      money: this.bank.money,
-      chips: this.bank.chips,
+      money: this.bank.getMoneyValue(),
+      chips: this.bank.getChipsValue(),
     };
   };
 
@@ -182,9 +182,12 @@ export class PokerBot implements Player {
   }
 
   private pay(chips: number) {
-    if (chips < MIN_BOT_BET_CHIPS || this.bank.chips < MIN_BOT_BET_CHIPS)
+    if (
+      chips < MIN_BOT_BET_CHIPS ||
+      this.bank.getChipsValue() < MIN_BOT_BET_CHIPS
+    )
       return 0;
-    return this.bank.getChips(Math.min(chips, this.bank.chips));
+    return this.bank.getChips(Math.min(chips, this.bank.getChipsValue()));
   }
 
   private getSimulationCount(): number {
@@ -263,7 +266,8 @@ export class PokerBot implements Player {
     { canCheck, chipsToCall }: BotTurnContext,
   ): BotAction {
     const profile = DIFFICULTY_PROFILES[this.difficulty];
-    const canOpenBet = canCheck && this.bank.chips >= MIN_BOT_BET_CHIPS;
+    const canOpenBet =
+      canCheck && this.bank.getChipsValue() >= MIN_BOT_BET_CHIPS;
 
     if (canCheck) {
       if (canOpenBet && winRate >= profile.raiseThreshold) {
@@ -277,7 +281,10 @@ export class PokerBot implements Player {
       return { type: "check", chips: 0 };
     }
 
-    if (chipsToCall < MIN_BOT_BET_CHIPS || chipsToCall > this.bank.chips) {
+    if (
+      chipsToCall < MIN_BOT_BET_CHIPS ||
+      chipsToCall > this.bank.getChipsValue()
+    ) {
       return { type: "fold", chips: 0 };
     }
 
@@ -286,7 +293,10 @@ export class PokerBot implements Player {
     }
 
     if (winRate > profile.raiseThreshold) {
-      const chips = Math.min(this.bank.chips, chipsToCall + profile.raiseChips);
+      const chips = Math.min(
+        this.bank.getChipsValue(),
+        chipsToCall + profile.raiseChips,
+      );
       if (chips > chipsToCall && chips >= MIN_BOT_BET_CHIPS) {
         return { type: "raise", chips };
       }

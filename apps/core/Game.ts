@@ -1,40 +1,42 @@
 import { v4 as uuid } from "uuid";
-import {
-  GameEventManager,
-  type GameEvents,
-} from "./Events/GameEventManager.ts";
+import { GameEventManager } from "./Events/GameEventManager.ts";
 import { DeckEventsManager } from "./Deck/DeckEventsFactory.ts";
 import { Player } from "./Players/Player.ts";
 import { Players } from "./Players/index.ts";
 import { TurnSystem } from "./Deck/TurnSystem.ts";
 import { GameFacade } from "./GameFacade.ts";
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 import { PokerBot } from "./Players/Bot.ts";
 import type { GameState } from "@repo/types";
+import { Inventory } from "./Players/Inventory.ts";
+import { ExploitManager } from "./Exploits/ExploitManager.ts";
+import { ExploitFacade } from "./Exploits/ExploitFacade.ts";
+import { User } from "@repo/types/server";
 
->>>>>>> 3aab64dd (feat(Core): adding method to get current game state)
-=======
-import { PokerBot } from "./Players/Bot.ts";
-
->>>>>>> 69c7f632 (merge: bringin changes to  bot)
 export class Game {
   id: string;
   eventManager = new GameEventManager();
   deck = new DeckEventsManager(this.eventManager);
   players = new Players();
   turnSystem = new TurnSystem(this.eventManager);
+  exploitsManager = new ExploitManager(this);
   private isStarted = false;
   constructor() {
     this.id = uuid();
   }
+  private getUser(id: string): User {
+    const user = this.players.getPlayer(id) as User;
+    if (!user || user instanceof PokerBot)
+      throw new Error("Error trying to get state");
+    return user;
+  }
   getState(id: string): GameState {
+    const user = this.getUser(id);
+    const { [id]: _, ...players } = { ...this.players.getPlayersData() };
     return {
       isStarted: this.isStarted,
       table: this.deck.gameState,
-      players: this.players.getPlayersData(),
-      user: this.players.getPlayer(id).getData(),
+      players,
+      user: user.getData(),
       turn: this.turnSystem.getTurn(),
       pot: this.turnSystem.moneyPot,
     };
@@ -49,16 +51,15 @@ export class Game {
       listener: this.players.resetForNewRound.bind(this.players),
     });
   }
-  private waitForEvent<T extends GameEvents>(event: T) {
-    return new Promise<void>((res) =>
-      this.eventManager.on({ eventId: event, listener: () => res() }, true),
-    );
-  }
   attachClient(
     player: Player["playerId"],
     send: (payload: string) => void,
   ): GameFacade {
     const facade = new GameFacade({ gameParam: this, player, send });
+    return facade;
+  }
+  attachExploit(playerId: string, send: (payload: string) => void) {
+    const facade = new ExploitFacade(this.exploitsManager, playerId, send);
     return facade;
   }
   determineWinner({ moneyPot }: { moneyPot: number }) {
@@ -104,7 +105,6 @@ export class Game {
   async startRound() {
     this.isStarted = true;
     this.eventManager.emit("round:start", this.players.session());
-    this.waitForEvent("deck:cards_deal");
     await this.turnSystem.startTurn(this.players.session());
     if (!this.canPlay()) {
       this.roundEnd();
@@ -127,9 +127,11 @@ export class Game {
     this.roundEnd();
   }
   addPlayer(id: string) {
+    const invetory = new Inventory(this.exploitsManager.eventManger, id);
     const player = new Player({
       manager: this.eventManager.createManage(),
       playerId: id,
+      invetory,
     });
     this.players.attachPlayer(player);
   }

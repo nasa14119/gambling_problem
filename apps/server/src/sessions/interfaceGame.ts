@@ -1,6 +1,6 @@
 import type { GameState } from "@repo/types";
 
-import { GameFacade } from "core/types";
+import { ExploitFacade, GameFacade } from "core/types";
 
 export interface Game {
   addPlayer: (playerId: string) => void;
@@ -8,6 +8,10 @@ export interface Game {
     playerId: string,
     send: (payload: string) => void,
   ) => GameFacade;
+  attachExploit: (
+    playerId: string,
+    send: (payload: string) => void,
+  ) => ExploitFacade;
   getState: (id: string) => GameState;
   init(): void;
 }

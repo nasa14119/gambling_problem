@@ -1,6 +1,7 @@
 import { PlayerHand } from "@repo/types";
-import { type Bank } from "./Bank.ts";
+import { BankInterface } from "./Bank.ts";
 import { GameEventManager } from "../Events/GameEventManager.ts";
+import { Inventory } from "./Inventory.ts";
 
 export const VALID_ACTIONS: ReadonlySet<string> = new Set([
   "fold",
@@ -25,10 +26,13 @@ export type PlayerConstructor = {
   playerId: string;
   manager: ReturnType<GameEventManager["createManage"]>;
 };
+export type PlayerConstrutorWithInvetory = {
+  invetory: Inventory;
+} & PlayerConstructor;
 export interface Player {
   playerId: string;
   cards: PlayerHand;
-  bank: Bank;
+  bank: BankInterface;
   isFold: boolean;
   turn: () => Promise<void>;
   getData: () => PlayerData;
