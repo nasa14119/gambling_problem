@@ -1,6 +1,9 @@
-import { Game } from "./Game";
-import { GameEventPayloads, type GameEvents } from "./Events/GameEventManager";
-import type { Player } from "./types";
+import { Game } from "./Game.ts";
+import {
+  type GameEventPayloads,
+  type GameEvents,
+} from "./Events/GameEventManager.ts";
+import type { Player } from "./types.ts";
 import { z } from "zod";
 export type GameEventPayload<T extends GameEvents> = {
   eventId: T;
@@ -66,7 +69,7 @@ export class GameFacade {
     if (this.game.turnSystem.moneyPot !== 0) {
       this.sendPayload({
         eventId: "turn:end",
-        payload: { moneyPot: this.game.turnSystem.moneyPot },
+        payload: { moneyPot: this.game.turnSystem.moneyPot ?? 0 },
       });
     }
   }
@@ -147,7 +150,12 @@ export class GameFacade {
         );
         return;
       }
-      this.send(JSON.stringify({ eventId, payload }));
+      this.send(
+        JSON.stringify({
+          eventId,
+          payload: this.game.turnSystem.getTurn(),
+        }),
+      );
       return;
     }
     // Players bet
@@ -159,7 +167,9 @@ export class GameFacade {
           payload: {
             type: payloadBet.type,
             chips: payloadBet.chips,
-            player: payloadBet.player.playerId,
+            player: this.game.players
+              .getPlayer(payloadBet.player.playerId)
+              .getData(),
           },
         }),
       );

@@ -1,33 +1,42 @@
 import { v4 as uuid } from "uuid";
-import { GameEventManager } from "./Events/GameEventManager";
-import { DeckEventsManager } from "./Deck/DeckEventsFactory";
-import { Player } from "./Players/Player";
-import { Players } from "./Players/index";
-import { TurnSystem } from "./Deck/TurnSystem";
-import { GameFacade } from "./GameFacade";
+import { GameEventManager } from "./Events/GameEventManager.ts";
+import { DeckEventsManager } from "./Deck/DeckEventsFactory.ts";
+import { Player } from "./Players/Player.ts";
+import { Players } from "./Players/index.ts";
+import { TurnSystem } from "./Deck/TurnSystem.ts";
+import { GameFacade } from "./GameFacade.ts";
+import { PokerBot } from "./Players/Bot.ts";
+import type { GameState } from "@repo/types";
+
 export class Game {
   id: string;
   eventManager = new GameEventManager();
   deck = new DeckEventsManager(this.eventManager);
   players = new Players();
   turnSystem = new TurnSystem(this.eventManager);
+  private isStarted = false;
   constructor() {
     this.id = uuid();
+  }
+  getState(id: string): GameState {
+    return {
+      isStarted: this.isStarted,
+      table: this.deck.gameState,
+      players: this.players.getPlayersData(),
+      user: this.players.getPlayer(id).getData(),
+      turn: this.turnSystem.getTurn(),
+      pot: this.turnSystem.moneyPot,
+    };
   }
   init() {
     this.eventManager.on({
       eventId: "player:turn",
-      listener: (id) => this.players.playerTurn(id),
+      listener: (id: string) => this.players.playerTurn(id),
     });
     this.eventManager.on({
       eventId: "round:end",
       listener: this.players.resetForNewRound.bind(this.players),
     });
-  }
-  private waitForEvent<T extends GameEvents>(event: T) {
-    return new Promise<void>((res) =>
-      this.eventManager.on({ eventId: event, listener: () => res() }, true),
-    );
   }
   attachClient(
     player: Player["playerId"],
@@ -37,6 +46,7 @@ export class Game {
     return facade;
   }
   determineWinner({ moneyPot }: { moneyPot: number }) {
+    if (moneyPot <= 0) return;
     const players = this.players.getPlaingPlayers();
     const sendwinners = this.eventManager.createEmiter("round:winners");
     if (players.length === 0) return;
@@ -67,19 +77,38 @@ export class Game {
       })),
     });
   }
-
+  roundEnd() {
+    this.isStarted = false;
+    this.determineWinner({ moneyPot: this.turnSystem.moneyPot ?? 0 });
+    this.eventManager.emit("round:end", undefined);
+  }
+  canPlay() {
+    return this.players.getPlaingPlayers().length > 1;
+  }
   async startRound() {
+    if (this.isStarted) return;
+    this.isStarted = true;
     this.eventManager.emit("round:start", this.players.session());
-    this.waitForEvent("deck:cards_deal");
     await this.turnSystem.startTurn(this.players.session());
+    if (!this.canPlay()) {
+      this.roundEnd();
+      return;
+    }
     this.deck.flop();
     await this.turnSystem.startTurn(this.players.getPlaingPlayers());
+    if (!this.canPlay()) {
+      this.roundEnd();
+      return;
+    }
     this.deck.turn();
     await this.turnSystem.startTurn(this.players.getPlaingPlayers());
+    if (!this.canPlay()) {
+      this.roundEnd();
+      return;
+    }
     this.deck.river();
     await this.turnSystem.startTurn(this.players.getPlaingPlayers());
-    this.determineWinner({ moneyPot: this.turnSystem.moneyPot });
-    this.eventManager.emit("round:end", undefined);
+    this.roundEnd();
   }
   addPlayer(id: string) {
     const player = new Player({
@@ -87,5 +116,13 @@ export class Game {
       playerId: id,
     });
     this.players.attachPlayer(player);
+  }
+  addBot(id: string) {
+    const bot = new PokerBot({
+      difficulty: "easy",
+      playerId: id,
+      manager: this.eventManager.createManage(),
+    });
+    this.players.attachPlayer(bot);
   }
 }

@@ -1,6 +1,6 @@
 import { PlayerHand } from "@repo/types";
-import { type Bank } from "./Bank";
-import { GameEventManager } from "../Events/GameEventManager";
+import { type Bank } from "./Bank.ts";
+import { GameEventManager } from "../Events/GameEventManager.ts";
 
 export const VALID_ACTIONS: ReadonlySet<string> = new Set([
   "fold",

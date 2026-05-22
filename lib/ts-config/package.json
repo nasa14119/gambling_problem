@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "default": "./base.json"
+    ".": "./base.json"
   },
   "publishConfig": {
     "access": "public"

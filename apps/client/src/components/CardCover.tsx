@@ -1,6 +1,7 @@
-import { cn } from '#/utils'
+import { cn } from '#/lib/utils'
 import type { ComponentProps } from 'react'
 import type { ClassValue } from 'clsx'
+import cardCoverSprite from '#/assets/coverCardSprite.png'
 
 const CARD_WIDTH = 71,
   CARD_HEIGHT = 95
@@ -17,7 +18,7 @@ export function CardCover({ className, scale = 1, ...rest }: Props) {
   return (
     <div
       className={cn(
-        `bg-white rounded-xl relative overflow-hidden border border-black/20`,
+        `bg-white rounded-[5px]  relative overflow-hidden border border-black/20`,
         className,
       )}
       style={{
@@ -27,7 +28,7 @@ export function CardCover({ className, scale = 1, ...rest }: Props) {
       {...rest}
     >
       <img
-        src="../../assets/coverCardSprite.png"
+        src={cardCoverSprite}
         width={SPRITE_WIDTH * scale}
         style={{
           left,

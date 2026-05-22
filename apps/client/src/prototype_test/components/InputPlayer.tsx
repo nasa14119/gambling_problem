@@ -1,4 +1,4 @@
-import { useEventSender } from '#/plaingStore'
+import { useEventSender } from '#/prototype_test/plaingStore'
 import { useRef } from 'react'
 
 export function InputPlayer() {

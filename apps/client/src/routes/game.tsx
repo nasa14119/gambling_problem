@@ -1,59 +1,54 @@
-import { AdminPlayer } from '#/components/AdminPlayer'
-import { InputPlayer } from '#/components/InputPlayer'
-import { PlayerManager } from '#/components/PlayerManager'
-import { Pot } from '#/components/Pot'
-import { StartRoundBtn } from '#/components/StartRoundBtn'
-import { Table } from '#/components/Table'
+import { Applications } from '#/components/Applications'
+import { NavGame, NavGameItem } from '#/components/NavGame'
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { MainGame } from '#/components/MainGame'
+import { BankUI } from '#/components/BankUI'
+import { PockerFace, PockerTrigger } from '#/components/PockerFace'
+import { useGameStore } from '#/stores/gameStore'
+import { useEventSocket } from '#/stores/eventsStore'
+import { useGameInit } from '#/hooks/useGameInit'
 
 export const Route = createFileRoute('/game')({ component: CreateGame })
 
 function CreateGame() {
-  const [isLoading, setLoading] = useState(true)
-  useEffect(() => {
-    fetch('http://localhost:3000/api/game/new/singlePlayer', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        players: ['player:1', 'player:2', 'player:3', 'player:4', 'player:5'],
-      }),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error('Error creating game')
-        setLoading(false)
-      })
-      .catch((e) => {
-        console.error(e)
-        setLoading(false)
-      })
-  }, [])
+  useGameInit()
+  const isLoading = useGameStore((s) => s.isLoading)
+  const error = useGameStore((s) => s.error)
   if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Error</div>
+  return <SetUpGame />
+}
+function SetUpGame() {
+  useEventSocket()
   return <Game />
 }
 function Game() {
+  const [current, setCurrent] = useState<'casino' | 'bank'>('casino')
   return (
-    <main className="size-full  h-screen relative flex justify-center items-center flex-col gap-y-5">
-      <header>
-        <Table />
-      </header>
-      <div className="flex justify-between w-full px-[10%]">
-        <PlayerManager playerId="player:1" />
-        <PlayerManager playerId="player:2" />
-      </div>
-      <div className="flex justify-between w-full px-[10%]">
-        <PlayerManager playerId="player:3" />
-        <PlayerManager playerId="player:4" />
-      </div>
-      <div>
-        <AdminPlayer playerId="player:admin" />
-      </div>
-      <StartRoundBtn />
-      <InputPlayer />
-      <Pot />
-    </main>
+    <>
+      <PockerFace />
+      <main className="size-full  h-screen grid grid-cols-1 grid-rows-[auto_1fr_auto]">
+        <NavGame current={current}>
+          <NavGameItem
+            text="Casino"
+            isActive={current === 'casino'}
+            onClick={() => setCurrent('casino')}
+          />
+          <NavGameItem
+            text="Central Bank"
+            isActive={current === 'bank'}
+            onClick={() => setCurrent('bank')}
+          />
+        </NavGame>
+        <div className="p-2 size-full">
+          {current === 'casino' && <MainGame />}
+          {current === 'bank' && <BankUI />}
+        </div>
+        <Applications>
+          <PockerTrigger />
+        </Applications>
+      </main>
+    </>
   )
 }

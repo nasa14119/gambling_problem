@@ -1,14 +1,14 @@
 import { PlayerHand } from "@repo/types";
-import type { GameEventPayloads } from "../Events/GameEventManager";
-import { Bank } from "./Bank";
-import { ErrorInTurn, UserInput } from "../types";
+import type { GameEventPayloads } from "../Events/GameEventManager.ts";
+import { Bank } from "./Bank.ts";
+import { ErrorInTurn, UserInput } from "../types.ts";
 import type {
   Player as IPlayer,
   PlayerOptions,
   PlayerConstructor,
-} from "./types";
-import { Timer } from "../lib/TimerGame";
-import { DEFAULTS, VALID_ACTIONS } from "./types";
+} from "./types.ts";
+import { Timer } from "../lib/TimerGame.ts";
+import { DEFAULTS, VALID_ACTIONS } from "./types.ts";
 
 const PLAYER_TURN_TIME_SECONDS = 60;
 

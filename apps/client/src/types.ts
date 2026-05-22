@@ -1,10 +1,15 @@
-import type { Card, PlayerHand } from '@repo/types'
+import type { Card, GameState, PlayerHand, TurnOptions } from '@repo/types'
 import type { GameEventPayloads, PlayerData } from '@repo/types/server'
 
-export type ClientEvents = Omit<
+type Overwrites = keyof Pick<
   GameEventPayloads,
-  'deck:cards_deal' | 'round:winners'
-> & {
+  | 'deck:cards_deal'
+  | 'round:winners'
+  | 'player:validbet'
+  | 'round:start'
+  | 'player:turn'
+>
+export type ClientEvents = Omit<GameEventPayloads, Overwrites> & {
   'user:turn': PlayerData
   'deck:cards_deal': PlayerHand
   'round:winners': {
@@ -12,6 +17,9 @@ export type ClientEvents = Omit<
     gameState: Card[]
     moneyWin: number
   }
+  'player:validbet': { player: PlayerData; type: TurnOptions; chips: number }
+  'round:start': PlayerData
+  'player:turn': GameState['turn']
 }
 
 export type GameEventsClient = keyof ClientEvents

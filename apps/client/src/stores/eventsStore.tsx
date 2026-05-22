@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { useSocketStore } from '#/hooks/useSocketStore'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import type {
   ClientEvents,
   EventData,
@@ -26,21 +26,26 @@ export const useEventSetter = () => useEventStore((s) => s.setEvent)
 export const useEventSocket = () => {
   const setEvent = useEventStore((s) => s.setEvent)
   const setStore = useEventStore((s) => s.setStore)
-  const [socketData] = useSocketStore()
+  const [socketData, loading] = useSocketStore()
   useEffect(() => {
     setStore({ sendEvent: socketData.sendEvent })
   }, [socketData.sendEvent])
   useEffect(() => {
+    // console.log(socketData.data)
     if (!socketData.data) return
     setEvent(socketData.data)
   }, [socketData.data])
+  return loading
 }
 export const useEventListener = (): EventData | undefined => {
   const eventId = useEventStore((s) => s.eventId)
   const payload = useEventStore((s) => s.payload)
+  const memo: EventData = useMemo(
+    () => ({ eventId, payload }) as EventData,
+    [eventId],
+  )
   if (!eventId) return
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  return { eventId, payload } as EventData
+  return memo
 }
 export const useEventSender = () => {
   const sendEvent = useEventStore((s) => s.sendEvent)

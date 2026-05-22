@@ -1,8 +1,8 @@
 import { Card } from "@repo/types";
-import { EventManager } from "./EventsManager";
+import { EventManager } from "./EventsManager.ts";
 import type { PlayerHand } from "@repo/types";
-import type { Player, UserInput } from "../types";
-import { GameWinnerPayload } from "./types";
+import type { Player, UserInput } from "../types.ts";
+import { GameWinnerPayload } from "./types.ts";
 export type GameEventPayloads = {
   "round:start": Player[];
   "round:start_turn": Player[];
