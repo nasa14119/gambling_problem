@@ -10,7 +10,7 @@ export const useGameEvents = () => {
   const setState = useGameUpdate()
   const setStateFunction = useGameStore((s) => s.updateGameState)
   useTurnEvents({ event })
-  useTablePot()
+  // useTablePot()
   useEffect(() => {
     if (!event) return
     const { eventId, payload } = event

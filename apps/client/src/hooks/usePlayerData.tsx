@@ -1,15 +1,23 @@
 import { useEventListener } from '#/stores/eventsStore'
 import { useGameState, useGameStore } from '#/stores/gameStore'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export const usePlayerData = (id: string) => {
   const { players } = useGameState()
   const data = useEventListener()
   const setState = useGameStore((s) => s.updateGameState)
+  const [isActive, setIsActive] = useState(false)
   useEffect(() => {
     if (!data) return
     const { eventId, payload } = data
     if (eventId === 'round:start') {
+      setIsActive(false)
+    }
+    if (eventId === 'user:turn') {
+      setIsActive(false)
+    }
+    if (eventId === 'player:turn') {
+      setIsActive(() => payload?.currentPlayer === id)
     }
     if (eventId === 'player:validbet') {
       if (payload.player.playerId !== id) return
@@ -30,14 +38,14 @@ export const usePlayerData = (id: string) => {
           players: {
             ...state.players,
             [id]: {
-              cards: winners[0].cards,
               chips: winners[0].chips,
               isFold: false,
+              playerId: winners[0].playerId,
             },
           },
         }))
       }
     }
   }, [data])
-  return players[id]
+  return { ...players[id], isActive }
 }

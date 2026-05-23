@@ -1,35 +1,23 @@
-import { useEventListener } from '#/stores/eventsStore'
 import { useGameState, useGameUpdate } from '#/stores/gameStore'
+import type { EventData } from '#/types'
 import { useEffect } from 'react'
 
-export const useTablePot = () => {
+export const useTablePot = ({ event }: { event?: EventData }) => {
   const setState = useGameUpdate()
-  const { turn } = useGameState()
-  const events = useEventListener()
+  const { user, pot } = useGameState()
   useEffect(() => {
-    if (!events) return
-    const { eventId, payload } = events
-    if (eventId === 'player:validbet') {
-      setState({
-        turn: turn
-          ? {
-              ...turn,
-              playersPots: {
-                ...turn.playersPots,
-                [payload.player.playerId]:
-                  (turn.playersPots[payload.player.playerId] ?? 0) +
-                  payload.chips,
-              },
-            }
-          : null,
-      })
-    }
+    if (!event) return
+    const { eventId, payload } = event
     if (eventId === 'turn:end') {
-      setState({ turn: null, pot: payload.moneyPot })
+      setState({
+        turn: null,
+        pot: (pot ?? 0) + payload.moneyPot,
+        user: { ...user, currentBet: null },
+      })
     }
     if (eventId === 'round:start') {
       setState({ pot: null, turn: null })
     }
-  }, [events])
+  }, [event])
   return
 }

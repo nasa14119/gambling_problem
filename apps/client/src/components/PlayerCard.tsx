@@ -34,8 +34,20 @@ export function PlayerCard({
       <div className="flex gap-x-2 ">
         {cards === null || playerCards.length < 2 ? (
           <>
-            <CardCover scale={scale} />
-            <CardCover scale={scale} />
+            <CardCover
+              scale={scale}
+              className={[
+                isActive && 'outline-2 outline-green-400',
+                hasError && 'outline-2 outline-red-400',
+              ]}
+            />
+            <CardCover
+              scale={scale}
+              className={[
+                isActive && 'outline-2 outline-green-400',
+                hasError && 'outline-2 outline-red-400',
+              ]}
+            />
           </>
         ) : (
           <>
