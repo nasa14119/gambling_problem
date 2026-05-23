@@ -78,5 +78,28 @@ export function wsSever(app: express.Application) {
       ws.close(1003, "Something went wrong connection to game");
     }
   });
+  appWithWs.ws("/api/game/connect/exploit", (ws, req) => {
+    const { playerId = "player:admin", sessionId } = req.cookies;
+    if (!sessionId) return ws.close(1003, "No sessionId");
+    if (!sessions.sessionExists(sessionId))
+      return ws.close(1003, "Session not found");
+    try {
+      const facade = sessions.connectExploit(sessionId, {
+        playerId,
+        send: ws.send.bind(ws),
+      });
+      facade.sendActiveExploits();
+      ws.on("message", (mess, isBinary) => {
+        if (isBinary) return;
+        facade.handleInput(mess.toString("utf8"));
+      });
+      ws.on("error", () => {
+        facade.terminate();
+      });
+    } catch (error) {
+      console.error(error);
+      ws.close(1003, "Something went wrong connection to game");
+    }
+  });
   return appWithWs;
 }

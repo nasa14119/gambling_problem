@@ -1,11 +1,26 @@
-import { ErrorInTurn } from "../types.ts";
+import { ExpoitEventManager } from "../Events/ExploitsEventManager.ts";
+import { ErrorInTurn, ExploitBuyPayload } from "../types.ts";
+import { Inventory } from "./Inventory.ts";
+import { Player } from "./Player.ts";
 
-export class Bank {
-  money: number = 0;
-  chips: number = 0;
-  constructor(money: number, chips: number) {
+export interface BankInterface {
+  getChipsValue(): number;
+  getMoneyValue(): number;
+  canPay(amount: number): boolean;
+  addChips(amout: number): void;
+}
+export class Bank implements BankInterface {
+  private money: number = 0;
+  private chips: number = 0;
+  private playerInvetory: Inventory;
+  constructor(
+    money: number,
+    chips: number,
+    private player: Player,
+  ) {
     this.money = money;
     this.chips = chips;
+    this.playerInvetory = player.invetory;
   }
   deposit(amount: number) {
     if (amount > this.money || amount <= 0)
@@ -19,6 +34,37 @@ export class Bank {
     this.chips -= amount;
     this.money += amount;
   }
+  buyExploit({
+    exploitId,
+    price,
+    emit,
+  }: Omit<ExploitBuyPayload, "playerId"> & {
+    emit: ExpoitEventManager["emit"];
+  }) {
+    if (this.playerInvetory.includes(exploitId)) {
+      emit("buy:error", {
+        playerId: this.player.playerId,
+        error: "Already bought",
+        exploit: exploitId,
+      });
+      return;
+    }
+    if (this.money < price) {
+      emit("buy:error", {
+        playerId: this.player.playerId,
+        error: "Insuficient money",
+        exploit: exploitId,
+      });
+      return;
+    }
+    this.money -= price;
+    this.playerInvetory.addItem(exploitId);
+    emit("buy:success", {
+      playerId: this.player.playerId,
+      exploitId,
+      newBalance: this.getMoneyValue(),
+    });
+  }
   canPay(amount: number) {
     if (this.chips === 0) return false;
     return this.chips - amount > 0;
@@ -28,6 +74,9 @@ export class Bank {
   }
   getChipsValue() {
     return this.chips;
+  }
+  clearChips() {
+    this.chips = 0;
   }
   getChips(amount: number) {
     if (amount > this.chips)

@@ -1,18 +1,18 @@
-import type { EventManager as IEventManager } from "./types";
+import type { EventManager as IEventManager } from "./types.ts";
 import { v4 as uuid } from "uuid";
 export abstract class EventManager<
   T extends Record<string, any>,
 > implements IEventManager<T> {
   _eventsListeners: IEventManager<T>["_eventsListeners"] = {};
   _eventsTransmiters: [string, (param: any) => void][] = [];
-  emit: IEventManager<T>["emit"] = (eventId, payload) => {
+  emit<K extends keyof T>(eventId: K, payload: T[K]) {
     const listeners = this._eventsListeners[eventId];
     this._eventsTransmiters.forEach(([_, transmiter]) => {
       transmiter({ eventId, payload });
     });
     if (!listeners) return;
     Array.from(listeners).forEach(([_, listener]) => listener(payload!));
-  };
+  }
   on: IEventManager<T>["on"] = ({ eventId, listener }, once = false) => {
     if (!this._eventsListeners[eventId])
       this._eventsListeners[eventId] = new Map();
@@ -64,9 +64,9 @@ export abstract class EventManager<
       remove: this.remove.bind(this),
     };
   };
-  removeTransmiter(id: string): void {
+  removeTransmiter(id_: string): void {
     this._eventsTransmiters = this._eventsTransmiters.filter(
-      ([id]) => id !== id,
+      ([id]) => id !== id_,
     );
   }
 }

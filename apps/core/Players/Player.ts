@@ -1,11 +1,13 @@
-import { PlayerHand } from "@repo/types";
+import { GameState, PlayerHand } from "@repo/types";
 import type { GameEventPayloads } from "../Events/GameEventManager.ts";
 import { Bank } from "./Bank.ts";
-import { ErrorInTurn, UserInput } from "../types.ts";
+import { Inventory } from "./Inventory.ts";
+import { ErrorInTurn, ExploitId, UserInput } from "../types.ts";
 import type {
   Player as IPlayer,
   PlayerOptions,
   PlayerConstructor,
+  PlayerConstrutorWithInvetory,
 } from "./types.ts";
 import { Timer } from "../lib/TimerGame.ts";
 import { DEFAULTS, VALID_ACTIONS } from "./types.ts";
@@ -17,15 +19,18 @@ export class Player implements IPlayer {
   cards: PlayerHand = null;
   isFold = false;
   bank: Bank;
+  invetory: Inventory;
   private sendInput: (payload: GameEventPayloads["player:validbet"]) => void;
   private manager: PlayerConstructor["manager"];
   constructor(
-    { playerId, manager }: PlayerConstructor,
+    { playerId, manager, invetory }: PlayerConstrutorWithInvetory,
     options?: PlayerOptions,
   ) {
     this.playerId = playerId;
     const { money, chips } = { ...DEFAULTS, ...options };
-    this.bank = new Bank(money, chips);
+    this.invetory = invetory;
+    // INVETORY MUST ALLWAYS BE CREATED BEFORE BANK
+    this.bank = new Bank(money, chips, this);
     this.sendInput = manager.getEmiter("player:validbet");
     this.manager = manager;
     this.manager.on({
@@ -56,6 +61,12 @@ export class Player implements IPlayer {
         }
       },
     });
+  }
+  softReset() {
+    this.cards = null;
+    this.isFold = false;
+    this.bank.clearChips();
+    this.invetory.clearActiveExploits();
   }
   private async getUserInput() {
     const { promise, resolve, reject } = Promise.withResolvers<UserInput>();
@@ -121,13 +132,14 @@ export class Player implements IPlayer {
       throw new Error("Unexpected error happend getting" + message);
     }
   }
-  getData() {
+  getData(): GameState["user"] {
     return {
       playerId: this.playerId,
       isFold: this.isFold,
       cards: this.cards,
       money: this.bank.getMoneyValue(),
       chips: this.bank.getChipsValue(),
+      invetory: this.invetory.getItems(),
     };
   }
 }
