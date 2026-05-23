@@ -17,12 +17,12 @@ export function MainGame() {
       <OtherPlayer
         cards={null}
         playerId={keys[0]}
-        className="absolute top-[40%] left-[5%]"
+        className="absolute top-[30%] left-[5%]"
       />
       <OtherPlayer
         cards={null}
         playerId={keys[1]}
-        className="absolute top-[40%] right-[5%]"
+        className="absolute top-[30%] right-[5%]"
       />
       <OtherPlayer
         cards={null}

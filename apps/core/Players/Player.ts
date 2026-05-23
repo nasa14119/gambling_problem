@@ -34,6 +34,10 @@ export class Player implements IPlayer {
     this.sendInput = manager.getEmiter("player:validbet");
     this.manager = manager;
     this.manager.on({
+      eventId: "round:end",
+      listener: this.bank.clearCurrentPot.bind(this.bank),
+    });
+    this.manager.on({
       eventId: "player:deposit",
       listener: ({ chips, player }) => {
         if (player.playerId !== this.playerId) return;
@@ -140,6 +144,7 @@ export class Player implements IPlayer {
       money: this.bank.getMoneyValue(),
       chips: this.bank.getChipsValue(),
       invetory: this.invetory.getItems(),
+      currentBet: this.bank.getCurrentPot(),
     };
   }
 }

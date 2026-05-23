@@ -22,6 +22,7 @@ export const useUserEvents = ({ playerId }: Props) => {
           ...user,
           chips: payload.player.chips,
           isFold: payload.type === 'fold',
+          currentBet: (user.currentBet ?? 0) + payload.chips,
         },
       })
     }

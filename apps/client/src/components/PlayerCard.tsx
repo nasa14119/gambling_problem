@@ -24,7 +24,7 @@ export function PlayerCard({
   return (
     <div
       className={cn(
-        'flex flex-col justify-center items-center gap-y-2 relative',
+        'flex flex-col justify-center items-center gap-y-2 relative py-1',
         hasFold && 'opacity-50',
       )}
     >

@@ -38,7 +38,7 @@ export type GameState = {
   isStarted: boolean;
   table: null | (Card | null)[];
   players: Record<string, Omit<PlayerData, "money" | "cards">>;
-  user: PlayerData & { invetory: ExploitId[] };
+  user: PlayerData & { invetory: ExploitId[]; currentBet: number | null };
   turn: {
     currentPlayer: string;
     minBet: number;

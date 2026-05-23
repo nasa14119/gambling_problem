@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { useSocketStore } from '#/hooks/useSocketStore'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import type {
   ClientEvents,
   EventData,
@@ -55,5 +55,21 @@ export const useEventSender = () => {
       return
     }
     sendEvent(param)
+  }
+}
+
+export const useRoundStart = ():
+  | { isLoading: true; sendEvent: null }
+  | { isLoading: false; sendEvent: () => void } => {
+  const sendEvent = useEventStore((s) => s.sendEvent)
+  const isLoading = useMemo(() => !sendEvent, [sendEvent])
+  const sendEventMemo = useCallback(
+    () => sendEvent!({ eventId: 'round:start', payload: undefined }),
+    [sendEvent],
+  )
+  if (isLoading) return { isLoading: true, sendEvent: null }
+  return {
+    isLoading: false,
+    sendEvent: sendEventMemo,
   }
 }

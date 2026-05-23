@@ -10,7 +10,6 @@ function PlayerPot({
   pot,
   className,
   position: { left = '', top = '', right = '', bottom = '' },
-  id,
 }: PropsPotPlayer) {
   return (
     <div
@@ -29,13 +28,17 @@ const POSTIONS: Array<PropsPotPlayer['position']> = [
   { top: '40%', right: '20%' },
   { bottom: '40%', left: '25%' },
   { bottom: '40%', right: '25%' },
-  { bottom: '28%', left: '45%' },
+  { bottom: '30%', left: '50%' },
 ]
 export function Pot() {
-  const { turn, players, pot } = useGameState()
+  const {
+    turn,
+    players,
+    pot,
+    user: { currentBet },
+  } = useGameState()
   const keys = Object.keys(players)
   const pots = turn?.playersPots ?? {}
-  // if (!turn) return null
   return (
     <>
       <div className="absolute top-[40%] left-[48%] -translate-x-1/2 flex flex-col text-center">
@@ -47,6 +50,13 @@ export function Pot() {
           if (!pots[key]) return null
           return <PlayerPot key={key} pot={pots[key]} position={POSTIONS[i]} />
         })}
+      {currentBet && (
+        <PlayerPot
+          pot={currentBet}
+          position={POSTIONS[4]}
+          className="-translate-x-1/2"
+        />
+      )}
     </>
   )
 }

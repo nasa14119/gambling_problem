@@ -16,6 +16,13 @@ export const useTurnEvents = ({ event }: Props) => {
         turn: payload,
       })
     }
+    if (eventId === 'player:validbet') {
+      setState({
+        turn: turn
+          ? { ...turn, minBet: Math.max(turn.minBet, payload.chips) }
+          : null,
+      })
+    }
     if (eventId === 'user:turn') {
       setState({
         turn: turn
