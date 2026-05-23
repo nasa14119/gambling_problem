@@ -35,8 +35,7 @@ export function PockerFace() {
       <div
         className={cn(
           'z-40 fixed inset-0',
-          state === 'close' && 'hidden',
-          state === 'idle' && 'hidden',
+          state !== 'open' && 'pointer-events-none hidden -z-50',
         )}
         onClick={() => trigger('close')}
       ></div>

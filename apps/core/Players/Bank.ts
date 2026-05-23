@@ -12,6 +12,7 @@ export interface BankInterface {
 export class Bank implements BankInterface {
   private money: number = 0;
   private chips: number = 0;
+  private currentPot: number | null = null;
   private playerInvetory: Inventory;
   constructor(
     money: number,
@@ -27,6 +28,12 @@ export class Bank implements BankInterface {
       throw new ErrorInTurn("Value is not allow", "INVALID_INPUT");
     this.money -= amount;
     this.chips += amount;
+  }
+  getCurrentPot() {
+    return this.currentPot;
+  }
+  clearCurrentPot() {
+    this.currentPot = null;
   }
   withdraw(amount: number) {
     if (amount > this.chips || amount <= 0)
@@ -86,6 +93,7 @@ export class Bank implements BankInterface {
       );
     if (amount <= 0)
       throw new ErrorInTurn("Value must be grater than 1", "INVALID_INPUT");
+    this.currentPot = (this.currentPot ?? 0) + amount;
     this.chips -= amount;
     return amount;
   }

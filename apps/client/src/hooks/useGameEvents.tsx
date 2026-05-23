@@ -1,15 +1,16 @@
 import { useTablePot } from '#/hooks/useTablePot'
 import { useTurnEvents } from '#/hooks/useTurnEvents'
 import { useEventListener } from '#/stores/eventsStore'
-import { useGameStore, useGameUpdate } from '#/stores/gameStore'
+import { useGameState, useGameStore, useGameUpdate } from '#/stores/gameStore'
 import { useEffect } from 'react'
 
 export const useGameEvents = () => {
   const event = useEventListener()
+  const { user } = useGameState()
   const setState = useGameUpdate()
   const setStateFunction = useGameStore((s) => s.updateGameState)
   useTurnEvents({ event })
-  useTablePot()
+  // useTablePot()
   useEffect(() => {
     if (!event) return
     const { eventId, payload } = event
@@ -19,7 +20,7 @@ export const useGameEvents = () => {
     if (eventId === 'round:start') {
       setStateFunction((s) => ({
         ...s,
-        user: { ...payload },
+        user: { ...user, ...payload, currentBet: null },
         players: Object.fromEntries(
           Object.entries(s.players).map(([k, v]) => [
             k,

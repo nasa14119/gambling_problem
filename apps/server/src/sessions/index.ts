@@ -61,6 +61,10 @@ export function wsSever(app: express.Application) {
     const { sessionId } = req.cookies;
     const playerId = (req.query.playerId ?? "player:admin") as string;
     if (!sessionId) return ws.close(1003, "No sessionId");
+    if (!sessions.sessionExists(sessionId)) {
+      console.log("Session not found");
+      return ws.close(1003, "Session not found");
+    }
     try {
       const facade = sessions.connectGame(sessionId, {
         playerId,
