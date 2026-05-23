@@ -1,11 +1,11 @@
 import { Card } from "@repo/types";
-import { Player } from "../types";
+import { Player } from "../types.ts";
 
 type Event<T extends string, K> = {
   eventId: T;
   listener: (payload: K) => void;
 };
-type EventKey<Payloads extends Record<string, any>> = Extract<
+export type EventKey<Payloads extends Record<string, any>> = Extract<
   keyof Payloads,
   string
 >;

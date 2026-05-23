@@ -7,6 +7,10 @@ import { TurnSystem } from "./Deck/TurnSystem.ts";
 import { GameFacade } from "./GameFacade.ts";
 import { PokerBot } from "./Players/Bot.ts";
 import type { GameState } from "@repo/types";
+import { Inventory } from "./Players/Inventory.ts";
+import { ExploitManager } from "./Exploits/ExploitManager.ts";
+import { ExploitFacade } from "./Exploits/ExploitFacade.ts";
+import { User } from "@repo/types/server";
 
 export class Game {
   id: string;
@@ -14,16 +18,25 @@ export class Game {
   deck = new DeckEventsManager(this.eventManager);
   players = new Players();
   turnSystem = new TurnSystem(this.eventManager);
+  exploitsManager = new ExploitManager(this);
   private isStarted = false;
   constructor() {
     this.id = uuid();
   }
+  private getUser(id: string): User {
+    const user = this.players.getPlayer(id) as User;
+    if (!user || user instanceof PokerBot)
+      throw new Error("Error trying to get state");
+    return user;
+  }
   getState(id: string): GameState {
+    const user = this.getUser(id);
+    const { [id]: _, ...players } = { ...this.players.getPlayersData() };
     return {
       isStarted: this.isStarted,
       table: this.deck.gameState,
-      players: this.players.getPlayersData(),
-      user: this.players.getPlayer(id).getData(),
+      players,
+      user: user.getData(),
       turn: this.turnSystem.getTurn(),
       pot: this.turnSystem.moneyPot,
     };
@@ -43,6 +56,10 @@ export class Game {
     send: (payload: string) => void,
   ): GameFacade {
     const facade = new GameFacade({ gameParam: this, player, send });
+    return facade;
+  }
+  attachExploit(playerId: string, send: (payload: string) => void) {
+    const facade = new ExploitFacade(this.exploitsManager, playerId, send);
     return facade;
   }
   determineWinner({ moneyPot }: { moneyPot: number }) {
@@ -86,7 +103,6 @@ export class Game {
     return this.players.getPlaingPlayers().length > 1;
   }
   async startRound() {
-    if (this.isStarted) return;
     this.isStarted = true;
     this.eventManager.emit("round:start", this.players.session());
     await this.turnSystem.startTurn(this.players.session());
@@ -111,9 +127,11 @@ export class Game {
     this.roundEnd();
   }
   addPlayer(id: string) {
+    const invetory = new Inventory(this.exploitsManager.eventManger, id);
     const player = new Player({
       manager: this.eventManager.createManage(),
       playerId: id,
+      invetory,
     });
     this.players.attachPlayer(player);
   }

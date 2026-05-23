@@ -35,7 +35,7 @@ export class Players {
   getPlayersData() {
     const players: Partial<GameState["players"]> = {};
     for (const [key, player] of this.players.entries()) {
-      const { playerId, money, ...playerData } = player.getData();
+      const { money, cards, ...playerData } = player.getData();
       players[key] = playerData;
     }
     return players as GameState["players"];

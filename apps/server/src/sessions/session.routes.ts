@@ -20,7 +20,7 @@ router.post("/api/game/new/singlePlayer", (req, res) => {
   game.addBot("bot:2");
   game.addBot("bot:3");
   game.addBot("bot:4");
-  game.addBot(playerId);
+  game.addPlayer(playerId);
   game.init();
   if (!token) {
     res.cookie("sessionId", sessions.newGame(game, "guest:"));

@@ -1,4 +1,4 @@
-import { GameFacade } from "core/types";
+import { ExploitFacade, GameFacade } from "core/types";
 import { v4 as uuid } from "uuid";
 
 import { type Game } from "./interfaceGame.ts";
@@ -12,6 +12,14 @@ class Singleton {
       Singleton.instance = new Singleton();
     }
     return Singleton.instance;
+  }
+  connectExploit(
+    sessionId: string,
+    { playerId, send }: { playerId: string; send: (payload: string) => void },
+  ): ExploitFacade {
+    if (!this.sessions.has(sessionId)) throw new Error("Session Id not found");
+    const game = this.sessions.get(sessionId)!;
+    return game.attachExploit(playerId, send);
   }
   connectGame(
     sessionId: string,
