@@ -9,7 +9,7 @@ export function Pot() {
   const winners = useWinnersData()
   return (
     <>
-      <div className="absolute top-[25%] left-1/2 -translate-x-1/2 flex flex-col justify-center items-center text-center bg-neutral-400/50 min-w-[20vw] aspect-video rounded-4xl py-2 px-5">
+      <div className="absolute top-[32%] left-1/2 -translate-x-1/2 flex flex-col justify-center items-center text-center bg-neutral-400/50 min-w-[20vw] aspect-video rounded-4xl py-2 px-5">
         {winners ? (
           <Winners winners={winners} />
         ) : (
