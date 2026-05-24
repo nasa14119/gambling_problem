@@ -1,6 +1,7 @@
 import express from "express";
-import { wsSever } from "./index.ts";
+
 import { COOKIES_OPTS } from "./cookieOpts.ts";
+import { wsSever } from "./index.ts";
 const app = wsSever(express());
 app.post("/api/game/changePlayer", (req, res) => {
   const { playerId = "guest" } = req.body;
