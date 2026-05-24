@@ -1,5 +1,4 @@
-// require the CJS module and provide a simple type so TypeScript stops complaining
-const getRandomDeck: () => number[] = require("./lib/index.cjs");
+import { getRandomDeck } from "./lib/index.cjs";
 import { getCardName } from "./Card.ts";
 import { type Card } from "@repo/types";
 import pokersolver, { type Hand } from "./lib/pokersolver.ts";
