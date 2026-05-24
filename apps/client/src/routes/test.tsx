@@ -7,13 +7,14 @@ import { Table as TableUI } from '#/components/Table'
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { useTableStore } from '#/prototype_test/store'
+import { SERVER_PATH } from '#/env'
 
 export const Route = createFileRoute('/test')({ component: CreateGame })
 
 function CreateGame() {
   const [isLoading, setLoading] = useState(true)
   useEffect(() => {
-    fetch('http://localhost:3000/api/game/new/prototype', {
+    fetch(`${SERVER_PATH}/api/game/new/prototype`, {
       method: 'POST',
       credentials: 'include',
       headers: {

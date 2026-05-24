@@ -1,3 +1,4 @@
+import { SERVER_PATH } from '#/env'
 import { useGameStore } from '#/stores/gameStore'
 import type { GameState } from '@repo/types'
 import { useEffect } from 'react'
@@ -8,14 +9,11 @@ const OPTIONS = {
   headers: { 'Content-Type': 'application/json' },
 } as const
 const createGame = async () => {
-  const res = await fetch(
-    'http://localhost:3000/api/game/new/singlePlayer',
-    OPTIONS,
-  )
+  const res = await fetch(`${SERVER_PATH}/api/game/new/singlePlayer`, OPTIONS)
   if (res.status !== 200) {
     throw new Error('Something went wrong')
   }
-  const stateRes = await fetch('http://localhost:3000/api/game/status', {
+  const stateRes = await fetch(`${SERVER_PATH}/api/game/status`, {
     credentials: 'include',
   })
   if (stateRes.status !== 200) {
@@ -25,7 +23,8 @@ const createGame = async () => {
   return data
 }
 const getStatus = async (): Promise<GameState> => {
-  const res = await fetch('http://localhost:3000/api/game/status', {
+  console.log(SERVER_PATH)
+  const res = await fetch(`${SERVER_PATH}/api/game/status`, {
     credentials: 'include',
   })
   if (res.status === 204 || res.status === 404) {
