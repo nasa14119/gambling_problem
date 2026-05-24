@@ -5,6 +5,7 @@
   "description": "card game",
   "scripts": {
     "init": "cat bin/init.sh | sh",
+    "setenv": "cat bin/setup_env.sh | sh",
     "build": "turbo run build",
     "dev": "turbo run dev",
     "dev:server": "turbo run dev --filter=server",
