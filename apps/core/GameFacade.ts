@@ -148,7 +148,6 @@ export class GameFacade {
             payload: this.player.getData(),
           }),
         );
-        return;
       }
       this.send(
         JSON.stringify({

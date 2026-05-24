@@ -41,7 +41,7 @@ function Game() {
             onClick={() => setCurrent('bank')}
           />
         </NavGame>
-        <div className="p-2 size-full">
+        <div className="p-2 size-full relative">
           {current === 'casino' && <MainGame />}
           {current === 'bank' && <BankUI />}
         </div>

@@ -12,11 +12,13 @@ import type {
 type Store = {
   eventId?: GameEventsClient
   payload?: ClientEvents[GameEventsClient]
+  isLoading: boolean
   sendEvent: null | EventSender
   setEvent: <T extends GameEventsClient>(event: EventPayload<T>) => void
   setStore: <T extends keyof Store>(param: Partial<Record<T, Store[T]>>) => void
 }
 export const useEventStore = create<Store>((set) => ({
+  isLoading: false,
   sendEvent: null,
   setEvent: ({ eventId, payload }) => set({ eventId, payload }),
   setStore: (param) => set({ ...param }),
@@ -26,16 +28,18 @@ export const useEventSetter = () => useEventStore((s) => s.setEvent)
 export const useEventSocket = () => {
   const setEvent = useEventStore((s) => s.setEvent)
   const setStore = useEventStore((s) => s.setStore)
-  const [socketData, loading] = useSocketStore()
+  const [socketData, isConnected] = useSocketStore()
+  useEffect(() => {
+    setStore({ isLoading: !isConnected })
+  }, [isConnected])
   useEffect(() => {
     setStore({ sendEvent: socketData.sendEvent })
   }, [socketData.sendEvent])
   useEffect(() => {
-    // console.log(socketData.data)
     if (!socketData.data) return
     setEvent(socketData.data)
   }, [socketData.data])
-  return loading
+  return
 }
 export const useEventListener = (): EventData | undefined => {
   const eventId = useEventStore((s) => s.eventId)
@@ -55,5 +59,17 @@ export const useEventSender = () => {
       return
     }
     sendEvent(param)
+  }
+}
+
+export const useRoundStart = ():
+  | { isLoading: true; sendEvent: null }
+  | { isLoading: false; sendEvent: () => void } => {
+  const sendEvent = useEventStore((s) => s.sendEvent)
+  const isLoading = useEventStore((s) => s.isLoading)
+  if (isLoading) return { isLoading: true, sendEvent: null }
+  return {
+    isLoading: false,
+    sendEvent: () => sendEvent!({ eventId: 'round:start', payload: undefined }),
   }
 }

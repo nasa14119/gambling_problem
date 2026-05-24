@@ -1,7 +1,7 @@
 @import 'tailwindcss';
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@fontsource-variable/geist';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -20,6 +20,7 @@ body {
   margin: 0;
   background-color: hsl(0, 0%, 90%);
   color: hsl(0, 0%, 10%);
+  user-select: none;
 }
 
 @theme inline {
