@@ -11,6 +11,7 @@ type Props = {
   hasError?: boolean
   scale?: number
   hasFold?: boolean
+  className?: string
 } & PropsWithChildren
 export function PlayerCard({
   cards = null,
@@ -19,6 +20,7 @@ export function PlayerCard({
   hasError = false,
   scale = 1,
   hasFold = false,
+  className,
 }: Props) {
   const playerCards = cards as CardType[]
   return (
@@ -39,6 +41,7 @@ export function PlayerCard({
               className={[
                 isActive && 'outline-2 outline-green-400',
                 hasError && 'outline-2 outline-red-400',
+                className,
               ]}
             />
             <CardCover
@@ -46,6 +49,7 @@ export function PlayerCard({
               className={[
                 isActive && 'outline-2 outline-green-400',
                 hasError && 'outline-2 outline-red-400',
+                className,
               ]}
             />
           </>
@@ -57,6 +61,7 @@ export function PlayerCard({
               className={[
                 isActive && 'outline-2 outline-green-400',
                 hasError && 'outline-2 outline-red-400',
+                className,
               ]}
             />
             <Card
@@ -65,6 +70,7 @@ export function PlayerCard({
               className={[
                 isActive && 'outline-2 outline-green-400',
                 hasError && 'outline-2 outline-red-400',
+                className,
               ]}
             />
           </>

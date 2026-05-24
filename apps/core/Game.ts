@@ -6,7 +6,7 @@ import { Players } from "./Players/index.ts";
 import { TurnSystem } from "./Deck/TurnSystem.ts";
 import { GameFacade } from "./GameFacade.ts";
 import { PokerBot } from "./Players/Bot.ts";
-import type { GameState } from "@repo/types";
+import type { Card, GameState } from "@repo/types";
 import { Inventory } from "./Players/Inventory.ts";
 import { ExploitManager } from "./Exploits/ExploitManager.ts";
 import { ExploitFacade } from "./Exploits/ExploitFacade.ts";
@@ -62,7 +62,7 @@ export class Game {
     const facade = new ExploitFacade(this.exploitsManager, playerId, send);
     return facade;
   }
-  determineWinner({ moneyPot }: { moneyPot: number }) {
+  determineWinner({ moneyPot, state }: { moneyPot: number; state: Card[] }) {
     if (moneyPot <= 0) return;
     const players = this.players.getPlaingPlayers();
     const sendwinners = this.eventManager.createEmiter("round:winners");
@@ -70,7 +70,7 @@ export class Game {
     if (players.length < 2) {
       players[0].bank.addChips(moneyPot);
       sendwinners({
-        gameState: this.deck.gameState,
+        gameState: state,
         moneyWin: moneyPot,
         winners: [{ for: "default", player: players[0] }],
       });
@@ -86,7 +86,7 @@ export class Game {
       );
     }
     sendwinners({
-      gameState: this.deck.gameState,
+      gameState: state,
       moneyWin: moneyPot,
       winners: winners.map((w) => ({
         for: w.for,
@@ -96,7 +96,10 @@ export class Game {
   }
   roundEnd() {
     this.isStarted = false;
-    this.determineWinner({ moneyPot: this.turnSystem.moneyPot ?? 0 });
+    this.determineWinner({
+      moneyPot: this.turnSystem.moneyPot ?? 0,
+      state: [...this.deck.gameState],
+    });
     this.eventManager.emit("round:end", undefined);
   }
   canPlay() {
