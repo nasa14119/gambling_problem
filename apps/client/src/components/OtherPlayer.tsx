@@ -25,7 +25,7 @@ type PropsWithValue = Omit<PropsUI, 'playerId' | 'cards' | 'chips'> & {
 }
 function OtherPlayerWithValue({ playerId, ...rest }: PropsWithValue) {
   const userData = usePlayerData(playerId)
-  return <OtherPlayerUI {...rest} cards={null} {...userData} />
+  return <OtherPlayerUI {...rest} {...userData} />
 }
 
 export function OtherPlayerUI({

@@ -160,15 +160,17 @@ export class GameFacade {
     // Players bet
     if (eventId === "player:validbet") {
       const payloadBet = payload as GameEventPayloads["player:validbet"];
+      const player = this.game.players
+        .getPlayer(payloadBet.player.playerId)
+        .getData();
+      player["cards"] = null;
       this.send(
         JSON.stringify({
           eventId,
           payload: {
             type: payloadBet.type,
             chips: payloadBet.chips,
-            player: this.game.players
-              .getPlayer(payloadBet.player.playerId)
-              .getData(),
+            player,
           },
         }),
       );
