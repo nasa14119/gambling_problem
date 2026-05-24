@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { useSocketStore } from '#/hooks/useSocketStore'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import type {
   ClientEvents,
   EventData,
@@ -36,7 +36,6 @@ export const useEventSocket = () => {
     setStore({ sendEvent: socketData.sendEvent })
   }, [socketData.sendEvent])
   useEffect(() => {
-    console.log({ ...socketData.data })
     if (!socketData.data) return
     setEvent(socketData.data)
   }, [socketData.data])

@@ -96,8 +96,8 @@ export class Game {
   }
   roundEnd() {
     this.isStarted = false;
-    this.eventManager.emit("round:end", undefined);
     this.determineWinner({ moneyPot: this.turnSystem.moneyPot ?? 0 });
+    this.eventManager.emit("round:end", undefined);
   }
   canPlay() {
     return this.players.getPlaingPlayers().length > 1;

@@ -7,14 +7,13 @@ type Props = {
   event?: EventData
 }
 export const useTurnEvents = ({ event }: Props) => {
-  const { turn, user, players } = useGameState()
+  const { turn, user } = useGameState()
   useTablePot({ event })
   const setState = useGameUpdate()
   useEffect(() => {
     if (!event) return
     const { eventId, payload } = event
     if (eventId === 'player:turn') {
-      // console.log({ eventId, payload })
       setState({
         turn: payload,
       })
@@ -25,13 +24,6 @@ export const useTurnEvents = ({ event }: Props) => {
         turn: turn
           ? { ...turn, minBet: Math.max(turn.minBet, payload.chips) }
           : null,
-        players: {
-          ...players,
-          [payload.player.playerId]: {
-            ...players[payload.player.playerId],
-            isFold: payload.type === 'fold',
-          },
-        },
       })
       return
     }
