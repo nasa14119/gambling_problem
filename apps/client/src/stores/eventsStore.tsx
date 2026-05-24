@@ -28,7 +28,12 @@ export const useEventSetter = () => useEventStore((s) => s.setEvent)
 export const useEventSocket = () => {
   const setEvent = useEventStore((s) => s.setEvent)
   const setStore = useEventStore((s) => s.setStore)
-  const [socketData, isConnected] = useSocketStore()
+  const [socketData, isConnected] = useSocketStore({
+    path: '/api/game/connect',
+    options: {
+      queryParams: { playerId: 'player:admin' },
+    },
+  })
   useEffect(() => {
     setStore({ isLoading: !isConnected })
   }, [isConnected])

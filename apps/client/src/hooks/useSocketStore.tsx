@@ -1,22 +1,26 @@
 import { useEffect, useState } from 'react'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
+import type { Options } from 'react-use-websocket'
 import type { EventPayload, EventSender, GameEventsClient } from '#/types'
-
-const SOCKET_URL = 'ws://localhost:3000/api/game/connect'
+import { WS_PATH } from '#/env'
 
 type Data = EventPayload<GameEventsClient>
 
-export const useSocketStore = (): [
-  { data: Data | null; sendEvent: EventSender },
-  boolean,
-] => {
+export const useSocketStore = ({
+  path = '',
+  options = {},
+}: {
+  path: string
+  options?: Options
+}): [{ data: Data | null; sendEvent: EventSender }, boolean] => {
   // Making hook to the websocket client
+  const URL = `${WS_PATH}${path}`
   const { lastJsonMessage, readyState, sendJsonMessage } = useWebSocket<
     Data | undefined
-  >(`${SOCKET_URL}`, {
+  >(URL, {
     shouldReconnect: () => true,
-    queryParams: { playerId: 'player:admin' },
     onError: (e) => console.error(e),
+    ...options,
   })
   const [data, setData] = useState<Data | null>(null)
   useEffect(() => {
