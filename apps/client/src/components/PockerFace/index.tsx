@@ -43,7 +43,7 @@ function PockerFaceComponent() {
           <span className="aspect-square bg-yellow-700 rounded-full w-2"></span>
           <span className="aspect-square bg-green-700 rounded-full w-2"></span>
         </div>
-        <div className="min-w-full max-h-full overflow-y-scroll min-h-full bg-gray-800 font-mono scrollbar-track-transparent">
+        <div className="min-w-full max-h-full overflow-y-scroll min-h-full bg-gray-950 text-cyan-400 scrollbar-track-transparent px-2">
           <Title />
           {items.map((exploit) => (
             <Item
@@ -52,6 +52,7 @@ function PockerFaceComponent() {
               desc="hola"
               title={exploit}
               onClick={() => handleSend(exploit)}
+              className="text-green-400"
             />
           ))}
         </div>

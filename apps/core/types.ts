@@ -21,7 +21,7 @@ export type UserInput = {
 export { type GameFacade } from "./GameFacade.ts";
 export type Transmiter = (eventId: string, payload?: Record<any, any>) => void;
 
-export type { Player, PlayerData, ExploitId };
+export type { Player, PlayerData, ExploitId, ExploitsEvents };
 
 export type {
   GameEventPayloads,
@@ -33,7 +33,6 @@ export type GameEventValue<T extends GameEvents> = {
   eventId: T;
   payload: GameEventPayloads[T];
 };
-
 export type ExploitEventValue<T extends ExploitsEvents> = {
   eventId: T;
   payload: ExploitsPayloads[T];
@@ -62,3 +61,5 @@ export type { Player as User } from "./Players/Player.ts";
 export type GameOptions = {
   exploits_whitelist?: ExploitId[];
 };
+
+export { EXPLOITS } from "./Exploits/const.ts";

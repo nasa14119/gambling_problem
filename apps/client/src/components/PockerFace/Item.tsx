@@ -15,6 +15,7 @@ export function Item({
   title,
   desc,
   price = 100,
+  className,
   onClick,
   ...rest
 }: Props) {
@@ -28,7 +29,8 @@ export function Item({
   return (
     <button
       className={cn(
-        'flex text-white hover:bg-blue-800/10 transition-all duration-125 ease w-full justify-between items-center my-2',
+        'flex  hover:bg-current/10 transition-all duration-125 ease w-full justify-between items-center my-2 p-2 rounded-sm',
+        className,
         isLoading && 'opacity-50',
       )}
       onClick={(e) => {
