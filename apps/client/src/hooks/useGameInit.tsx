@@ -23,7 +23,6 @@ const createGame = async () => {
   return data
 }
 const getStatus = async (): Promise<GameState> => {
-  console.log(SERVER_PATH)
   const res = await fetch(`${SERVER_PATH}/api/game/status`, {
     credentials: 'include',
   })

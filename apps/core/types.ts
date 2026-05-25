@@ -38,7 +38,9 @@ export type ExploitEventValue<T extends ExploitsEvents> = {
   eventId: T;
   payload: ExploitsPayloads[T];
 };
-export type ExploitEventPayload = ExploitEventValue<ExploitsEvents>;
+export type ExploitEventPayload = {
+  [K in ExploitsEvents]: ExploitEventValue<K>;
+}[ExploitsEvents];
 export type GameEvent = {
   [K in GameEvents]: GameEventValue<K>;
 }[GameEvents];
