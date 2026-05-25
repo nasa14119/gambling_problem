@@ -10,7 +10,8 @@ import type { Card, GameState } from "@repo/types";
 import { Inventory } from "./Players/Inventory.ts";
 import { ExploitManager } from "./Exploits/ExploitManager.ts";
 import { ExploitFacade } from "./Exploits/ExploitFacade.ts";
-import { User } from "@repo/types/server";
+import { ExploitId, User } from "@repo/types/server";
+import { GameOptions } from "./types.ts";
 
 export class Game {
   id: string;
@@ -19,15 +20,30 @@ export class Game {
   players = new Players();
   turnSystem = new TurnSystem(this.eventManager);
   exploitsManager = new ExploitManager(this);
+  public exploits_whitelist: ExploitId[] = [];
   private isStarted = false;
-  constructor() {
+  constructor({ exploits_whitelist = [] }: GameOptions = {}) {
     this.id = uuid();
+    this.exploits_whitelist = [
+      "see_flop",
+      "pick_other_player",
+      ...exploits_whitelist,
+    ];
   }
   private getUser(id: string): User {
     const user = this.players.getPlayer(id) as User;
     if (!user || user instanceof PokerBot)
       throw new Error("Error trying to get state");
     return user;
+  }
+  getUserStore(palyerId: string) {
+    const user = this.players.getPlayer(palyerId) as User;
+    if (!user || user instanceof PokerBot)
+      throw new Error("Error trying to get state");
+    const store = this.exploits_whitelist.filter(
+      (e) => !user.invetory.includes(e),
+    );
+    return store;
   }
   getState(id: string): GameState {
     const user = this.getUser(id);

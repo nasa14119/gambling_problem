@@ -56,5 +56,9 @@ export type ExploitTriggerPayload = {
   playerId: Player["playerId"];
 };
 
-export type { ExploitFacade } from "./exploits/ExploitFacade.ts";
+export type { ExploitFacade } from "./Exploits/ExploitFacade.ts";
 export type { Player as User } from "./Players/Player.ts";
+
+export type GameOptions = {
+  exploits_whitelist?: ExploitId[];
+};
