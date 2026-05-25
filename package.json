@@ -5,8 +5,10 @@
   "description": "card game",
   "scripts": {
     "init": "cat bin/init.sh | sh",
+    "setenv": "cat bin/setup_env.sh | sh",
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "dev:not_db": "turbo run dev --filter=!db",
     "dev:server": "turbo run dev --filter=server",
     "db:start": "turbo run db:start --filter=db",
     "db:stop": "turbo run db:stop --filter=db",

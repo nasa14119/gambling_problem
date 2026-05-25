@@ -3,6 +3,7 @@ import { Pot } from '#/components/Pot'
 import { StartGameBtn } from '#/components/StartGameBtn'
 import { TableWithStore } from '#/components/TableWithStore'
 import { UserCards } from '#/components/UserCards'
+import { ExploitsSuit } from '#/exploits/ExploitsSuit'
 import { useGameEvents } from '#/hooks/useGameEvents'
 import { useGameState } from '#/stores/gameStore'
 
@@ -13,6 +14,7 @@ export function MainGame() {
   const keys = Object.keys(game.players).filter((k) => k !== user.playerId)
   return (
     <div className="bg-green-950 rounded-4xl size-full p-2 text-white relative">
+      <ExploitsSuit />
       <div className="absolute inset-x-0 flex justify-center top-0 pt-2">
         <TableWithStore />
       </div>

@@ -1,4 +1,6 @@
+@import '@fontsource/ibm-plex-mono';
 .main {
+  font-family: 'IBM Plex Mono', monospace;
   --duration: 125ms;
   opacity: 0;
 }

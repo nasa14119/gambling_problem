@@ -1,3 +1,6 @@
 {
-  "extends": "@repo/ts-config"
+  "extends": "@repo/ts-config",
+  "compilerOptions": {
+    "allowJs": true
+  }
 }

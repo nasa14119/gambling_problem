@@ -13,5 +13,6 @@ export interface Game {
     send: (payload: string) => void,
   ) => ExploitFacade;
   getState: (id: string) => GameState;
+  getUserStore: (playerId: string) => string[];
   init(): void;
 }

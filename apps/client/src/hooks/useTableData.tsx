@@ -19,7 +19,7 @@ export const useTableData = (): Table => {
       setTable([...payload, null])
     }
     if (eventId === 'deck:river') {
-      setTable([...payload, null])
+      setTable([...payload])
     }
     if (eventId === 'round:start') {
       setTable(null)

@@ -2,6 +2,7 @@ import { GameSinglePlayer } from "core";
 import { Router } from "express";
 import z from "zod";
 
+import { hasSession } from "../middleware/hasSession.ts";
 import { COOKIES_OPTS } from "./cookieOpts.ts";
 import sessions from "./Singleton.ts";
 const router = Router();
@@ -65,5 +66,14 @@ router.get("/api/game/status", (req, res) => {
     return;
   }
   res.send(sessions.getGameStatus(sessionId, playerId));
+});
+
+router.get("/api/game/status/store", hasSession, (req, res) => {
+  const { playerId, sessionId } = req.cookies;
+  if (!playerId) {
+    res.sendStatus(400);
+    return;
+  }
+  res.send({ store: sessions.getUserStore(sessionId, playerId) });
 });
 export default router;
