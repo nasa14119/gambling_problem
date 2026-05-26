@@ -51,25 +51,11 @@ export class GameFacade {
       this.sendPayload.bind(this),
     );
     this.send = send;
-    // Sending the player's cards
-    if (this.player.cards !== null) {
-      this.sendPayload({
-        eventId: "round:start",
-        payload: this.game.players.session(),
-      });
-    }
     // Sending the message that the playes is on turn
-    if (this.game.turnSystem.playerPlaing !== null) {
+    if (this.game.isStarted) {
       this.sendPayload({
         eventId: "player:turn",
-        payload: this.game.turnSystem.playerPlaing,
-      });
-    }
-    // Sending the current money pot
-    if (this.game.turnSystem.moneyPot !== 0) {
-      this.sendPayload({
-        eventId: "turn:end",
-        payload: { moneyPot: this.game.turnSystem.moneyPot ?? 0 },
+        payload: this.game.turnSystem.getTurn()!.currentPlayer,
       });
     }
   }

@@ -8,6 +8,7 @@ import { PockerFace, PockerTrigger } from '#/components/PockerFace'
 import { useGameStore } from '#/stores/gameStore'
 import { useEventSocket } from '#/stores/eventsStore'
 import { useGameInit } from '#/hooks/useGameInit'
+import { usePockerFace } from '#/components/PockerFace/store'
 
 export const Route = createFileRoute('/game')({ component: CreateGame })
 
@@ -23,8 +24,14 @@ function SetUpGame() {
   useEventSocket()
   return <Game />
 }
+export type Tabs = 'casino' | 'bank'
 function Game() {
-  const [current, setCurrent] = useState<'casino' | 'bank'>('casino')
+  const setPockerFace = usePockerFace((s) => s.setState)
+  const [current, setCurrent] = useState<Tabs>('casino')
+  const handleClick = (path: Tabs) => {
+    setPockerFace('idle')
+    setCurrent(path)
+  }
   return (
     <>
       <PockerFace />
@@ -33,12 +40,12 @@ function Game() {
           <NavGameItem
             text="Casino"
             isActive={current === 'casino'}
-            onClick={() => setCurrent('casino')}
+            onClick={() => handleClick('casino')}
           />
           <NavGameItem
             text="Central Bank"
             isActive={current === 'bank'}
-            onClick={() => setCurrent('bank')}
+            onClick={() => handleClick('bank')}
           />
         </NavGame>
         <div className="p-2 size-full relative">

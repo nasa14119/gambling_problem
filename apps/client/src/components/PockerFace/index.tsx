@@ -22,7 +22,7 @@ function PockerFaceComponent() {
     <>
       <div
         className={cn(
-          'fixed bottom-[10vh] left-[1vw] aspect-video h-[40vh]  rounded-4xl overflow-hidden  z-50 grid grid-cols-1 grid-rows-[max-content_1fr] bg-gray-800',
+          'fixed bottom-[10vh] z-100 left-[1vw] aspect-video h-[40vh]  rounded-4xl overflow-hidden grid grid-cols-1 grid-rows-[max-content_1fr] bg-gray-800',
           styles.main,
         )}
         onMouseOver={() =>
@@ -38,6 +38,7 @@ function PockerFaceComponent() {
             'flex gap-x-2 h-10 px-5 items-center justify-end bg-gray-900',
             state === 'close' && 'pointer-events-none',
           )}
+          onClick={() => trigger('close')}
         >
           <span className="aspect-square bg-red-700 rounded-full w-2"></span>
           <span className="aspect-square bg-yellow-700 rounded-full w-2"></span>
@@ -59,7 +60,7 @@ function PockerFaceComponent() {
       </div>
       <div
         className={cn(
-          'z-40 fixed inset-0',
+          'z-90 fixed inset-0',
           state !== 'open' && 'pointer-events-none hidden -z-50',
         )}
         onClick={() => trigger('close')}
