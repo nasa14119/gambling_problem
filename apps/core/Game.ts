@@ -8,8 +8,8 @@ import { GameFacade } from "./GameFacade.ts";
 import { PokerBot } from "./Players/Bot.ts";
 import type { Card, GameState } from "@repo/types";
 import { Inventory } from "./Players/Inventory.ts";
-import { ExploitManager } from "./Exploits/ExploitManager.ts";
-import { ExploitFacade } from "./Exploits/ExploitFacade.ts";
+import { ExploitManager } from "./exploits/ExploitManager.ts";
+import { ExploitFacade } from "./exploits/ExploitFacade.ts";
 import { ExploitId, User } from "@repo/types/server";
 import { GameOptions } from "./types.ts";
 
