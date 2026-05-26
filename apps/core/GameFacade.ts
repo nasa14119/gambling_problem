@@ -55,14 +55,7 @@ export class GameFacade {
     if (this.game.isStarted) {
       this.sendPayload({
         eventId: "player:turn",
-        payload: this.game.turnSystem.getTurn()?.currentPlayer!,
-      });
-    }
-    // Sending the current money pot
-    if (this.game.turnSystem.moneyPot !== 0) {
-      this.sendPayload({
-        eventId: "turn:end",
-        payload: { moneyPot: this.game.turnSystem.moneyPot ?? 0 },
+        payload: this.game.turnSystem.getTurn()!.currentPlayer,
       });
     }
   }
