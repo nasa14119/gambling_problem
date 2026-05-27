@@ -21,7 +21,6 @@ export class Inventory {
         if (payload.playerId !== this.player) return;
         const canTrigger = this.useItem(payload.exploitId);
         if (!canTrigger) return;
-        this.exploitsManager.emit("exploit:trigger", payload);
       },
     });
   }
