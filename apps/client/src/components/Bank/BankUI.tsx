@@ -9,9 +9,6 @@ import { useBankLoading } from './store.ts'
 import { fetchData } from './store'
 
 export function BankUI() {
-  useEffect(() => {
-    fetchData()
-  }, [])
   return (
     <div className="bg-blue-950 rounded-4xl size-full p-2  text-blue-900 flex flex-col justify-between py-[5vh] font-serif  px-4">
       <div className="h-[10vh] flex ">
@@ -21,9 +18,9 @@ export function BankUI() {
       </div>
       <Pay />
       <div className="grid grid-cols-3 gap-x-2 h-[10vh]">
-        <MoneyBalance />
-        <ChipsBank />
         <Credit />
+        <ChipsBank />
+        <MoneyBalance />
       </div>
       <Actions />
     </div>
@@ -31,6 +28,9 @@ export function BankUI() {
 }
 export const Bank = () => {
   const isLoading = useBankLoading()
+  useEffect(() => {
+    fetchData()
+  }, [])
   if (isLoading) return <Loanding />
   return <BankUI />
 }

@@ -16,7 +16,7 @@ export const useBankStore = create<Store>((set) => ({
       return { data: new_data }
     }),
 }))
-export async function fetchData() {
+export async function fetchData(num = 1) {
   try {
     const res = await fetch(`${SERVER_PATH}/api/game/status/bank`, {
       credentials: 'include',
@@ -27,6 +27,9 @@ export async function fetchData() {
   } catch {
     console.error('Error fetching data')
     useBankStore.setState({ data: null })
+    const time = 500 * 2 ** num
+    await new Promise((resolve) => setTimeout(resolve, time))
+    fetchData(num + 1)
   }
 }
 function getLocalData(): Store['data'] {

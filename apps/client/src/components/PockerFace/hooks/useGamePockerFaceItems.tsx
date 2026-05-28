@@ -39,7 +39,10 @@ export const usePockerFaceItems = (): [
         prev ? prev.filter((item) => item !== payload.exploitId) : null,
       )
       setState({
-        user: { ...user, invetory: [...user.invetory, payload.exploitId] },
+        user: {
+          ...user,
+          invetory: Array.from(new Set([...user.invetory, payload.exploitId])),
+        },
       })
     }
   })
