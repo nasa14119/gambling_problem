@@ -54,17 +54,8 @@ router.post("/api/game/new/prototype", (req, res) => {
   res.sendStatus(200);
 });
 
-router.get("/api/game/status", (req, res) => {
+router.get("/api/game/status", hasSession, (req, res) => {
   const { playerId, sessionId } = req.cookies;
-  if (!sessionId) {
-    res.sendStatus(204);
-    return;
-  }
-  if (!sessions.sessionExists(sessionId)) {
-    res.clearCookie("sessionId");
-    res.sendStatus(204);
-    return;
-  }
   res.send(sessions.getGameStatus(sessionId, playerId));
 });
 
@@ -75,5 +66,13 @@ router.get("/api/game/status/store", hasSession, (req, res) => {
     return;
   }
   res.send({ store: sessions.getUserStore(sessionId, playerId) });
+});
+router.get("/api/game/status/bank", hasSession, (req, res) => {
+  const { playerId, sessionId } = req.cookies;
+  if (!playerId) {
+    res.sendStatus(400);
+    return;
+  }
+  res.send(sessions.getUserBank(sessionId, playerId));
 });
 export default router;

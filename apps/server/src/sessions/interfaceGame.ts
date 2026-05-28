@@ -1,4 +1,5 @@
 import type { GameState } from "@repo/types";
+import type { BankData } from "@repo/types/server";
 
 import { ExploitFacade, GameFacade } from "core/types";
 
@@ -13,6 +14,7 @@ export interface Game {
     send: (payload: string) => void,
   ) => ExploitFacade;
   getState: (id: string) => GameState;
+  getUserBank: (id: string) => BankData;
   getUserStore: (playerId: string) => string[];
   init(): void;
 }

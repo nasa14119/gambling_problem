@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 import type { Options } from 'react-use-websocket'
 import { WS_PATH } from '#/env'
@@ -20,15 +19,10 @@ export const useSocketStore = <T extends any>({
     onError: (e) => console.error(e),
     ...options,
   })
-  const [data, setData] = useState<T | null>(null)
-  useEffect(() => {
-    if (!lastJsonMessage) return
-    setData(() => lastJsonMessage)
-  }, [lastJsonMessage])
   const isConnected = readyState === ReadyState.OPEN
   return [
     {
-      data,
+      data: lastJsonMessage ?? null,
       sendEvent: sendJsonMessage,
     },
     isConnected,

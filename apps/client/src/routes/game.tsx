@@ -3,7 +3,7 @@ import { NavGame, NavGameItem } from '#/components/NavGame'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { MainGame } from '#/components/MainGame'
-import { BankUI } from '#/components/BankUI'
+import { Bank } from '#/components/Bank/BankUI'
 import { PockerFace, PockerTrigger } from '#/components/PockerFace'
 import { useGameStore } from '#/stores/gameStore'
 import { useEventSocket } from '#/stores/eventsStore'
@@ -50,7 +50,7 @@ function Game() {
         </NavGame>
         <div className="p-2 size-full relative">
           {current === 'casino' && <MainGame />}
-          {current === 'bank' && <BankUI />}
+          {current === 'bank' && <Bank />}
         </div>
         <Applications>
           <PockerTrigger />

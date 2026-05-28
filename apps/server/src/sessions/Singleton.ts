@@ -34,6 +34,11 @@ class Singleton {
     const game = this.sessions.get(sessionId)!;
     return game.getState(playerId);
   }
+  getUserBank(sessionId: string, playerId: string) {
+    if (!this.sessionExists(sessionId)) throw new Error("Session Id not found");
+    const game = this.sessions.get(sessionId)!;
+    return game.getUserBank(playerId);
+  }
   getUserStore(sessionId: string, playerId: string) {
     if (!this.sessionExists(sessionId)) throw new Error("Session Id not found");
     const game = this.sessions.get(sessionId)!;
