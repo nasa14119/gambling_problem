@@ -26,5 +26,13 @@ export const useUserEvents = ({ playerId }: Props) => {
         },
       })
     }
+    if (eventId === 'round:winners') {
+      const winners = payload.winners.filter((w) => w.playerId === playerId)
+      if (winners[0]) {
+        setState({
+          user: { ...user, currentBet: null, chips: winners[0].chips },
+        })
+      }
+    }
   }, [data])
 }

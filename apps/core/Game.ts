@@ -8,9 +8,9 @@ import { GameFacade } from "./GameFacade.ts";
 import { PokerBot } from "./Players/Bot.ts";
 import type { Card, GameState } from "@repo/types";
 import { Inventory } from "./Players/Inventory.ts";
-import { ExploitManager } from "./exploits/ExploitManager.ts";
-import { ExploitFacade } from "./exploits/ExploitFacade.ts";
-import { ExploitId, User } from "@repo/types/server";
+import { ExploitManager } from "./Exploits/ExploitManager.ts";
+import { ExploitFacade } from "./Exploits/ExploitFacade.ts";
+import { BankData, ExploitId, User } from "@repo/types/server";
 import { GameOptions } from "./types.ts";
 
 export class Game {
@@ -22,6 +22,7 @@ export class Game {
   exploitsManager = new ExploitManager(this);
   public exploits_whitelist: ExploitId[] = [];
   private _isStarted = false;
+  nextRank = 10_000;
   constructor({ exploits_whitelist = [] }: GameOptions = {}) {
     this.id = uuid();
     this.exploits_whitelist = [
@@ -80,6 +81,18 @@ export class Game {
   attachExploit(playerId: string, send: (payload: string) => void) {
     const facade = new ExploitFacade(this.exploitsManager, playerId, send);
     return facade;
+  }
+  getUserBank(id: string): BankData {
+    const user = this.players.getPlayer(id) as User;
+    // TODO: on mafia and credit
+    return {
+      money: user.bank.getMoneyValue(),
+      chips: user.bank.getChipsValue(),
+      next_rank: this.nextRank,
+      credit: 100_000,
+      pay: 1_000,
+      round_to_end: 15,
+    };
   }
   determineWinner({ moneyPot, state }: { moneyPot: number; state: Card[] }) {
     if (moneyPot <= 0) return;

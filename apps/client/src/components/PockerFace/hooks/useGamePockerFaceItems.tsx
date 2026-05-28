@@ -13,7 +13,6 @@ const fetchStore = async () => {
     credentials: 'include',
   })
   if (res.status !== 200) {
-    console.error(res.status)
     throw new Error('Something went wrong')
   }
   const data = await res.json()
