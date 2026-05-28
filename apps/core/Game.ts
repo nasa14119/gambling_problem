@@ -22,9 +22,11 @@ export class Game {
   exploitsManager = new ExploitManager(this);
   public exploits_whitelist: ExploitId[] = [];
   private _isStarted = false;
+  public round: number = 0;
   nextRank = 10_000;
   constructor({ exploits_whitelist = [] }: GameOptions = {}) {
     this.id = uuid();
+    this.round = 0;
     this.exploits_whitelist = [
       "see_flop",
       "pick_other_player",
@@ -132,13 +134,14 @@ export class Game {
       moneyPot: this.turnSystem.moneyPot ?? 0,
       state: [...this.deck.gameState],
     });
-    this.eventManager.emit("round:end", undefined);
+    this.eventManager.emit("round:end", { round: this.round });
   }
   canPlay() {
     return this.players.getPlaingPlayers().length > 1;
   }
   async startRound() {
     this._isStarted = true;
+    this.round++;
     this.eventManager.emit("round:start", this.players.session());
     await this.turnSystem.startTurn(this.players.session());
     if (!this.canPlay()) {

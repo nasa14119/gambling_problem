@@ -8,7 +8,7 @@ export type GameEventPayloads = {
   "round:start_turn": Player[];
   "turn:start": undefined;
   "turn:end": { moneyPot: number };
-  "round:end": undefined;
+  "round:end": { round: number };
   "game:state_change": Card[];
   "deck:cards_deal": undefined;
   "deck:shuffle": undefined;
