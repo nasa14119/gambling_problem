@@ -1,7 +1,7 @@
 import type { TurnOptions } from "@repo/types";
 import type { Player, PlayerData } from "./Players/types.ts";
 import { GameEventPayloads, GameEvents } from "@repo/types/server";
-import { ExploitId } from "./exploits/ExploitsTypes.ts";
+import { ExploitId } from "./Exploits/ExploitsTypes.ts";
 import {
   ExploitsEvents,
   ExploitsPayloads,
@@ -55,11 +55,11 @@ export type ExploitTriggerPayload = {
   playerId: Player["playerId"];
 };
 
-export type { ExploitFacade } from "./exploits/ExploitFacade.ts";
+export type { ExploitFacade } from "./Exploits/ExploitFacade.ts";
 export type { Player as User } from "./Players/Player.ts";
 
 export type GameOptions = {
   exploits_whitelist?: ExploitId[];
 };
 
-export { EXPLOITS } from "./exploits/const.ts";
+export { EXPLOITS } from "./Exploits/const.ts";
