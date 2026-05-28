@@ -1,0 +1,35 @@
+USE gambling_problem;
+
+DROP TRIGGER IF EXISTS trgRunsCalcEarnIns;
+DELIMITER //
+CREATE TRIGGER trgRunsCalcEarnIns
+BEFORE INSERT ON Runs
+FOR EACH ROW
+BEGIN
+    SET NEW.earnings = COALESCE(NEW.moneyTotal, 0) - COALESCE(NEW.moneySpend, 0);
+END //
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS trgRunsCalcEarnUpd;
+DELIMITER //
+CREATE TRIGGER trgRunsCalcEarnUpd
+BEFORE UPDATE ON Runs
+FOR EACH ROW
+BEGIN
+    SET NEW.earnings = COALESCE(NEW.moneyTotal, 0) - COALESCE(NEW.moneySpend, 0);
+END //
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS trgRunsSetStarted;
+DELIMITER //
+CREATE TRIGGER trgRunsSetStarted
+AFTER INSERT ON Runs
+FOR EACH ROW
+BEGIN
+    IF NEW.metadataID IS NOT NULL THEN
+        UPDATE Metadata
+        SET startedAt = CURRENT_TIMESTAMP
+        WHERE metadataID = NEW.metadataID;
+    END IF;
+END //
+DELIMITER ;
