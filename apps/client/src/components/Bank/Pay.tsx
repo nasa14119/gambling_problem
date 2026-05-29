@@ -1,10 +1,11 @@
 import { PayBtn } from '#/components/Bank/PayBtn'
 import { Rank } from '#/components/Bank/Rank'
-import { usePayPercent } from '#/components/Bank/store'
+import { usePayPercent, useRoundsLeft } from '#/components/Bank/store'
 import { cn } from '#/lib/utils'
 
 export function Pay() {
   const total_pay = usePayPercent()
+  const rounds = useRoundsLeft()
   return (
     <div className="grid grid-rows-1 grid-cols-2 gap-x-10 h-[11vh]">
       <main className="rounded-xl px-2 bg-white grid grid-cols-1 grid-rows-2">
@@ -12,6 +13,16 @@ export function Pay() {
           <h3 className="text-3xl font-medium leading-3.75 align-bottom">
             Credit Due Date
           </h3>
+          <div>
+            <span
+              className={cn(
+                'rounded-full bg-accent text-slate-950 font-bold p-1 text-[16px] align-bottom',
+                rounds <= 10 && 'bg-red-700',
+              )}
+            >
+              {rounds}
+            </span>
+          </div>
           <PayBtn />
         </header>
         <div className=" flex items-center justify-center h-full">

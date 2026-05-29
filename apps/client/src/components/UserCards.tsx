@@ -62,6 +62,7 @@ export function UserCards() {
             <Options
               minBet={turn.minBet - (turn.playersPots[user.playerId] ?? 0)}
               currentBet={currentBet}
+              isInvalid={currentBet > user.chips}
               setOpt={handleOpt}
             />
           )}
@@ -101,16 +102,18 @@ function Options({
   minBet,
   setOpt,
   currentBet,
+  isInvalid = false,
 }: {
   minBet: number | null
   setOpt: (key: TurnOptions) => void
   currentBet: number
+  isInvalid?: boolean
 }) {
   return (
     <>
-      {minBet !== null && (
+      {minBet !== null && !isInvalid && (
         <>
-          {currentBet === minBet && (
+          {currentBet === minBet && minBet > 0 && (
             <Option
               value="pay"
               className="bg-blue-500/70"

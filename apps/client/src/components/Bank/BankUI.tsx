@@ -10,7 +10,7 @@ import { fetchData } from './store'
 
 export function BankUI() {
   return (
-    <div className="bg-blue-950 rounded-4xl size-full p-2  text-blue-900 flex flex-col justify-between py-[5vh] font-serif  px-4">
+    <div className="bg-blue-950 rounded-4xl size-full p-2  text-blue-900 flex flex-col justify-between py-[5vh]   px-4">
       <div className="h-[10vh] flex ">
         <span className="rounded-sm bg-white h-full w-[20%] grid place-content-center">
           LOGO

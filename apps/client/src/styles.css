@@ -2,10 +2,17 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 @import '@fontsource-variable/geist';
-@import '@fontsource-variable/stix-two-text';
+@import '@fontsource-variable/pixelify-sans';
 @plugin 'tailwind-scrollbar';
 
 @custom-variant dark (&:is(.dark *));
+
+@font-face {
+  font-family: 'Geist Pixel Square';
+  src: url('/fonts/GeistPixel-Square.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
 
 * {
   box-sizing: border-box;
@@ -28,7 +35,8 @@ body {
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: 'Geist Variable', sans-serif;
-  --font-serif: 'STIX Two Text Variable', sans-serif;
+  --font-pixelated: 'Pixelify Sans Variable', system-ui;
+  --font-base: 'Geist Pixel Square', sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -146,6 +154,39 @@ body {
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans;
+    @apply font-base;
+  }
+}
+.typewriter-text {
+  white-space: nowrap;
+  overflow: hidden; /* Hides upcoming text until container expands */
+  border-right: 5px solid #fff; /* Represents insertion cursor */
+  width: 0; /* Starting state */
+
+  /* Applies two animations simultaneously: typing and cursor blink */
+  --duration: 2.5s;
+  animation:
+    typing var(--duration) steps(25) forwards,
+    blink-cursor 0.75s step-end infinite;
+}
+
+/* Keyframes to expand width */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Keyframes for the blinking cursor */
+@keyframes blink-cursor {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #fff;
   }
 }

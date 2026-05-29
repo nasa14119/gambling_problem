@@ -26,7 +26,7 @@ export type PlayerConstructor = {
   playerId: string;
   manager: ReturnType<GameEventManager["createManage"]>;
 };
-export type PlayerConstrutorWithInvetory = {
+export type PlayerConstrutorWithUserVals = {
   invetory: Inventory;
 } & PlayerConstructor;
 export interface Player {
@@ -37,3 +37,8 @@ export interface Player {
   turn: () => Promise<void>;
   getData: () => PlayerData;
 }
+
+export type BackBettting = {
+  round: number;
+  factor: number;
+} | null;

@@ -1,8 +1,10 @@
 import { SERVER_PATH } from '#/env'
+import { useEventSender } from '#/stores/eventsStore'
 import { useGameState, useGameUpdate } from '#/stores/gameStore'
 import type { BankData } from '@repo/types/server'
 import { create } from 'zustand'
 
+const MIN_PAY = 500
 type Store = {
   data: BankData | null
   setState: (param: Partial<Store['data']>) => void
@@ -51,13 +53,27 @@ export const useBankMoney = () => {
   const { money: balance } = useDataBank()
   return balance
 }
+export const useCanPayDebt = () => {
+  const { user } = useGameState()
+  const percent = usePayPercent()
+  return percent !== 100 && user.money >= MIN_PAY
+}
 
 export const useIncrementPay = () => {
   const setState = useBankStore((s) => s.setState)
+  const canPay = useCanPayDebt()
+  const { user } = useGameState()
+  const setGame = useGameUpdate()
+  const send = useEventSender()
   const { pay, credit } = useDataBank()
   return () => {
-    if (pay >= credit) return
-    setState({ pay: pay + 5000 })
+    if (pay >= credit || !canPay) return
+    setState({ pay: pay + MIN_PAY, money: user.money - MIN_PAY })
+    send({
+      eventId: 'mafia:pay',
+      payload: { money: MIN_PAY, player: user.playerId },
+    })
+    setGame({ user: { ...user, money: user.money - MIN_PAY } })
   }
 }
 
@@ -76,6 +92,10 @@ export const useRankBank = () => {
 export const useBankChips = () => {
   const { chips } = useDataBank()
   return chips
+}
+export const useRoundsLeft = () => {
+  const { round_to_end } = useDataBank()
+  return round_to_end
 }
 export const useUpdateBank = () => {
   const { user } = useGameState()

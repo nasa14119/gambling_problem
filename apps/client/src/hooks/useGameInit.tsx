@@ -29,7 +29,9 @@ const getStatus = async (): Promise<GameState> => {
   if (res.status === 204 || res.status === 404) {
     return await createGame()
   }
-  const data = await res.json()
+  const data = await res.json().catch(() => {
+    throw new Error('Error trying to format data as JSON')
+  })
   return data
 }
 export const useGameInit = () => {
@@ -46,8 +48,8 @@ export const useGameInit = () => {
         const data = await getStatus()
         setState({ gameState: data })
       } catch (e) {
-        console.error(e)
-        setState({ error: true, gameState: null })
+        const error = e as Error
+        setState({ error: error.message, gameState: null })
       } finally {
         setState({ isLoading: false })
       }

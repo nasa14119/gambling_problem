@@ -4,19 +4,16 @@ import { useEffect, useState } from 'react'
 
 type SetBet = (num: number) => void
 type Props = {
-  isActive: boolean
   chips: number
   onClick: SetBet
   className?: string
 }
-export function Chip({ className, chips, isActive, onClick }: Props) {
+export function Chip({ className, chips, onClick }: Props) {
   const [value, setValue] = useState(0)
   const handleCllick = () => {
-    if (!isActive) return
     setValue((prev) => prev + 1)
   }
   const handleMinus = () => {
-    if (!isActive) return
     setValue((prev) => prev - 1)
   }
   useEffect(() => {
@@ -28,7 +25,6 @@ export function Chip({ className, chips, isActive, onClick }: Props) {
       className={cn(
         'aspect-square p-2 rounded-full grid place-content-center text-xs relative select-none',
         className,
-        !isActive && 'opacity-30',
       )}
       onClick={handleCllick}
     >

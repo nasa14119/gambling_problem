@@ -74,7 +74,17 @@ export class Bank implements BankInterface {
   }
   canPay(amount: number) {
     if (this.chips === 0) return false;
-    return this.chips - amount > 0;
+    return this.chips - amount >= 0;
+  }
+  canPayMoney(amount: number) {
+    if (this.money === 0) return false;
+    return this.money - amount >= 0;
+  }
+  pay(amount: number) {
+    if (amount > this.money)
+      throw new ErrorInTurn("Invalid input", "INVALID_INPUT");
+    this.money -= amount;
+    return amount;
   }
   getMoneyValue() {
     return this.money;
@@ -99,5 +109,11 @@ export class Bank implements BankInterface {
   }
   addChips(amount: number) {
     this.chips += amount;
+  }
+  addMoney(amount: number) {
+    this.money += amount;
+  }
+  isBackrupt() {
+    return this.chips <= 0 && this.money <= 0;
   }
 }

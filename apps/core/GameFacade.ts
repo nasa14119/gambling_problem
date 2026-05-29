@@ -183,6 +183,9 @@ export class GameFacade {
     if (eventId === "deck:cards_deal") {
       this.send(JSON.stringify({ eventId, payload: this.player.cards }));
     }
+    if (eventId === "reset:hard" || eventId === "reset:soft") {
+      this.send(JSON.stringify({ eventId, payload: undefined }));
+    }
     // console.log("unhandle " + eventId);
   }
   handleInput(input: string) {
@@ -228,6 +231,14 @@ export class GameFacade {
         player: this.player,
       });
       return;
+    }
+    if (eventId === "mafia:pay") {
+      const data = payload as { money: number; player: Player["playerId"] };
+      if (typeof data.money !== "number") return;
+      this.game.eventManager.emit("mafia:pay", {
+        money: data.money,
+        player: this.player.playerId,
+      });
     }
   }
   terminate() {
