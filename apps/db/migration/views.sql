@@ -107,3 +107,86 @@ INNER JOIN Users u
     ON u.userUUID = r.userUUID
 LEFT JOIN Metadata m
     ON m.metadataID = r.metadataID;
+
+DROP VIEW IF EXISTS RunRecapView;
+CREATE VIEW RunRecapView AS
+SELECT
+    r.runID,
+    r.userUUID,
+    u.username,
+    r.moneyTotal,
+    r.moneySpend,
+    r.earnings,
+    m.typeEnd,
+    m.level,
+    m.saveData,
+    m.startedAt,
+    m.endedAt,
+    m.lastSavedAt,
+    m.durationSeconds
+FROM Runs r
+INNER JOIN Users u
+    ON u.userUUID = r.userUUID
+LEFT JOIN Metadata m
+    ON m.metadataID = r.metadataID
+WHERE r.isRunning = FALSE;
+
+DROP VIEW IF EXISTS RunExploitTotalsView;
+CREATE VIEW RunExploitTotalsView AS
+SELECT
+    r.runID,
+    r.userUUID,
+    u.username,
+    COALESCE(SUM(eu.quantity), 0) AS totalExploitsUsed,
+    COALESCE(SUM(eu.quantity * e.price), 0) AS totalExploitCost
+FROM Runs r
+INNER JOIN Users u
+    ON u.userUUID = r.userUUID
+LEFT JOIN ExploitsUsed eu
+    ON eu.runID = r.runID
+LEFT JOIN ExploitsData e
+    ON e.exploitID = eu.exploitID
+GROUP BY r.runID, r.userUUID, u.username;
+
+DROP VIEW IF EXISTS TotalActivePlayersView;
+CREATE VIEW TotalActivePlayersView AS
+SELECT
+    COUNT(DISTINCT userUUID) AS totalActivePlayers,
+    COUNT(runID) AS totalActiveRuns
+FROM Runs
+WHERE isRunning = TRUE;
+
+DROP VIEW IF EXISTS LoseLevelStatsView;
+CREATE VIEW LoseLevelStatsView AS
+SELECT
+    m.level,
+    m.typeEnd,
+    COUNT(r.runID) AS totalRuns
+FROM Metadata m
+INNER JOIN Runs r
+    ON r.metadataID = m.metadataID
+WHERE r.isRunning = FALSE
+    AND m.typeEnd IS NOT NULL
+GROUP BY m.level, m.typeEnd
+ORDER BY totalRuns DESC, m.level ASC;
+
+DROP VIEW IF EXISTS PlayerOverallStatsView;
+CREATE VIEW PlayerOverallStatsView AS
+SELECT
+    u.userUUID,
+    u.username,
+    COUNT(r.runID) AS totalRuns,
+    SUM(CASE WHEN r.isRunning = TRUE THEN 1 ELSE 0 END) AS activeRuns,
+    SUM(CASE WHEN r.isRunning = FALSE THEN 1 ELSE 0 END) AS finishedRuns,
+    COALESCE(MAX(CASE WHEN r.isRunning = FALSE THEN r.earnings END), 0) AS bestScore,
+    COALESCE(AVG(CASE WHEN r.isRunning = FALSE THEN r.earnings END), 0) AS averageScore,
+    COALESCE(SUM(r.moneyTotal), 0) AS totalMoney,
+    COALESCE(SUM(r.moneySpend), 0) AS totalMoneySpend,
+    COALESCE(SUM(r.earnings), 0) AS totalEarnings,
+    COALESCE(SUM(m.durationSeconds), 0) AS totalPlaySeconds
+FROM Users u
+LEFT JOIN Runs r
+    ON r.userUUID = u.userUUID
+LEFT JOIN Metadata m
+    ON m.metadataID = r.metadataID
+GROUP BY u.userUUID, u.username;
