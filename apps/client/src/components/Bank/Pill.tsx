@@ -26,9 +26,9 @@ export function Pill({
   return (
     <div
       className={cn(
-        'bg-slate-300/30 px-4 py-2 rounded-2xl text-center w-full',
+        'bg-current/20 px-4 py-2 rounded-2xl text-center w-full',
         className,
-        error && 'outline outline-red-700',
+        error && 'outline outline-red-700 outline-dashed',
       )}
     >
       <span className="grid grid-cols-[auto_1fr] items-center">

@@ -8,13 +8,13 @@ export function PayBtn() {
   return (
     <button
       className={cn(
-        'font-black rounded-4xl px-5  text-white bg-blue-950  py-1 leading-3.75 active:outline-none',
-        isDisabled && ' text-gray-500 bg-gray-300 opacity-20 ',
+        'font-black rounded-sm px-5   border-2 border-current border-dashed  py-1 leading-3.75 active:outline-none',
+        isDisabled && ' text-gray-500 opacity-20 ',
       )}
       disabled={isDisabled}
       onClick={handleClick}
     >
-      Pay +500
+      <span className="text-white">Pay +500</span>
     </button>
   )
 }

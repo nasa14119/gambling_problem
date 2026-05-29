@@ -64,6 +64,7 @@ export function UserCards() {
               currentBet={currentBet}
               isInvalid={currentBet > user.chips}
               setOpt={handleOpt}
+              chips={user.chips}
             />
           )}
 
@@ -103,24 +104,35 @@ function Options({
   setOpt,
   currentBet,
   isInvalid = false,
+  chips = Infinity,
 }: {
   minBet: number | null
   setOpt: (key: TurnOptions) => void
   currentBet: number
   isInvalid?: boolean
+  chips?: number
 }) {
+  const isAll = chips - currentBet === 0 && currentBet > 0
+  const isPay = currentBet === minBet && minBet > 0 && !isAll
   return (
     <>
       {minBet !== null && !isInvalid && (
         <>
-          {currentBet === minBet && minBet > 0 && (
+          {isPay && (
             <Option
               value="pay"
               className="bg-blue-500/70"
               onClick={() => setOpt('pay')}
             />
           )}
-          {currentBet > minBet && (
+          {isAll && (
+            <Option
+              value="All in"
+              className="bg-green-400/70"
+              onClick={() => setOpt(currentBet > minBet ? 'raise' : 'pay')}
+            />
+          )}
+          {currentBet > minBet && !isAll && (
             <Option
               value="raise"
               className="bg-green-500/70"

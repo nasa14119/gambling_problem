@@ -16,7 +16,7 @@ export function StartGameBtn() {
   return (
     <button
       className={cn(
-        'px-4 py-2 rounded-full bg-gray-400/20 text-white z-50 relative',
+        'px-4 py-2 rounded-full bg-gray-400/20 text-white z-50 absolute bottom-1/4 left-1/2 -translate-x-1/2',
         isLoading && 'opacity-50',
       )}
       disabled={isLoading}

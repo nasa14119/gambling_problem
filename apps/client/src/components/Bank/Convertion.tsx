@@ -54,7 +54,7 @@ export function Convertion({
   return (
     <div
       className={cn(
-        'bg-white rounded-sm flex flex-col px-5 py-4 text-xl',
+        'border-2 border-current border-dashed rounded-sm flex flex-col px-5 py-4 text-xl',
         className,
       )}
       {...rest}
@@ -86,7 +86,7 @@ export function Convertion({
         />
         <button
           className={cn(
-            'ml-auto text-white bg-blue-800 font-black rounded-4xl px-4 py-2 text-lg h-4/5 grid place-content-center',
+            'ml-auto text-white border-2 border-current border-dashed font-black rounded-sm px-4 py-2 text-lg h-4/5 grid place-content-center',
             errorInput && 'opacity-50',
           )}
           disabled={!!errorInput}
@@ -100,7 +100,7 @@ export function Convertion({
 
 function Arrow() {
   return (
-    <span className="bg-slate-100 rounded-full p-1">
+    <span className="bg-current/10 rounded-full p-1">
       <ArrowRight className="size-5" />
     </span>
   )

@@ -42,7 +42,7 @@ function Game() {
   return (
     <>
       <PockerFace />
-      <main className="size-full  h-screen grid grid-cols-1 grid-rows-[auto_1fr_auto]">
+      <main className="size-full  h-screen grid grid-cols-1 grid-rows-[auto_1fr_auto] bg-neutral-300">
         <NavGame current={current}>
           <NavGameItem
             text="Casino"
@@ -50,7 +50,7 @@ function Game() {
             onClick={() => handleClick('casino')}
           />
           <NavGameItem
-            text="Central Bank"
+            text="Loan Manager"
             isActive={current === 'bank'}
             onClick={() => handleClick('bank')}
           />
