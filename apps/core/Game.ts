@@ -12,6 +12,7 @@ import { ExploitManager } from "./Exploits/ExploitManager.ts";
 import { ExploitFacade } from "./Exploits/ExploitFacade.ts";
 import { BankData, ExploitId, User } from "@repo/types/server";
 import { GameOptions } from "./types.ts";
+import { Mafia } from "./Players/Mafia.ts";
 
 export class Game {
   id: string;
@@ -22,9 +23,12 @@ export class Game {
   exploitsManager = new ExploitManager(this);
   public exploits_whitelist: ExploitId[] = [];
   private _isStarted = false;
+  public round: number = 0;
+  public isEnded = false;
   nextRank = 10_000;
   constructor({ exploits_whitelist = [] }: GameOptions = {}) {
     this.id = uuid();
+    this.round = 0;
     this.exploits_whitelist = [
       "see_flop",
       "pick_other_player",
@@ -67,6 +71,10 @@ export class Game {
       eventId: "round:end",
       listener: this.players.resetForNewRound.bind(this.players),
     });
+    this.eventManager.on({
+      eventId: "reset:hard",
+      listener: () => (this.isEnded = true),
+    });
   }
   get isStarted() {
     return this._isStarted;
@@ -84,14 +92,11 @@ export class Game {
   }
   getUserBank(id: string): BankData {
     const user = this.players.getPlayer(id) as User;
-    // TODO: on mafia and credit
     return {
       money: user.bank.getMoneyValue(),
       chips: user.bank.getChipsValue(),
       next_rank: this.nextRank,
-      credit: 100_000,
-      pay: 1_000,
-      round_to_end: 15,
+      ...user.mafia.getMafiaData(),
     };
   }
   determineWinner({ moneyPot, state }: { moneyPot: number; state: Card[] }) {
@@ -132,13 +137,16 @@ export class Game {
       moneyPot: this.turnSystem.moneyPot ?? 0,
       state: [...this.deck.gameState],
     });
-    this.eventManager.emit("round:end", undefined);
+    this.eventManager.emit("round:end", { round: this.round });
   }
   canPlay() {
+    if (this.isEnded) return false;
     return this.players.getPlaingPlayers().length > 1;
   }
   async startRound() {
+    if (this.isEnded) return;
     this._isStarted = true;
+    this.round++;
     this.eventManager.emit("round:start", this.players.session());
     await this.turnSystem.startTurn(this.players.session());
     if (!this.canPlay()) {
@@ -168,6 +176,8 @@ export class Game {
       playerId: id,
       invetory,
     });
+    const mafia = new Mafia(this, player);
+    player.mafia = mafia;
     this.players.attachPlayer(player);
   }
   addBot(id: string) {

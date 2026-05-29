@@ -29,24 +29,9 @@ export function UserInput({ currentBet, handleChip, chips, minBet }: Props) {
         </TooltipContent>
       </Tooltip>
       <div className="flex justify-center relative gap-x-1.5 py-2">
-        <Chip
-          className="bg-cyan-700"
-          isActive={currentBet <= chips}
-          chips={10}
-          onClick={handleChip(10)}
-        />
-        <Chip
-          className="bg-cyan-600"
-          isActive={currentBet <= chips}
-          chips={100}
-          onClick={handleChip(50)}
-        />
-        <Chip
-          className="bg-cyan-500"
-          isActive={currentBet <= chips}
-          chips={200}
-          onClick={handleChip(100)}
-        />
+        <Chip className="bg-cyan-700" chips={10} onClick={handleChip(10)} />
+        <Chip className="bg-cyan-600" chips={100} onClick={handleChip(50)} />
+        <Chip className="bg-cyan-500" chips={200} onClick={handleChip(100)} />
       </div>
     </div>
   )

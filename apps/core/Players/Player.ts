@@ -7,10 +7,11 @@ import type {
   Player as IPlayer,
   PlayerOptions,
   PlayerConstructor,
-  PlayerConstrutorWithInvetory,
+  PlayerConstrutorWithUserVals,
 } from "./types.ts";
 import { Timer } from "../lib/TimerGame.ts";
 import { DEFAULTS, VALID_ACTIONS } from "./types.ts";
+import { Mafia } from "./Mafia.ts";
 
 const PLAYER_TURN_TIME_SECONDS = 60;
 
@@ -20,10 +21,11 @@ export class Player implements IPlayer {
   isFold = false;
   bank: Bank;
   invetory: Inventory;
+  public mafia!: Mafia;
   private sendInput: (payload: GameEventPayloads["player:validbet"]) => void;
   private manager: PlayerConstructor["manager"];
   constructor(
-    { playerId, manager, invetory }: PlayerConstrutorWithInvetory,
+    { playerId, manager, invetory }: PlayerConstrutorWithUserVals,
     options?: PlayerOptions,
   ) {
     this.playerId = playerId;

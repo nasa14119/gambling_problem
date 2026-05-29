@@ -7,7 +7,7 @@ type PropsNav = {
 } & PropsWithChildren
 const PATHS: Record<ActiveRoutes, string> = {
   casino: 'online.casino.com/round?id=jfldie1231',
-  bank: 'centralbank.com/account?user=2iujklielsopa-123iosj',
+  bank: 'loanmanager.DTJMQ&fyJv88Webh3Mm#Urm8#RfyZ1Ts&&TJzp.onion',
 }
 const BG = 'bg-neutral-300'
 export function NavGame({ children, current }: PropsNav) {
@@ -30,7 +30,7 @@ export function NavGameItem({ text, isActive = false, ...rest }: PropsItem) {
   return (
     <span
       className={cn(
-        'rounded-t-[10px] text-[14px] font-medium w-[10vw] py-1 px-[1vw] flex items-center  transition-all ease-linear duration-100 cursor-pointer',
+        ' text-[14px] font-medium w-[10vw] py-1 px-[1vw] flex items-center  transition-all ease-linear duration-100 cursor-pointer',
         rest.className,
         isActive && `${BG} font-semibold`,
         'hover:' + BG,

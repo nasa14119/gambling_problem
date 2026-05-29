@@ -8,10 +8,10 @@ type Store = {
   isLoading: boolean
   setState: (param: Partial<Store>) => void
   updateGameState: (param: UpdateGameState) => void
-  error: boolean
+  error: string | null
 }
 export const useGameStore = create<Store>((set) => ({
-  error: false,
+  error: null,
   isLoading: true,
   gameState: null,
   setState: (changing) => {

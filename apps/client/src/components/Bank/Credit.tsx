@@ -7,8 +7,8 @@ export function Credit() {
     <div className="flex justify-start text-[5vh] flex-col leading-8.75">
       <div
         className={cn(
-          'p-4 rounded-xl bg-red-50 flex flex-col size-full',
-          pay <= 0 && 'bg-white',
+          'p-4 rounded-xl border-2 border-dashed border-current flex flex-col size-full',
+          pay <= 0 && 'text-white',
         )}
       >
         <span className="text-base font-semibold ">Debt</span>
