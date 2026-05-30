@@ -6,11 +6,11 @@ import { Players } from "./Players/index.ts";
 import { TurnSystem } from "./Deck/TurnSystem.ts";
 import { GameFacade } from "./GameFacade.ts";
 import { PokerBot } from "./Players/Bot.ts";
-import type { Card, GameState } from "@repo/types";
+import type { Card, ExploitId, GameState } from "@repo/types";
 import { Inventory } from "./Players/Inventory.ts";
 import { ExploitManager } from "./Exploits/ExploitManager.ts";
 import { ExploitFacade } from "./Exploits/ExploitFacade.ts";
-import { BankData, ExploitId, User } from "@repo/types/server";
+import { BankData, User } from "@repo/types/server";
 import { GameOptions } from "./types.ts";
 import { Mafia } from "./Players/Mafia.ts";
 

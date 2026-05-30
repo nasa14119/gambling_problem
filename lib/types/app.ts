@@ -1,4 +1,5 @@
-import { ExploitId, PlayerData } from "core/types";
+import { PlayerData } from "core/types";
+import { EXPLOITS } from "./const.ts";
 
 export type Result<T, E> =
   | { success: true; data: T; error?: never }
@@ -52,3 +53,5 @@ export type WinnersPayload = {
   gameState: Card[];
   moneyWin: number;
 } | null;
+
+export type ExploitId = (typeof EXPLOITS)[keyof typeof EXPLOITS];

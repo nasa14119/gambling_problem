@@ -1,4 +1,4 @@
-import { ExploitId } from "@repo/types/server";
+import { ExploitId } from "@repo/types";
 import { ExpoitEventManager } from "../Events/ExploitsEventManager.ts";
 import { Player } from "./Player.ts";
 

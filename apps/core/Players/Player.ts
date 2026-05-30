@@ -2,7 +2,7 @@ import { GameState, PlayerHand } from "@repo/types";
 import type { GameEventPayloads } from "../Events/GameEventManager.ts";
 import { Bank } from "./Bank.ts";
 import { Inventory } from "./Inventory.ts";
-import { ErrorInTurn, ExploitId, UserInput } from "../types.ts";
+import { ErrorInTurn, UserInput } from "../types.ts";
 import type {
   Player as IPlayer,
   PlayerOptions,

@@ -1,5 +1,3 @@
-USE gambling_problem;
-
 DROP TRIGGER IF EXISTS trgRunsCalcEarnIns;
 DELIMITER //
 CREATE TRIGGER trgRunsCalcEarnIns
@@ -32,4 +30,37 @@ BEGIN
         WHERE metadataID = NEW.metadataID;
     END IF;
 END //
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS trgAddRunning;
+DELIMITER //
+CREATE TRIGGER trgAddRunning
+AFTER INSERT ON Runs
+FOR EACH ROW
+BEGIN
+    INSERT INTO Running (runID, data, sessionID)
+    VALUES (NEW.runID, NULL, NULL);
+END // 
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS trgAddMetadata; 
+DELIMITER //
+CREATE TRIGGER trgAddMetadata
+BEFORE INSERT ON Runs
+FOR EACH ROW
+BEGIN
+    INSERT INTO Metadata () VALUES (); 
+    SET NEW.metadataID = LAST_INSERT_ID();
+END // 
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS trgDeleteMetadata; 
+DELIMITER //
+CREATE TRIGGER trgDeleteMetadata
+AFTER DELETE ON Runs
+FOR EACH ROW
+BEGIN
+    DELETE FROM Metadata
+    WHERE metadataID = OLD.metadataID;
+END // 
 DELIMITER ;

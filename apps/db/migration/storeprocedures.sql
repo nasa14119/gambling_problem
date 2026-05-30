@@ -1,5 +1,3 @@
-USE gambling_problem;
-
 DROP PROCEDURE IF EXISTS updLeaderboard;
 DELIMITER //
 CREATE PROCEDURE updLeaderboard(

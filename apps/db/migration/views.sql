@@ -1,5 +1,3 @@
-USE gambling_problem;
-
 DROP VIEW IF EXISTS Top50PlayersView;
 CREATE VIEW Top50PlayersView AS
 SELECT
@@ -94,14 +92,12 @@ SELECT
     r.moneySpend,
     r.earnings,
     r.isRunning,
-    r.metadataID,
     m.typeEnd,
     m.level,
-    m.saveData,
+    m.durationSeconds,
     m.startedAt,
     m.endedAt,
-    m.lastSavedAt,
-    m.durationSeconds
+    m.lastSavedAt
 FROM Runs r
 INNER JOIN Users u
     ON u.userUUID = r.userUUID

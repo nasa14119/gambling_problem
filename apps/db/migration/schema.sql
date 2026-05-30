@@ -1,8 +1,3 @@
-CREATE DATABASE IF NOT EXISTS gambling_problem
-DEFAULT CHARACTER SET utf8mb4;
-
-USE gambling_problem;
-
 CREATE TABLE IF NOT EXISTS Users (
     userUUID CHAR(36) PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -15,7 +10,6 @@ CREATE TABLE IF NOT EXISTS Metadata (
     metadataID INT AUTO_INCREMENT PRIMARY KEY,
     typeEnd VARCHAR(50),
     level INT,
-    saveData JSON,
     startedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     endedAt TIMESTAMP NULL,
     lastSavedAt TIMESTAMP NULL,
@@ -59,18 +53,18 @@ ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS ExploitsData (
-    exploitID INT AUTO_INCREMENT PRIMARY KEY,
+    exploitID VARCHAR(30) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    price DECIMAL(10,2),
-    type VARCHAR(50),
-    description TEXT
+    price DECIMAL(10,2) NOT NULL,
+    type VARCHAR(20) NOT NULL,
+    description TEXT NOT NULL
 )
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS  ExploitsUsed (
     runID INT NOT NULL,
-    exploitID INT NOT NULL,
+    exploitID VARCHAR(30) NOT NULL,
     quantity INT NOT NULL DEFAULT 1,
 
     PRIMARY KEY (runID, exploitID),
@@ -90,7 +84,7 @@ DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS Whitelist (
     userUUID CHAR(36) NOT NULL,
-    exploitID INT NOT NULL,
+    exploitID VARCHAR(30) NOT NULL,
 
     PRIMARY KEY (userUUID, exploitID),
 
