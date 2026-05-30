@@ -7,7 +7,10 @@ const DEFAULT_OPTIONS: Options = {
   volume: 0.5,
 }
 export type AudioOptions = Partial<Options>
-export const useSound = (path: string, options: AudioOptions = {}) => {
+export const useSound = (
+  path: string,
+  options: AudioOptions = {},
+): [null, false] | [HTMLAudioElement, true] => {
   const { volume } = { ...DEFAULT_OPTIONS, ...options }
   const [isReady, setIsReady] = useState(false)
   const ref = useRef<HTMLAudioElement>(null)
@@ -16,5 +19,6 @@ export const useSound = (path: string, options: AudioOptions = {}) => {
     ref.current.volume = volume
     ref.current.oncanplaythrough = () => setIsReady(true)
   }, [])
-  return [ref.current, isReady] as const
+  if (!ref.current || !isReady) return [null, false]
+  return [ref.current, isReady]
 }

@@ -1,18 +1,24 @@
 import { cn } from '#/lib/utils'
 import soundEffect from '#/assets/soundEffects/boot-effect.mp3'
 import { ArrowRight, Power, User2 } from 'lucide-react'
-import { useSoundOnLoad } from '#/hooks/useSound/useSoundOnLoad'
 import styles from './styles.module.css'
 import { useEffect, useState } from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '#/shadcn/ui/tooltip'
+import { useSound } from '#/hooks/useSound'
 
 export function Hero() {
   const [isKeydown, setIsKeydown] = useState(false)
-  useSoundOnLoad(soundEffect, { volume: 0.2 })
+  const [ref, isReady] = useSound(soundEffect, { volume: 0.8 })
   useEffect(() => {
-    window.addEventListener('keydown', () => setIsKeydown(true), { once: true })
-    window.addEventListener('click', () => setIsKeydown(true), { once: true })
-  }, [])
+    if (!isReady) return
+    const handleClick = () => {
+      if (isKeydown) return
+      setIsKeydown(true)
+      ref.play()
+    }
+    window.addEventListener('keydown', handleClick, { once: true })
+    window.addEventListener('click', handleClick, { once: true })
+  }, [isReady])
   return (
     <header
       className={cn('w-screen h-screen relative z-0', styles['hero'])}
