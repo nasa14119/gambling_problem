@@ -14,14 +14,15 @@
   },
   "type": "module",
   "dependencies": {
+    "@repo/validator": "*",
+    "argon2": "^0.44.0",
     "drizzle-orm": "^0.45.2",
     "mysql2": "^3.22.3",
-    "redis": "^5.12.1",
-    "@repo/validator": "*"
+    "redis": "^5.12.1"
   },
   "devDependencies": {
+    "@repo/ts-config": "*",
     "@types/node": "^25.6.0",
-    "drizzle-kit": "^0.31.10",
-    "@repo/ts-config": "*"
+    "drizzle-kit": "^0.31.10"
   }
 }

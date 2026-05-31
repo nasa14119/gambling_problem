@@ -16,13 +16,13 @@ const zodValidateInput = z.object({
       "Your password must contain at least one special caracter",
     ),
 });
-type User = {
+export type UserCreationInput = {
   user: string;
   password: string;
 };
 export function validate_user_input(
-  param: unknown | User,
-): Result<User, Partial<User>> {
+  param: unknown | UserCreationInput,
+): Result<UserCreationInput, Partial<UserCreationInput>> {
   const { success, data, error: zodError } = zodValidateInput.safeParse(param);
   if (success) {
     return successFunc(data);
