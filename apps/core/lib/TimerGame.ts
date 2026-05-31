@@ -58,7 +58,7 @@ export class Timer {
   private end() {
     this.clean();
     this.onEnd();
-    this.manager.emit("player:timeexeded", this.player);
+    this.manager.emit("player:timeexeded", { player: this.player });
   }
   cancel() {
     this.clean();

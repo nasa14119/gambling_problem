@@ -18,10 +18,10 @@ export type GameEventPayloads = {
   "deck:river": Card[];
   "deck:update_player_hand": PlayerHand;
   "player:validbet": UserInput;
-  "player:insuficientfunds": { min: number; player: Player };
   "player:turn": Player["playerId"];
   "player:input": UserInput;
-  "player:timeexeded": Player;
+  "player:insuficientfunds": { min: number; player: Player };
+  "player:timeexeded": { player: Player };
   "player:invalid_input": { error: string; player: Player };
   "player:withdraw": { chips: number; player: Player };
   "player:deposit": { chips: number; player: Player };

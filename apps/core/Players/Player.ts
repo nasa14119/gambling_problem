@@ -132,7 +132,6 @@ export class Player implements IPlayer {
         return;
       }
       if (type === "TIME_EXEDED") {
-        this.manager.emit("player:timeexeded", this);
         return;
       }
       throw new Error("Unexpected error happend getting" + message);
