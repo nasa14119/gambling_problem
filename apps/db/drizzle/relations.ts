@@ -34,7 +34,7 @@ export const runsRelations = relations(runs, ({ one, many }) => ({
   }),
   user: one(users, {
     fields: [runs.userUuid],
-    references: [users.userUuid],
+    references: [users.userUUID],
   }),
 }));
 
@@ -61,6 +61,6 @@ export const whitelistRelations = relations(whitelist, ({ one }) => ({
   }),
   user: one(users, {
     fields: [whitelist.userUuid],
-    references: [users.userUuid],
+    references: [users.userUUID],
   }),
 }));

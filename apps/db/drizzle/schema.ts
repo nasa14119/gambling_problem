@@ -86,9 +86,9 @@ export const runs = mysqlTable(
   "Runs",
   {
     runId: int().autoincrement().notNull(),
-    userUuid: char({ length: 36 })
+    userUUID: char({ length: 36 })
       .notNull()
-      .references(() => users.userUuid),
+      .references(() => users.userUUID),
     moneyTotal: decimal({ precision: 10, scale: 2 }).default("0.00"),
     moneySpend: decimal({ precision: 10, scale: 2 }).default("0.00"),
     earnings: decimal({ precision: 10, scale: 2 }).default("0.00"),
@@ -101,12 +101,12 @@ export const runs = mysqlTable(
 export const users = mysqlTable(
   "Users",
   {
-    userUuid: char({ length: 36 }).notNull(),
+    userUUID: char({ length: 36 }).notNull(),
     username: varchar({ length: 50 }).notNull(),
     password: varchar({ length: 255 }).notNull(),
   },
   (table) => [
-    primaryKey({ columns: [table.userUuid], name: "Users_userUUID" }),
+    primaryKey({ columns: [table.userUUID], name: "Users_userUUID" }),
     unique("username").on(table.username),
   ],
 );
@@ -114,23 +114,23 @@ export const users = mysqlTable(
 export const whitelist = mysqlTable(
   "Whitelist",
   {
-    userUuid: char({ length: 36 })
+    userUUID: char({ length: 36 })
       .notNull()
-      .references(() => users.userUuid),
+      .references(() => users.userUUID),
     exploitId: varchar({ length: 30 })
       .notNull()
       .references(() => exploitsData.exploitId),
   },
   (table) => [
     primaryKey({
-      columns: [table.userUuid, table.exploitId],
+      columns: [table.userUUID, table.exploitId],
       name: "Whitelist_userUUID_exploitID",
     }),
   ],
 );
 export const best50Activerunsview = mysqlView("best50activerunsview", {
   runId: int().default(0).notNull(),
-  userUuid: char({ length: 36 }).notNull(),
+  userUUID: char({ length: 36 }).notNull(),
   username: varchar({ length: 50 }).notNull(),
   moneyTotal: decimal({ precision: 10, scale: 2 }).default("0.00"),
   moneySpend: decimal({ precision: 10, scale: 2 }).default("0.00"),
@@ -149,7 +149,7 @@ export const best50Activerunsview = mysqlView("best50activerunsview", {
 
 export const top50Playersview = mysqlView("top50playersview", {
   runId: int().default(0).notNull(),
-  userUuid: char({ length: 36 }).notNull(),
+  userUUID: char({ length: 36 }).notNull(),
   username: varchar({ length: 50 }).notNull(),
   timePlayedSeconds: int(),
   moneyTotal: decimal({ precision: 10, scale: 2 }).default("0.00"),
@@ -179,7 +179,7 @@ export const topexploitsusedview = mysqlView("topexploitsusedview", {
 
 export const userrunsmetadataview = mysqlView("userrunsmetadataview", {
   runId: int().default(0).notNull(),
-  userUuid: char({ length: 36 }).notNull(),
+  userUUID: char({ length: 36 }).notNull(),
   username: varchar({ length: 50 }).notNull(),
   moneyTotal: decimal({ precision: 10, scale: 2 }).default("0.00"),
   moneySpend: decimal({ precision: 10, scale: 2 }).default("0.00"),
@@ -199,7 +199,7 @@ export const userrunsmetadataview = mysqlView("userrunsmetadataview", {
   );
 
 export const userunlockedexploitsview = mysqlView("userunlockedexploitsview", {
-  userUuid: char({ length: 36 }).notNull(),
+  userUUID: char({ length: 36 }).notNull(),
   username: varchar({ length: 50 }).notNull(),
   exploitId: varchar({ length: 30 }).notNull(),
   name: varchar({ length: 100 }).notNull(),

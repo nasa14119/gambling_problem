@@ -8,14 +8,12 @@ DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS Metadata (
     metadataID INT AUTO_INCREMENT PRIMARY KEY,
-    typeEnd VARCHAR(50),
+    typeEnd ENUM("WIN", "BANKRUPT", "TERMINATED", "DEATH") DEFAULT NULL,
     level INT,
     startedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     endedAt TIMESTAMP NULL,
     lastSavedAt TIMESTAMP NULL,
-    durationSeconds INT GENERATED ALWAYS AS (
-        TIMESTAMPDIFF(SECOND, startedAt, endedAt)
-    ) STORED
+    durationMinutes BIGINT DEFAULT NULL,
 )
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
@@ -44,6 +42,7 @@ CREATE TABLE IF NOT EXISTS Running (
     runID INT PRIMARY KEY,
     data JSON,
     sessionID VARCHAR(100),
+    slot TINYINT UNSIGNED DEFAULT 1, 
 
     CONSTRAINT fkRunningRun
         FOREIGN KEY (runID)

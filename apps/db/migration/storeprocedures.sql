@@ -53,7 +53,7 @@ BEGIN
         r.runID, 
         r.userUUID,
         u.username,
-        m.durationSeconds AS timePlayedSeconds,
+        m.durationMinutes AS timePlayedMinutes,
         r.moneyTotal,
         r.moneySpend,
         r.earnings,
@@ -142,3 +142,39 @@ BEGIN
 END //
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS killSession;
+DELIMITER //
+CREATE PROCEDURE killSession(IN sessionId VARCHAR(36))
+BEGIN
+    DECLARE new_time BIGINT; 
+    DECLARE v_runID INT;
+    IF sessionId IS NOT NULL THEN
+        SELECT ru.runID INTO v_runID FROM Running as ru 
+        WHERE ru.sessionID = sessionId ;
+
+        SELECT TIMESTAMPDIFF(MINUTE, m.lastSavedAt, NOW()) 
+            INTO new_time 
+            FROM Runs AS r INNER JOIN 
+                Metadata AS m
+                USING (metadataID)
+            WHERE r.runID = v_runID LIMIT 1; 
+        
+        UPDATE Metadata AS m INNER JOIN Runs AS r 
+            USING (metadataID)
+            SET lastSavedAt = NULL, m.durationMinutes = COALESCE(m.durationMinutes, 0) + new_time 
+            WHERE r.runID = v_runID; 
+
+        UPDATE Running as ru 
+        SET sessionId = NULL 
+        WHERE ru.sessionID = sessionId;
+    END IF; 
+END //
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS endGame;
+DELIMITER //
+CREATE PROCEDURE endGame(IN runID INT, IN typeEnd ENUM("WIN", "BANKRUPT", "TERMINATED", "DEATH"))
+BEGIN
+    UPDATE Metadata as m SET m.typeEnd = typeEnd WHERE m.metadataID = (SELECT metadataID FROM Runs AS r WHERE r.runID = runID);
+END //
+DELIMITER ;

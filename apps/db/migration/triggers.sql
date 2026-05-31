@@ -64,3 +64,19 @@ BEGIN
     WHERE metadataID = OLD.metadataID;
 END // 
 DELIMITER ;
+
+DROP TRIGGER IF EXISTS trgClearRunning; 
+DELIMITER //
+CREATE TRIGGER trgClearRunning
+AFTER UPDATE ON Metadata
+FOR EACH ROW
+BEGIN
+    IF NEW.typeEnd IS NOT NULL THEN
+        DELETE Running
+        WHERE runId = ( SELECT runID FROM Runs WHERE metadataID = NEW.metadataID ); 
+
+        UPDATE Runs SET isRunning = FALSE
+        WHERE metadataID = NEW.metadataID
+    END IF;
+END // 
+DELIMITER ;

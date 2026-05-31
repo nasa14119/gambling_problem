@@ -4,7 +4,7 @@ SELECT
     r.runID,
     r.userUUID,
     u.username,
-    m.durationSeconds AS timePlayedSeconds,
+    m.durationMinutes AS timePlayedSeconds,
     r.moneyTotal,
     r.moneySpend,
     r.earnings,
@@ -94,7 +94,7 @@ SELECT
     r.isRunning,
     m.typeEnd,
     m.level,
-    m.durationSeconds,
+    m.durationMinutes,
     m.startedAt,
     m.endedAt,
     m.lastSavedAt
