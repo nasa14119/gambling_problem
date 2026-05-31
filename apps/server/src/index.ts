@@ -1,6 +1,8 @@
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 
+import authRouter from "./auth.ts";
 import env from "./env.ts";
 
 if (env.MODE === "production" && !env.SERVER_PATH) {
@@ -10,14 +12,23 @@ import { wsSever } from "./sessions/index.ts";
 import sessionRouter from "./sessions/session.routes.ts";
 const PORT = process.env.SERVER_PORT ?? 3000;
 const app = express();
+// app level middleware
+app.use(cookieParser());
+app.use(express.json());
 app.use(
   cors({
     credentials: true,
     origin: env.SERVER_PATH,
   }),
 );
+// web socket server
 wsSever(app);
-app.use(sessionRouter);
+
+// api routes / routers
+app.use("/api", sessionRouter);
+app.use("/api", authRouter);
+
+// Health check
 app.get("/", (_, res) => {
   res.sendStatus(200);
 });

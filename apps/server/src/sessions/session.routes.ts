@@ -7,7 +7,7 @@ import { COOKIES_OPTS } from "./cookieOpts.ts";
 import sessions from "./Singleton.ts";
 const router = Router();
 
-router.post("/api/game/new/singlePlayer", (req, res) => {
+router.post("/game/new/singlePlayer", (req, res) => {
   const game = new GameSinglePlayer();
   const { playerId, token } = z
     .object({
@@ -30,7 +30,7 @@ router.post("/api/game/new/singlePlayer", (req, res) => {
     return;
   }
 });
-router.post("/api/game/new/prototype", (req, res) => {
+router.post("/game/new/prototype", (req, res) => {
   const { sessionId } = req.cookies;
   if (sessionId && sessions.sessionExists(sessionId)) {
     res.sendStatus(204);
@@ -54,12 +54,12 @@ router.post("/api/game/new/prototype", (req, res) => {
   res.sendStatus(200);
 });
 
-router.get("/api/game/status", hasSession, (req, res) => {
+router.get("/game/status", hasSession, (req, res) => {
   const { playerId, sessionId } = req.cookies;
   res.send(sessions.getGameStatus(sessionId, playerId));
 });
 
-router.get("/api/game/status/store", hasSession, (req, res) => {
+router.get("/game/status/store", hasSession, (req, res) => {
   const { playerId, sessionId } = req.cookies;
   if (!playerId) {
     res.sendStatus(400);
@@ -67,7 +67,7 @@ router.get("/api/game/status/store", hasSession, (req, res) => {
   }
   res.send({ store: sessions.getUserStore(sessionId, playerId) });
 });
-router.get("/api/game/status/bank", hasSession, (req, res) => {
+router.get("/game/status/bank", hasSession, (req, res) => {
   const { playerId, sessionId } = req.cookies;
   if (!playerId) {
     res.sendStatus(400);
