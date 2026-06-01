@@ -10,6 +10,7 @@ import { useEventListener, useEventSocket } from '#/stores/eventsStore'
 import { useGameInit } from '#/hooks/useGameInit'
 import { usePockerFace } from '#/components/PockerFace/store'
 import { ErrorPage } from '#/components/ErrorPage'
+import { PauseScreen } from '#/components/PauseScreen/PauseScreen'
 
 export const Route = createFileRoute('/game')({ component: CreateGame })
 
@@ -41,6 +42,7 @@ function Game() {
   }
   return (
     <>
+      <PauseScreen />
       <PockerFace />
       <main className="size-full  h-screen grid grid-cols-1 grid-rows-[auto_1fr_auto] bg-neutral-300">
         <NavGame current={current}>
