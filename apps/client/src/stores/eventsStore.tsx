@@ -16,14 +16,17 @@ type Store = {
   sendEvent: null | EventSender
   setEvent: <T extends GameEventsClient>(event: EventPayload<T>) => void
   setStore: <T extends keyof Store>(param: Partial<Record<T, Store[T]>>) => void
+  clear: () => void
 }
 export const useEventStore = create<Store>((set) => ({
   isLoading: false,
   sendEvent: null,
   setEvent: ({ eventId, payload }) => set({ eventId, payload }),
   setStore: (param) => set({ ...param }),
+  clear: () => set({ eventId: undefined, payload: undefined }),
 }))
 
+export const useEventClear = () => useEventStore((s) => s.clear)
 export const useEventSetter = () => useEventStore((s) => s.setEvent)
 export const useEventSocket = () => {
   const setEvent = useEventStore((s) => s.setEvent)

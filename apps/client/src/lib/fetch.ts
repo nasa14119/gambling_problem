@@ -12,7 +12,6 @@ export const fetchNewGame = async () => {
     CREATE_OPTIONS,
   )
   if (res.status !== 200) {
-    console.log(res)
     throw new Error('Something went wrong')
   }
   const stateRes = await fetch(`${SERVER_PATH}/api/game/status`, {
@@ -25,15 +24,18 @@ export const fetchNewGame = async () => {
   return data
 }
 
-export const fetchStatus = async (): Promise<GameState> => {
+export const fetchStatus = async (): Promise<GameState | null> => {
   const res = await fetch(`${SERVER_PATH}/api/game/status`, {
+    headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
   })
   if (res.status === 204 || res.status === 404) {
-    return await fetchNewGame()
+    return null
   }
-  const data = await res.json().catch(() => {
+  try {
+    const data = await res.json()
+    return data
+  } catch {
     throw new Error('Error trying to format data as JSON')
-  })
-  return data
+  }
 }

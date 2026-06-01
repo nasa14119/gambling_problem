@@ -6,7 +6,7 @@ import { ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import type { UserCreationInput } from '@repo/validator/user-validator'
 import type { SubmitHandler } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SERVER_PATH } from '#/env'
 import { useRouter } from '@tanstack/react-router'
 import { useAuth, useAuthSetter } from '#/components/Login/store'
@@ -29,6 +29,12 @@ export function LoginForm() {
   })
   const { navigate } = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  useEffect(() => {
+    if (isLogged) {
+      navigate({ to: '/user' })
+      return
+    }
+  }, [])
   const onSubmit: SubmitHandler<UserCreationInput> = async (inp) => {
     setIsLoading(true)
     try {
@@ -57,10 +63,6 @@ export function LoginForm() {
     }
   }
   const [visible, setVisible] = useState(false)
-  if (isLogged) {
-    navigate({ to: '/user' })
-    return
-  }
   return (
     <form
       className="h-[5vh] w-[20vw] min-w-60 flex flex-col mx-auto gap-y-2 *:animate-in *:slide-in-from-right-2 *:duration-500 *:animate-ease-in-out"

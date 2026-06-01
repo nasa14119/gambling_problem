@@ -5,7 +5,7 @@ import { Link, useRouter } from '@tanstack/react-router'
 import { useAuth } from '#/components/Login/store'
 import { useLogout } from '#/hooks/useLogout'
 import { RestoreDialog } from '#/components/RestoreDialog'
-import { fetchNewGame } from '#/lib/fetch'
+import { fetchNewGame, fetchStatus } from '#/lib/fetch'
 
 export function UserPage() {
   const { playerId } = useAuth()
@@ -13,6 +13,11 @@ export function UserPage() {
   const { navigate } = useRouter()
   const handleNewGame = async () => {
     await fetchNewGame()
+    navigate({ to: '/game' })
+  }
+  const handleRestoreGame = async () => {
+    const data = await fetchStatus()
+    if (data === null) await fetchNewGame()
     navigate({ to: '/game' })
   }
   return (
@@ -50,12 +55,12 @@ export function UserPage() {
             </p>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link
+                <button
                   className="bg-slate-300 aspect-12/9 border border-slate-800 grid place-content-center"
-                  to="/game"
+                  onClick={handleRestoreGame}
                 >
                   <ArrowRight className="size-5" />
-                </Link>
+                </button>
               </TooltipTrigger>
               <TooltipContent className="text-current">
                 <span className="text-white">Start</span>

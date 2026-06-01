@@ -63,7 +63,13 @@ router.post("/game/new/prototype", (req, res) => {
 
 router.get("/game/status", getUserFromToken, hasSession, (req, res) => {
   const { sessionId } = req.cookies;
-  res.send(sessions.getGameStatus(sessionId, res.locals.playerId));
+  const status = sessions.getGameStatus(sessionId, res.locals.playerId);
+  if (!status) {
+    res.clearCookie("sessionId");
+    res.sendStatus(204);
+    return;
+  }
+  res.send(status);
 });
 
 router.get("/game/status/store", getUserFromToken, hasSession, (req, res) => {

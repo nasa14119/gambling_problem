@@ -5,6 +5,7 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { Row } from '#/components/Summary/Row'
 import { cn } from '#/lib/utils'
+import { useEventClear } from '#/stores/eventsStore'
 
 export const Route = createFileRoute('/summary')({ component: Summary })
 async function getSummary() {
@@ -12,7 +13,9 @@ async function getSummary() {
 }
 function Summary() {
   const { navigate } = useRouter()
+  const clear = useEventClear()
   useEffect(() => {
+    clear()
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'r') {
         navigate({ to: '/' })
