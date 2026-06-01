@@ -1,6 +1,7 @@
 import type { GameState } from "@repo/types";
 import type { BankData } from "@repo/types/server";
 
+import { TypeEnd } from "@repo/types/db";
 import { ExploitFacade, GameFacade } from "core/types";
 
 export interface Game {
@@ -18,5 +19,7 @@ export interface Game {
   getUserStore: (playerId: string) => string[];
   id: string;
   init(): void;
+  isEnded: null | TypeEnd;
   kill: (id: string) => void;
+  terminate: (() => void) | null;
 }

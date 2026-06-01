@@ -35,7 +35,7 @@ export type GameEventPayloads = {
   };
   "mafia:backbet_end": { player: Player["playerId"] };
   "mafia:backbet_update": { player: Player };
-  "reset:hard": { end: TypeEnd };
+  "reset:hard": { end: TypeEnd; player: Player["playerId"] };
   "reset:soft": undefined;
   pause: undefined;
   resume: undefined;

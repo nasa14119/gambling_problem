@@ -29,6 +29,7 @@ export class Game {
   public round: number = 0;
   public isEnded: TypeEnd | null = null;
   nextRank = 10_000;
+  public terminate: null | (() => Promise<void>) = null;
   constructor({ runId, exploits_whitelist = [] }: GameOptions = {}) {
     this.id = runId?.toString() ?? uuid();
     this.round = 0;
@@ -44,6 +45,7 @@ export class Game {
       const playerScore = (
         this.players.getPlayer(playerId) as User
       ).bank.getGameState();
+      await this.terminate?.();
       await updateRun(Number(this.id), {
         level: this.level,
         typeEnd: this.isEnded,
@@ -91,7 +93,10 @@ export class Game {
     });
     this.eventManager.on({
       eventId: "reset:hard",
-      listener: ({ end }) => (this.isEnded = end),
+      listener: ({ end, player }) => {
+        this.isEnded = end;
+        this.kill(player);
+      },
     });
   }
   get isStarted() {

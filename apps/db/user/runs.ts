@@ -40,7 +40,6 @@ export const updateRun = async (runId: number, data: RunDataGame) => {
           r.moneyTotal = ${data.moneyTotal},
           r.moneySpend = ${data.moneySpend}, 
           r.isRunning = FALSE
-
         WHERE r.runID = ${runId};
     `);
       await t.execute(sql`
@@ -49,7 +48,8 @@ export const updateRun = async (runId: number, data: RunDataGame) => {
       USING (metadataID)
       SET 
         m.typeEnd = ${data.typeEnd},
-        m.level = ${data.level}
+        m.level = ${data.level}, 
+        m.endedAt = CURRENT_TIMESTAMP
       WHERE r.runID = ${runId}; 
     `);
     });

@@ -23,6 +23,7 @@ export class Bank implements BankInterface {
   ) {
     this.money = money;
     this.chips = chips;
+    this._moneyTotal = money + chips;
     this.playerInvetory = player.invetory;
   }
   get moneyTotal() {

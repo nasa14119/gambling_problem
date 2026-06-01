@@ -33,6 +33,10 @@ class Singleton {
   getGameStatus(sessionId: string, playerId: string) {
     if (!this.sessionExists(sessionId)) throw new Error("Session Id not found");
     const game = this.sessions.get(sessionId)!;
+    if (game.isEnded !== null) {
+      this.sessions.delete(sessionId);
+      return null;
+    }
     return game.getState(playerId);
   }
   getUserBank(sessionId: string, playerId: string) {
@@ -47,8 +51,10 @@ class Singleton {
   }
   newGame(game: Game, prefix = "") {
     const id = prefix + uuid();
+    game.terminate = () => this.teminateDemo(id);
     if (prefix === "user:") {
       setRunSession(Number(game.id), id);
+      game.terminate = () => terminateSession(id);
     }
     this.sessions.set(id, game);
     return id;
@@ -63,7 +69,6 @@ class Singleton {
     const game = this.sessions.get(sessionId);
     if (!game) return;
     game.kill(playerId);
-    terminateSession(sessionId);
   }
 }
 export default Singleton.getInstance();
