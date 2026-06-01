@@ -16,5 +16,7 @@ export interface Game {
   getState: (id: string) => GameState;
   getUserBank: (id: string) => BankData;
   getUserStore: (playerId: string) => string[];
+  id: string;
   init(): void;
+  kill: (id: string) => void;
 }

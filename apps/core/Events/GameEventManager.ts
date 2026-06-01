@@ -4,6 +4,7 @@ import type { PlayerHand } from "@repo/types";
 import type { Player, UserInput } from "../types.ts";
 import { GameWinnerPayload } from "./types.ts";
 import { BackBettting } from "../Players/types.ts";
+import { TypeEnd } from "@repo/types/db";
 export type GameEventPayloads = {
   "round:start": Player[];
   "round:start_turn": Player[];
@@ -34,7 +35,7 @@ export type GameEventPayloads = {
   };
   "mafia:backbet_end": { player: Player["playerId"] };
   "mafia:backbet_update": { player: Player };
-  "reset:hard": undefined;
+  "reset:hard": { end: TypeEnd };
   "reset:soft": undefined;
   pause: undefined;
   resume: undefined;

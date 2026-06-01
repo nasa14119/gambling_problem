@@ -14,6 +14,8 @@ export class Bank implements BankInterface {
   private chips: number = 0;
   private currentPot: number | null = null;
   private playerInvetory: Inventory;
+  private _moneyTotal: number = 0;
+  private _moneySpend: number = 0;
   constructor(
     money: number,
     chips: number,
@@ -22,6 +24,15 @@ export class Bank implements BankInterface {
     this.money = money;
     this.chips = chips;
     this.playerInvetory = player.invetory;
+  }
+  get moneyTotal() {
+    return this._moneyTotal;
+  }
+  get moneySpend() {
+    return this._moneySpend;
+  }
+  getGameState() {
+    return { moneyTotal: this.moneyTotal, moneySpend: this.moneySpend };
   }
   deposit(amount: number) {
     if (amount > this.money || amount <= 0)
@@ -65,6 +76,7 @@ export class Bank implements BankInterface {
       return;
     }
     this.money -= price;
+    this._moneySpend += price;
     this.playerInvetory.addItem(exploitId);
     emit("buy:success", {
       playerId: this.player.playerId,
@@ -84,6 +96,7 @@ export class Bank implements BankInterface {
     if (amount > this.money)
       throw new ErrorInTurn("Invalid input", "INVALID_INPUT");
     this.money -= amount;
+    this._moneySpend += amount;
     return amount;
   }
   getMoneyValue() {
@@ -105,12 +118,15 @@ export class Bank implements BankInterface {
       throw new ErrorInTurn("Value must be grater than 1", "INVALID_INPUT");
     this.currentPot = (this.currentPot ?? 0) + amount;
     this.chips -= amount;
+    this._moneySpend += amount;
     return amount;
   }
   addChips(amount: number) {
+    this._moneyTotal += amount;
     this.chips += amount;
   }
   addMoney(amount: number) {
+    this._moneyTotal += amount;
     this.money += amount;
   }
   isBackrupt() {

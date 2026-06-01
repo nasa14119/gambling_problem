@@ -1,0 +1,103 @@
+import { cn } from '#/lib/utils'
+import { ArrowRight, DoorOpen, Power, User2 } from 'lucide-react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '#/shadcn/ui/tooltip'
+import { Link, useRouter } from '@tanstack/react-router'
+import { useAuth } from '#/components/Login/store'
+import { useLogout } from '#/hooks/useLogout'
+import { RestoreDialog } from '#/components/RestoreDialog'
+import { fetchNewGame } from '#/lib/fetch'
+
+export function UserPage() {
+  const { playerId } = useAuth()
+  const logout = useLogout()
+  const { navigate } = useRouter()
+  const handleNewGame = async () => {
+    await fetchNewGame()
+    navigate({ to: '/game' })
+  }
+  return (
+    <header className={cn('w-screen h-screen relative z-0')}>
+      <div className={cn('size-full flex flex-col gap-y-5 justify-center')}>
+        <div className="grid place-content-center">
+          <User2 className="size-[25vh] text-current p-5 bg-current/20 rounded-full" />
+        </div>
+        <div>
+          <h1 className="text-center text-6xl font-bold capitalize">
+            {playerId}
+          </h1>
+        </div>
+        <div className="*:py-1">
+          <div className="h-[5vh] w-[20vw] grid grid-cols-[1fr_min-content] mx-auto ">
+            <p className="text-xl pl-2 border border-slate-800 border-r-0 flex items-center size-full bg-slate-100 min-w-40">
+              Reset game
+            </p>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <RestoreDialog onAccept={handleNewGame}>
+                  <button className="bg-slate-300 aspect-12/9 border border-slate-800 grid place-content-center">
+                    <ArrowRight className="size-5" />
+                  </button>
+                </RestoreDialog>
+              </TooltipTrigger>
+              <TooltipContent className="text-current">
+                <span className="text-white">Reset</span>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+          <div className="h-[5vh] w-[20vw] grid grid-cols-[1fr_min-content] mx-auto ">
+            <p className="text-xl pl-2 border border-slate-800 border-r-0 flex items-center size-full bg-slate-100 min-w-40">
+              Load game
+            </p>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  className="bg-slate-300 aspect-12/9 border border-slate-800 grid place-content-center"
+                  to="/game"
+                >
+                  <ArrowRight className="size-5" />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent className="text-current">
+                <span className="text-white">Start</span>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        </div>
+      </div>
+      <div className="absolute bottom-0 left-0 inset-x-0 flex justify-between  pb-2 px-5">
+        <div className={cn('flex gap-x-2 items-center')}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="text-3xl px-2 hover:bg-slate-950/10 transition-all duration-250 ease rounded-sm min-w-fit">
+                <div>Your Runs</div>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent className="text-slate-950">
+              <span className="text-white">See the runs saved</span>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger
+              className="flex items-center justify-center hover:bg-slate-950/10 py-2 transition-all duration-250 ease rounded-sm h-full aspect-square "
+              onClick={logout}
+            >
+              <DoorOpen className="size-10" />
+            </TooltipTrigger>
+            <TooltipContent className="text-slate-950">
+              <span className="text-white">Logout</span>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+        <div className="flex gap-x-2 items-center">
+          <Link to="/">
+            <Power
+              className={cn(
+                'size-12 text-black opacity-10 transition-all duration-1000 ease',
+              )}
+            />
+          </Link>
+        </div>
+      </div>
+    </header>
+  )
+}

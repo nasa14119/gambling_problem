@@ -1,4 +1,5 @@
 import { ExploitFacade, GameFacade } from "core/types";
+import { setRunSession, terminateSession } from "db";
 import { v4 as uuid } from "uuid";
 
 import { type Game } from "./interfaceGame.ts";
@@ -45,12 +46,24 @@ class Singleton {
     return game.getUserStore(playerId);
   }
   newGame(game: Game, prefix = "") {
-    const id = uuid();
-    this.sessions.set(prefix + id, game);
-    return prefix + id;
+    const id = prefix + uuid();
+    if (prefix === "user:") {
+      setRunSession(Number(game.id), id);
+    }
+    this.sessions.set(id, game);
+    return id;
   }
   sessionExists(sessionId: string) {
     return this.sessions.has(sessionId);
+  }
+  teminateDemo(id: string) {
+    this.sessions.delete(id);
+  }
+  terminateGame(sessionId: string, playerId: string) {
+    const game = this.sessions.get(sessionId);
+    if (!game) return;
+    game.kill(playerId);
+    terminateSession(sessionId);
   }
 }
 export default Singleton.getInstance();

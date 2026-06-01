@@ -1,11 +1,15 @@
 {
   "name": "db",
   "version": "0.0.0",
+  "imports": {
+    "#env": "./env.ts",
+    "#schemas": "./drizzle/schema.ts"
+  },
   "exports": {
     ".": "./index.ts"
   },
   "scripts": {
-    "db:start": "docker compose up -d",
+    "db:start": "sh ./migration/start.sh",
     "db:stop": "docker compose stop",
     "db:clear": "docker compose down",
     "db:restart": "docker compose restart",

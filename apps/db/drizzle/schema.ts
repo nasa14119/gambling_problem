@@ -77,7 +77,7 @@ export const running = mysqlTable(
       .notNull()
       .references(() => runs.runId),
     data: json(),
-    sessionId: varchar({ length: 100 }),
+    sessionID: varchar({ length: 100 }),
   },
   (table) => [primaryKey({ columns: [table.runId], name: "Running_runID" })],
 );
@@ -85,7 +85,7 @@ export const running = mysqlTable(
 export const runs = mysqlTable(
   "Runs",
   {
-    runId: int().autoincrement().notNull(),
+    runId: int().autoincrement().notNull().primaryKey(),
     userUUID: char({ length: 36 })
       .notNull()
       .references(() => users.userUUID),

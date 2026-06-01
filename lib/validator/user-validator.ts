@@ -1,10 +1,11 @@
 import { z } from "zod";
 import { type Result, success as successFunc, fail } from "@repo/types";
-const zodValidateInput = z.object({
+export const zodValidateInput = z.object({
   user: z
     .string("User is not defined")
     .min(5, "User must be at least 5 caracters")
-    .max(12),
+    .max(12)
+    .refine((val) => val !== "player:guest", "Invalid user name"),
   password: z
     .string("Password is not defined")
     .min(8, "Password must be at least 8 caracters")

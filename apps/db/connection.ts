@@ -1,5 +1,5 @@
 import { drizzle } from "drizzle-orm/mysql2";
-import { env } from "env";
+import { env } from "#env";
 import mysql from "mysql2/promise";
 
 const client = await mysql.createConnection({

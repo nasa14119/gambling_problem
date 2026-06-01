@@ -13,6 +13,8 @@ import { ExploitFacade } from "./Exploits/ExploitFacade.ts";
 import { BankData, User } from "@repo/types/server";
 import { GameOptions } from "./types.ts";
 import { Mafia } from "./Players/Mafia.ts";
+import type { TypeEnd } from "@repo/types/db";
+import { updateRun } from "db";
 
 export class Game {
   id: string;
@@ -21,19 +23,35 @@ export class Game {
   players = new Players();
   turnSystem = new TurnSystem(this.eventManager);
   exploitsManager = new ExploitManager(this);
+  level = 0;
   public exploits_whitelist: ExploitId[] = [];
   private _isStarted = false;
   public round: number = 0;
-  public isEnded = false;
+  public isEnded: TypeEnd | null = null;
   nextRank = 10_000;
-  constructor({ exploits_whitelist = [] }: GameOptions = {}) {
-    this.id = uuid();
+  constructor({ runId, exploits_whitelist = [] }: GameOptions = {}) {
+    this.id = runId?.toString() ?? uuid();
     this.round = 0;
     this.exploits_whitelist = [
       "see_flop",
       "pick_other_player",
       ...exploits_whitelist,
     ];
+  }
+  async kill(playerId: string) {
+    if (!this.isEnded) this.isEnded = "TERMINATED";
+    try {
+      const playerScore = (
+        this.players.getPlayer(playerId) as User
+      ).bank.getGameState();
+      await updateRun(Number(this.id), {
+        level: this.level,
+        typeEnd: this.isEnded,
+        ...playerScore,
+      });
+    } catch {
+      throw new Error("Error trying to update run");
+    }
   }
   private getUser(id: string): User {
     const user = this.players.getPlayer(id) as User;
@@ -73,7 +91,7 @@ export class Game {
     });
     this.eventManager.on({
       eventId: "reset:hard",
-      listener: () => (this.isEnded = true),
+      listener: ({ end }) => (this.isEnded = end),
     });
   }
   get isStarted() {

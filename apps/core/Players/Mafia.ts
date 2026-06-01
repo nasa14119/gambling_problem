@@ -23,7 +23,7 @@ export class Mafia {
       eventId: "round:end",
       listener: ({ round }) => {
         if (this.player.bank.isBackrupt()) {
-          this.events.emit("reset:hard", undefined);
+          this.events.emit("reset:hard", { end: "BANKRUPT" });
           return;
         }
         this.roundPassed = round;
@@ -81,7 +81,7 @@ export class Mafia {
   private async updateMafia() {
     if (this.havePay) return;
     if (this.roundPassed < this.roundToEnd) return;
-    this.events.emit("reset:hard", undefined);
+    this.events.emit("reset:hard", { end: "DEATH" });
   }
   private async getNextDebt() {
     const data = await getQuerryRank();

@@ -1,35 +1,42 @@
+import type { UserAuth } from "db";
+
 import { GameSinglePlayer } from "core";
+import { startNewRun } from "db";
 import { Router } from "express";
 import z from "zod";
 
+import { getUserFromToken } from "../middleware/auth.ts";
+import { isDemo } from "../middleware/demo.ts";
 import { hasSession } from "../middleware/hasSession.ts";
 import { COOKIES_OPTS } from "./cookieOpts.ts";
 import sessions from "./Singleton.ts";
+
 const router = Router();
 
-router.post("/game/new/singlePlayer", (req, res) => {
-  const game = new GameSinglePlayer();
-  const { playerId, token } = z
-    .object({
-      playerId: z.string().optional().default("player:admin"),
-      token: z.string().optional().nullable().default(null),
-    })
-    .optional()
-    .default({})
-    .parse(req.body);
-  game.addBot("bot:1");
-  game.addBot("bot:2");
-  game.addBot("bot:3");
-  game.addBot("bot:4");
-  game.addPlayer(playerId);
-  game.init();
-  if (!token) {
-    res.cookie("sessionId", sessions.newGame(game, "guest:"));
+router.get(
+  "/game/new/singlePlayer",
+  getUserFromToken,
+  isDemo,
+  async (req, res) => {
+    if (sessions.sessionExists(req.cookies.sessionId)) {
+      sessions.terminateGame(req.cookies.sessionId, res.locals.playerId);
+    }
+    const { userUUID } = res.locals.user as UserAuth;
+    const runId = await startNewRun(userUUID);
+    const game = new GameSinglePlayer({ runId });
+    const playerId = res.locals.playerId;
+    game.addBot("bot:1");
+    game.addBot("bot:2");
+    game.addBot("bot:3");
+    game.addBot("bot:4");
+    game.addPlayer(playerId);
+    game.init();
+    res.cookie("sessionId", sessions.newGame(game, "user:"));
     res.cookie("playerId", playerId, COOKIES_OPTS);
     res.sendStatus(200);
-    return;
-  }
-});
+  },
+);
+
 router.post("/game/new/prototype", (req, res) => {
   const { sessionId } = req.cookies;
   if (sessionId && sessions.sessionExists(sessionId)) {
@@ -54,21 +61,23 @@ router.post("/game/new/prototype", (req, res) => {
   res.sendStatus(200);
 });
 
-router.get("/game/status", hasSession, (req, res) => {
-  const { playerId, sessionId } = req.cookies;
-  res.send(sessions.getGameStatus(sessionId, playerId));
+router.get("/game/status", getUserFromToken, hasSession, (req, res) => {
+  const { sessionId } = req.cookies;
+  res.send(sessions.getGameStatus(sessionId, res.locals.playerId));
 });
 
-router.get("/game/status/store", hasSession, (req, res) => {
-  const { playerId, sessionId } = req.cookies;
+router.get("/game/status/store", getUserFromToken, hasSession, (req, res) => {
+  const { sessionId } = req.cookies;
+  const playerId = res.locals.playerId;
   if (!playerId) {
     res.sendStatus(400);
     return;
   }
   res.send({ store: sessions.getUserStore(sessionId, playerId) });
 });
-router.get("/game/status/bank", hasSession, (req, res) => {
-  const { playerId, sessionId } = req.cookies;
+router.get("/game/status/bank", getUserFromToken, hasSession, (req, res) => {
+  const { sessionId } = req.cookies;
+  const playerId = res.locals.playerId;
   if (!playerId) {
     res.sendStatus(400);
     return;

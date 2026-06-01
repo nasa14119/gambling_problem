@@ -1,3 +1,4 @@
+import { ApplicationsRight } from '#/components/ApplicationsRight'
 import { Tooltip, TooltipContent, TooltipTrigger } from '#/shadcn/ui/tooltip'
 import type { LucideIcon } from 'lucide-react'
 import type { ComponentProps, PropsWithChildren } from 'react'
@@ -19,6 +20,7 @@ export function Applications({ children }: PropsAplications) {
         </svg>
       </span>
       {children}
+      <ApplicationsRight />
     </footer>
   )
 }

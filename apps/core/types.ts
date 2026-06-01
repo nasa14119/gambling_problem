@@ -58,5 +58,6 @@ export type { ExploitFacade } from "./Exploits/ExploitFacade.ts";
 export type { Player as User } from "./Players/Player.ts";
 
 export type GameOptions = {
+  runId?: number;
   exploits_whitelist?: ExploitId[];
 };

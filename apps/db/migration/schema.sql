@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS Metadata (
     startedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     endedAt TIMESTAMP NULL,
     lastSavedAt TIMESTAMP NULL,
-    durationMinutes BIGINT DEFAULT NULL,
+    durationMinutes BIGINT DEFAULT NULL
 )
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS Runs (
 
     CONSTRAINT fkRunsUser
         FOREIGN KEY (userUUID)
-        REFERENCES Users(userUUID),
+        REFERENCES Users(userUUID)
+        ON DELETE CASCADE,
 
     CONSTRAINT fkRunsMetadata
         FOREIGN KEY (metadataID)
@@ -47,6 +48,7 @@ CREATE TABLE IF NOT EXISTS Running (
     CONSTRAINT fkRunningRun
         FOREIGN KEY (runID)
         REFERENCES Runs(runID)
+        ON DELETE CASCADE
 )
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
@@ -70,12 +72,13 @@ CREATE TABLE IF NOT EXISTS  ExploitsUsed (
 
     CONSTRAINT fkExploitUsedRun
         FOREIGN KEY (runID)
-        REFERENCES Runs(runID),
+        REFERENCES Runs(runID)
+        ON DELETE CASCADE,
 
     CONSTRAINT fkExploitUsedExploit
         FOREIGN KEY (exploitID)
         REFERENCES ExploitsData(exploitID)
-	
+        ON DELETE CASCADE
     
 )
 ENGINE=InnoDB
@@ -89,11 +92,13 @@ CREATE TABLE IF NOT EXISTS Whitelist (
 
     CONSTRAINT fk_whitelist_user
         FOREIGN KEY (userUUID)
-        REFERENCES Users(userUUID),
+        REFERENCES Users(userUUID)
+        ON DELETE CASCADE,
 
     CONSTRAINT fk_whitelist_exploit
         FOREIGN KEY (exploitID)
         REFERENCES ExploitsData(exploitID)
+        ON DELETE CASCADE
 )
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
