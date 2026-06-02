@@ -24,7 +24,7 @@ export const isDemo: RequestHandler = (req, res, next) => {
     sessions.newGame(game, "guest:");
     res.cookie("sessionId", sessions.newGame(game, "guest:"), COOKIES_OPTS);
     res.cookie("playerId", "player:guest", COOKIES_OPTS);
-    res.sendStatus(204);
+    res.send(game.getState("player:guest"));
     return;
   }
   res.sendStatus(204);

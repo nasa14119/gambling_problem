@@ -3,7 +3,7 @@ import type {
   GameEvents,
 } from "../Events/GameEventManager.ts";
 import { Player } from "../types.ts";
-import { setTimeout as sleep } from "node:timers/promises";
+import { sleep } from "./utils.ts";
 type Constructor = {
   /**@type {number} seconds of the timer */
   time: number;

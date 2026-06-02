@@ -188,7 +188,11 @@ export class GameFacade {
     if (eventId === "deck:cards_deal") {
       this.send(JSON.stringify({ eventId, payload: this.player.cards }));
     }
-    if (eventId === "reset:hard" || eventId === "reset:soft") {
+    if (
+      eventId === "reset:hard" ||
+      eventId === "reset:soft" ||
+      eventId === "reset:quit"
+    ) {
       this.send(JSON.stringify({ eventId, payload: undefined }));
     }
     // console.log("unhandle " + eventId);

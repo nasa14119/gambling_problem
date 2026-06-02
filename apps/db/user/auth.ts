@@ -90,3 +90,12 @@ export type UserAuth = {
   userUUID: `${string}-${string}-${string}-${string}-${string}`;
   username: string;
 };
+
+export const UserExists = async (user: UserAuth["userUUID"]) => {
+  const results = await db
+    .select()
+    .from(users)
+    .where(eq(users.userUUID, user))
+    .limit(1);
+  return results.length > 0;
+};

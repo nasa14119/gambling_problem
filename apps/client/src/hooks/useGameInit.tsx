@@ -17,6 +17,7 @@ export const useGameInit = () => {
     const fetchData = async () => {
       try {
         const data = await fetchStatus()
+        console.log(data)
         if (!data) {
           navigate({ to: auth.isLogged ? '/user' : '/' })
           return

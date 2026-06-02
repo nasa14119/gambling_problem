@@ -1,5 +1,5 @@
 import { ExploitFacade, GameFacade } from "core/types";
-import { setRunSession, terminateSession } from "db";
+import { saveSession, setRunSession, terminateSession, UserAuth } from "db";
 import { v4 as uuid } from "uuid";
 
 import { type Game } from "./interfaceGame.ts";
@@ -58,6 +58,14 @@ class Singleton {
     }
     this.sessions.set(id, game);
     return id;
+  }
+  saveGameQuit(sessionId: string, user: UserAuth) {
+    if (!this.sessionExists(sessionId))
+      throw new Error("Session not found for saving");
+    const game = this.sessions.get(sessionId)!;
+    const data = game.quit(user.username);
+    saveSession({ data, sessionId: sessionId.replace("user:", "") });
+    this.sessions.delete(sessionId);
   }
   sessionExists(sessionId: string) {
     return this.sessions.has(sessionId);

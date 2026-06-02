@@ -2,6 +2,7 @@ import { PlayerHand } from "@repo/types";
 import { BankInterface } from "./Bank.ts";
 import { GameEventManager } from "../Events/GameEventManager.ts";
 import { Inventory } from "./Inventory.ts";
+import { SavedGame } from "@repo/types/server";
 
 export const VALID_ACTIONS: ReadonlySet<string> = new Set([
   "fold",
@@ -14,7 +15,13 @@ export const DEFAULTS = {
   money: 1000,
   chips: 1000,
 } as const;
-export type PlayerOptions = Partial<typeof DEFAULTS>;
+export type PlayerOptions = Partial<typeof DEFAULTS> & {
+  stored?: {
+    user: SavedGame["user"];
+    mafia: SavedGame["mafia"];
+    invetory: SavedGame["invetory"];
+  };
+};
 export type PlayerData = {
   playerId: string;
   isFold: boolean;

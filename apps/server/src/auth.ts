@@ -1,7 +1,7 @@
-import { AuthError, loginUser } from "db";
+import { AuthError, loginUser, UserAuth, UserExists } from "db";
 import { Router } from "express";
 
-import { signJWT } from "./lib/jwt.ts";
+import { signJWT, verifyJWT } from "./lib/jwt.ts";
 import { COOKIES_OPTS } from "./sessions/cookieOpts.ts";
 const router = Router();
 
@@ -34,4 +34,23 @@ router.get("/logout", (_, res) => {
   res.sendStatus(204);
 });
 
+router.get("/validate", (req, res) => {
+  const { token } = req.cookies;
+  if (!token) {
+    res.sendStatus(401);
+    return;
+  }
+  try {
+    const data = verifyJWT<UserAuth>(token);
+    if (!UserExists(data.userUUID)) {
+      res.clearCookie("token");
+      res.sendStatus(401);
+      return;
+    }
+    return res.sendStatus(204);
+  } catch {
+    res.clearCookie("token");
+    res.sendStatus(401);
+  }
+});
 export default router;

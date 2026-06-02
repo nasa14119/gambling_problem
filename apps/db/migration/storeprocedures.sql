@@ -25,10 +25,8 @@ BEGIN
         r.moneyTotal,
         r.moneySpend,
         r.earnings,
-        r.metadataID,
-        m.startedAt,
         m.lastSavedAt,
-        TIMESTAMPDIFF(SECOND, m.startedAt, CURRENT_TIMESTAMP) AS activeSeconds,
+        r.isRunning,
         ru.sessionID,
         ru.data
     FROM Runs r
@@ -39,7 +37,6 @@ BEGIN
     LEFT JOIN Running ru
         ON ru.runID = r.runID
     WHERE r.userUUID = p_userUUID
-        AND r.isRunning = TRUE
     ORDER BY m.startedAt DESC, r.runID DESC
     LIMIT 1;
 END //

@@ -20,10 +20,12 @@ export class Bank implements BankInterface {
     money: number,
     chips: number,
     private player: Player,
+    options?: { moneyTotal?: number; moneySpend?: number },
   ) {
     this.money = money;
     this.chips = chips;
-    this._moneyTotal = money + chips;
+    this._moneyTotal = options?.moneyTotal ? options.moneyTotal : money + chips;
+    this._moneySpend = options?.moneySpend ? options.moneySpend : 0;
     this.playerInvetory = player.invetory;
   }
   get moneyTotal() {
@@ -53,7 +55,7 @@ export class Bank implements BankInterface {
     this.chips -= amount;
     this.money += amount;
   }
-  buyExploit({
+  async buyExploit({
     exploitId,
     price,
     emit,
@@ -78,10 +80,10 @@ export class Bank implements BankInterface {
     }
     this.money -= price;
     this._moneySpend += price;
-    this.playerInvetory.addItem(exploitId);
+    await this.playerInvetory.addItem(exploitId);
     emit("buy:success", {
       playerId: this.player.playerId,
-      exploitId,
+      exploit: this.playerInvetory.getItemInfo(exploitId),
       newBalance: this.getMoneyValue(),
     });
   }

@@ -1,5 +1,5 @@
 import type { Card } from "@repo/types";
-import type { Player } from "../types.ts";
+import type { Player, SavedGame } from "../types.ts";
 import { Deck } from "./index.ts";
 import { GameEventManager } from "../Events/GameEventManager.ts";
 
@@ -28,6 +28,22 @@ export class DeckEventsManager extends Deck {
       eventId: "round:end",
       listener: () => (this.gameState = []),
     });
+  }
+  loadDeck(deck: SavedGame["deck"]) {
+    this.cards = deck.cards;
+    this.position = deck.position;
+    this.gameState = deck.gameState;
+    this.history = new Set(deck.history);
+    this.playersHistory = new Set(deck.playersHistory);
+  }
+  saveDeck(): SavedGame["deck"] {
+    return {
+      cards: this.cards,
+      position: this.position,
+      gameState: this.gameState,
+      history: [...this.history],
+      playersHistory: [...this.playersHistory],
+    };
   }
   flop(): Card[] {
     this.manager.emit("deck:flop", super.flop());

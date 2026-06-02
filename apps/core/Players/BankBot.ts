@@ -30,4 +30,7 @@ export class Bank implements BankInterface {
   addChips(amount: number) {
     this.chips += amount;
   }
+  setChips(amount: number) {
+    this.chips = amount;
+  }
 }

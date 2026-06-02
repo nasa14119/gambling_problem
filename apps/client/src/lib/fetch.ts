@@ -39,3 +39,20 @@ export const fetchStatus = async (): Promise<GameState | null> => {
     throw new Error('Error trying to format data as JSON')
   }
 }
+
+export const fetchSaveQuit = async () => {
+  const res = await fetch(`${SERVER_PATH}/api/game/save-quit`, CREATE_OPTIONS)
+  if (res.status !== 204) {
+    throw new Error('Something went wrong')
+  }
+}
+
+export const fetchLoadGame = async () => {
+  const res = await fetch(`${SERVER_PATH}/api/game/load`, {
+    ...CREATE_OPTIONS,
+    redirect: 'follow',
+  })
+  if (res.status !== 200) {
+    throw new Error('Something went wrong')
+  }
+}

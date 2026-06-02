@@ -2,10 +2,10 @@ import { cn } from '#/lib/utils'
 import { ArrowRight, DoorOpen, Power, User2 } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '#/shadcn/ui/tooltip'
 import { Link, useRouter } from '@tanstack/react-router'
-import { useAuth } from '#/components/Login/store'
+import { useAuth, useAuthValidate } from '#/components/Login/store'
 import { useLogout } from '#/hooks/useLogout'
 import { RestoreDialog } from '#/components/RestoreDialog'
-import { fetchNewGame, fetchStatus } from '#/lib/fetch'
+import { fetchLoadGame, fetchNewGame, fetchStatus } from '#/lib/fetch'
 
 export function UserPage() {
   const { playerId } = useAuth()
@@ -16,10 +16,12 @@ export function UserPage() {
     navigate({ to: '/game' })
   }
   const handleRestoreGame = async () => {
+    await fetchLoadGame()
     const data = await fetchStatus()
-    if (data === null) await fetchNewGame()
+    // if (data === null) await fetchNewGame()
     navigate({ to: '/game' })
   }
+  useAuthValidate()
   return (
     <header className={cn('w-screen h-screen relative z-0')}>
       <div className={cn('size-full flex flex-col gap-y-5 justify-center')}>

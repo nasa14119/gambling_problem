@@ -1,5 +1,6 @@
 import { PlayerData } from "core/types";
 import { EXPLOITS } from "./const.ts";
+import { ExploitData } from "./db.ts";
 
 export type Result<T, E> =
   | { success: true; data: T; error?: never }
@@ -34,12 +35,12 @@ export type Player = {
   cards: PlayerHand;
 };
 export type TurnOptions = "fold" | "raise" | "pay" | "check";
-
+export type InvetoryData = { [K in ExploitId]?: ExploitData }[];
 export type GameState = {
   isStarted: boolean;
   table: null | (Card | null)[];
   players: Record<string, Omit<PlayerData, "money" | "cards">>;
-  user: PlayerData & { invetory: ExploitId[]; currentBet: number | null };
+  user: PlayerData & { invetory: ExploitData[]; currentBet: number | null };
   turn: {
     currentPlayer: string;
     minBet: number;

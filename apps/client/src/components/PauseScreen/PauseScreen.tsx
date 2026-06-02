@@ -1,4 +1,5 @@
 import { usePauseState, useResume } from '#/components/PauseScreen/store'
+import { fetchSaveQuit } from '#/lib/fetch'
 import { Link } from '@tanstack/react-router'
 
 export function PauseScreen() {
@@ -14,7 +15,13 @@ export function PauseScreen() {
         >
           Resume
         </div>
-        <div className="w-4/5 h-20 bg-slate-400 text-slate-950 rounded-md text-5xl font-bold flex items-center pl-10 transition-all duration-200 ease hover:scale-101 hover:bg-slate-300">
+        <div
+          className="w-4/5 h-20 bg-slate-400 text-slate-950 rounded-md text-5xl font-bold flex items-center pl-10 transition-all duration-200 ease hover:scale-101 hover:bg-slate-300"
+          onClick={() => {
+            fetchSaveQuit()
+            resume()
+          }}
+        >
           Save and quit
         </div>
         <Link

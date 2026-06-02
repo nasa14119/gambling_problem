@@ -1,3 +1,5 @@
+import { ExploitId } from "./app.ts";
+
 export type TypeEnd = "WIN" | "BANKRUPT" | "TERMINATED" | "DEATH";
 export type NewDebt = {
   credit: number;
@@ -5,7 +7,7 @@ export type NewDebt = {
 } | null;
 
 export type ExploitData = {
-  exploitId: string;
+  exploitId: ExploitId;
   name: string;
   price: number;
   type: string;

@@ -1,5 +1,11 @@
-import type { ExploitId, TurnOptions } from "@repo/types";
-import type { Player, PlayerData } from "./Players/types.ts";
+import type {
+  Card,
+  ExploitId,
+  GameState,
+  InvetoryData,
+  TurnOptions,
+} from "@repo/types";
+import type { BackBettting, Player, PlayerData } from "./Players/types.ts";
 import { GameEventPayloads, GameEvents } from "@repo/types/server";
 import {
   ExploitsEvents,
@@ -60,4 +66,42 @@ export type { Player as User } from "./Players/Player.ts";
 export type GameOptions = {
   runId?: number;
   exploits_whitelist?: ExploitId[];
+  savedGame?: SavedGame;
+};
+
+export type SavedGame = {
+  playerId: string;
+  runId: string;
+  round: number;
+  exploits_whitelist: ExploitId[];
+  level: number;
+  deck: {
+    cards: number[];
+    position: number;
+    gameState: Card[];
+    history: Card[];
+    playersHistory: Card[];
+  };
+  players: PlayerData[];
+  turn: GameState["turn"];
+  user: {
+    chips: number;
+    money: number;
+    moneySpend: number;
+    moneyTotal: number;
+    next_rank: number;
+  };
+  mafia: {
+    backbett: BackBettting;
+    playerPay: number;
+    playerCredit: number;
+    havePay: boolean;
+  };
+  invetory: {
+    itmes: ExploitId[];
+    active: ExploitId[];
+  };
+  exploitStore: {
+    [key: string]: any;
+  };
 };
