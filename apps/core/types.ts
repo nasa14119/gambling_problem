@@ -66,6 +66,9 @@ export type { Player as User } from "./Players/Player.ts";
 export type GameOptions = {
   runId?: number;
   exploits_whitelist?: ExploitId[];
+};
+
+export type SiglePlayerOptions = GameOptions & {
   savedGame?: SavedGame;
 };
 export type TurnSave = {

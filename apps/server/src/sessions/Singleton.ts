@@ -1,8 +1,9 @@
+import type { SessionGameInterface as Game } from "@repo/types/server";
+import type { GameSinglePlayer } from "core";
+
 import { ExploitFacade, GameFacade } from "core/types";
 import { saveSession, setRunSession, terminateSession, UserAuth } from "db";
 import { v4 as uuid } from "uuid";
-
-import { type Game } from "./interfaceGame.ts";
 
 class Singleton {
   private static instance: Singleton;
@@ -19,7 +20,7 @@ class Singleton {
     { playerId, send }: { playerId: string; send: (payload: string) => void },
   ): ExploitFacade {
     if (!this.sessions.has(sessionId)) throw new Error("Session Id not found");
-    const game = this.sessions.get(sessionId)!;
+    const game = this.sessions.get(sessionId)! as GameSinglePlayer;
     return game.attachExploit(playerId, send);
   }
   connectGame(
@@ -27,7 +28,7 @@ class Singleton {
     { playerId, send }: { playerId: string; send: (payload: string) => void },
   ): GameFacade {
     if (!this.sessions.has(sessionId)) throw new Error("Session Id not found");
-    const game = this.sessions.get(sessionId)!;
+    const game = this.sessions.get(sessionId)! as GameSinglePlayer;
     return game.attachClient(playerId, send);
   }
   getGameStatus(sessionId: string, playerId: string) {
@@ -41,12 +42,12 @@ class Singleton {
   }
   getUserBank(sessionId: string, playerId: string) {
     if (!this.sessionExists(sessionId)) throw new Error("Session Id not found");
-    const game = this.sessions.get(sessionId)!;
+    const game = this.sessions.get(sessionId)! as GameSinglePlayer;
     return game.getUserBank(playerId);
   }
   getUserStore(sessionId: string, playerId: string) {
     if (!this.sessionExists(sessionId)) throw new Error("Session Id not found");
-    const game = this.sessions.get(sessionId)!;
+    const game = this.sessions.get(sessionId)! as GameSinglePlayer;
     return game.getUserStore(playerId);
   }
   newGame(game: Game, prefix = "") {
@@ -62,7 +63,7 @@ class Singleton {
   saveGameQuit(sessionId: string, user: UserAuth) {
     if (!this.sessionExists(sessionId))
       throw new Error("Session not found for saving");
-    const game = this.sessions.get(sessionId)!;
+    const game = this.sessions.get(sessionId)! as GameSinglePlayer;
     const data = game.quit(user.username);
     saveSession({ data, sessionId: sessionId.replace("user:", "") });
     this.sessions.delete(sessionId);
