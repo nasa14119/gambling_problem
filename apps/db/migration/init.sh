@@ -27,4 +27,5 @@ for file in $files; do
     echo "error running" $file
   fi
 done
-npm run db:pull
+
+echo "WARNING: Check if drizzle schemas are up to date"
