@@ -68,8 +68,18 @@ export type GameOptions = {
   exploits_whitelist?: ExploitId[];
   savedGame?: SavedGame;
 };
-
+export type TurnSave = {
+  moneyPot: number | null;
+  currentPlayer: string | null;
+  minBet: number;
+  blind: number;
+  playersPots: Record<string, number>;
+  waiting_queue: PlayerData[];
+  turn_queue: PlayerData[];
+  turn_pots: Record<string, number>;
+} | null;
 export type SavedGame = {
+  isStarted: boolean;
   playerId: string;
   runId: string;
   round: number;
@@ -83,13 +93,15 @@ export type SavedGame = {
     playersHistory: Card[];
   };
   players: PlayerData[];
-  turn: GameState["turn"];
+  turn: TurnSave;
   user: {
     chips: number;
     money: number;
     moneySpend: number;
     moneyTotal: number;
     next_rank: number;
+    card: Player["cards"];
+    isFold: boolean;
   };
   mafia: {
     backbett: BackBettting;

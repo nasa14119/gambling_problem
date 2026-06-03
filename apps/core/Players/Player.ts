@@ -36,6 +36,8 @@ export class Player implements IPlayer {
     if (options?.stored) {
       money = options.stored.user.money;
       chips = options.stored.user.chips;
+      this.cards = options.stored.user.card;
+      this.isFold = options.stored.user.isFold;
     }
     this.invetory = invetory;
     // Loading explits to invetory

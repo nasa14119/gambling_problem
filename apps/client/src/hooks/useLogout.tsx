@@ -8,10 +8,16 @@ export const useLogout = () => {
   const handleLogout = () => {
     fetch(`${SERVER_PATH}/api/logout`, {
       credentials: 'include',
-    }).then(() => {
-      setAuth({ isLogged: false })
-      navigate({ to: '/login' })
     })
+      .then(() => {
+        setAuth({ isLogged: false })
+      })
+      .then(() => {
+        localStorage.removeItem('gameState')
+      })
+      .then(() => {
+        navigate({ to: '/login' })
+      })
   }
   return handleLogout
 }

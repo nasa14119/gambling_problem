@@ -2,7 +2,7 @@ import type { UserAuth } from "db";
 
 import { GameSinglePlayer } from "core";
 import { SavedGame } from "core/types";
-import { getCurrentRun, startNewRun } from "db";
+import { clearSession, getCurrentRun, startNewRun } from "db";
 import { Router } from "express";
 import z from "zod";
 
@@ -49,6 +49,7 @@ router.get("/game/load", getUserFromToken, async (req, res) => {
     return;
   }
   const last_run = await getCurrentRun(res.locals.user.userUUID);
+  console.log(last_run);
   if (last_run === null || !last_run.isRunning) {
     res.redirect(302, "/api/game/new/singlePlayer");
     return;
@@ -57,6 +58,8 @@ router.get("/game/load", getUserFromToken, async (req, res) => {
   if (sessions.sessionExists(newSessionId)) {
     res.send(sessions.getGameStatus(newSessionId, last_run.username));
     return;
+  } else {
+    if (last_run.sessionId) await clearSession(last_run.sessionId);
   }
   if (!last_run.data) {
     throw new Error("No data was stored and session is lost");

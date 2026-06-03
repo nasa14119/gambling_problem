@@ -64,10 +64,56 @@ export class Game {
       savedGame.playerId,
       savedGame.exploitStore,
     );
+    this._isStarted = savedGame.isStarted;
+    if (savedGame.turn !== null) {
+      const turn = savedGame.turn;
+      const waiting_queue = this.players
+        .session()
+        .filter((p) =>
+          turn.waiting_queue.some((w) => w.playerId === p.playerId),
+        );
+      const turn_queue = this.players
+        .session()
+        .filter((p) => turn.turn_queue.some((w) => w.playerId === p.playerId));
+      this.turnSystem.loadTurn({ ...turn, waiting_queue, turn_queue });
+    }
+  }
+  private async resumeGame() {
+    if (!this.turnSystem.isIdle) {
+      await this.turnSystem.resumeTurn();
+      if (this.deck.gameState.length === 5) {
+        this.roundEnd();
+        return;
+      }
+    }
+    if (!this.canPlay()) {
+      this.roundEnd();
+      return;
+    }
+    if (this.deck.gameState.length === 0) {
+      this.deck.flop();
+      await this.turnSystem.startTurn(this.players.getPlaingPlayers());
+      if (!this.canPlay()) {
+        this.roundEnd();
+        return;
+      }
+    }
+    if (this.deck.gameState.length === 3) {
+      this.deck.turn();
+      await this.turnSystem.startTurn(this.players.getPlaingPlayers());
+      if (!this.canPlay()) {
+        this.roundEnd();
+        return;
+      }
+    }
+    this.deck.river();
+    await this.turnSystem.startTurn(this.players.getPlaingPlayers());
+    this.roundEnd();
   }
   save(id: string): SavedGame {
     const user = this.players.getPlayer(id) as User;
     return {
+      isStarted: this.isStarted,
       playerId: user.playerId,
       runId: this.id,
       round: this.round,
@@ -80,12 +126,14 @@ export class Game {
         .session()
         .filter((p) => p.playerId !== id)
         .map((p) => p.getData()),
-      turn: this.turnSystem.getTurn(),
+      turn: this.turnSystem.getSave(),
       user: {
         money: user.bank.getMoneyValue(),
         chips: user.bank.getChipsValue(),
         ...user.bank.getGameState(),
         next_rank: this.nextRank,
+        card: user.cards,
+        isFold: user.isFold,
       },
       mafia: {
         ...user.mafia.getSave(),
@@ -171,6 +219,9 @@ export class Game {
         this.kill(player);
       },
     });
+    if (this._isStarted) {
+      this.resumeGame();
+    }
   }
   get isStarted() {
     return this._isStarted;

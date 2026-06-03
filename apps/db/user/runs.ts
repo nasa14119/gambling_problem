@@ -30,6 +30,15 @@ export const setRunSession = async (runId: number, sessionId: string) => {
   }
 };
 
+export const terminateSession = async (sessionId: string) => {
+  try {
+    await db.execute(sql`
+        CALL killSession(${sessionId.replace("user:", "")}); 
+      `);
+  } catch {
+    throw new Error("Error killing session");
+  }
+};
 export const updateRun = async (runId: number, data: RunDataGame) => {
   if (typeof runId !== "number" || Number.isNaN(runId))
     throw new Error("RunId not a number");
@@ -57,16 +66,6 @@ export const updateRun = async (runId: number, data: RunDataGame) => {
   } catch (e) {
     console.error(e);
     throw new Error("Error updating run");
-  }
-};
-
-export const terminateSession = async (sessionId: string) => {
-  try {
-    await db.execute(sql`
-        CALL killSession(${sessionId.replace("user:", "")}); 
-      `);
-  } catch {
-    throw new Error("Error killing session");
   }
 };
 
@@ -106,4 +105,11 @@ export const getCurrentRun = async (userUUID: string) => {
     .limit(1);
 
   return result[0] ?? null;
+};
+
+export const clearSession = async (sessionId: string) => {
+  await db
+    .update(running)
+    .set({ sessionID: null })
+    .where(eq(running.sessionID, sessionId));
 };

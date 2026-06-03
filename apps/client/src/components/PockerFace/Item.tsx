@@ -12,19 +12,19 @@ type Props = {
   isAvailable?: boolean
 } & ComponentProps<'button'>
 export function Item({
-  id,
   title,
   desc,
   price = 100,
   className,
   isAvailable = true,
+  exploitId,
   onClick,
   ...rest
 }: Props) {
   const [isLoading, setLoading] = useState(false)
   useExploitEventListener(({ eventId, payload }) => {
     if (eventId === 'buy:success' && isLoading) {
-      if (payload.exploit.exploitId !== id) return
+      if (payload.exploit.exploitId !== exploitId) return
       setLoading(false)
     }
   })

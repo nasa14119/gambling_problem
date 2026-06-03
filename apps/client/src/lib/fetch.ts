@@ -55,4 +55,6 @@ export const fetchLoadGame = async () => {
   if (res.status !== 200) {
     throw new Error('Something went wrong')
   }
+  const data = await fetchStatus()
+  localStorage.setItem('gameState', JSON.stringify(data))
 }

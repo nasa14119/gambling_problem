@@ -4,17 +4,19 @@ import {
   useExploitEventListener,
   useExploitEventSender,
 } from '#/exploits/store'
+import { sleepClient } from '#/lib/utils'
 import { useGameState, useGameUpdate } from '#/stores/gameStore'
 import type { ExploitId } from '@repo/types'
 import type { ExploitData } from '@repo/types/db'
 import { useEffect, useState } from 'react'
 
-const fetchStore = async () => {
+const fetchStore = async (rtry: number = 1000) => {
   const res = await fetch(`${SERVER_PATH}/api/game/status/store`, {
     credentials: 'include',
   })
   if (res.status !== 200) {
-    throw new Error('Something went wrong')
+    await sleepClient(rtry)
+    return fetchStore(rtry ** 2)
   }
   const data = await res.json()
   return data
