@@ -17,11 +17,12 @@ export const startNewRun = async (userUUID: string) => {
 export const setRunSession = async (runId: number, sessionId: string) => {
   if (typeof runId !== "number" || Number.isNaN(runId))
     throw new Error("RunId not a number");
+  const updating = sessionId.replace(/^user:/, "");
   try {
     await db
       .update(running)
       .set({
-        sessionID: sessionId.replace("user:", ""),
+        sessionID: updating,
       })
       .where(eq(running.runId, runId));
   } catch (e) {
@@ -30,16 +31,50 @@ export const setRunSession = async (runId: number, sessionId: string) => {
   }
 };
 
-export const terminateSession = async (sessionId: string) => {
+export const terminateGame = async (userUUID: string) => {
   try {
     await db.execute(sql`
-        CALL killSession(${sessionId.replace("user:", "")}); 
+      UPDATE Runs r
+      INNER JOIN Metadata m
+        USING (metadataId)
+      SET
+        m.typeEnd = 'TERMINATED',
+        m.endedAt = CURRENT_TIMESTAMP,
+        r.isRunning = FALSE
+      WHERE r.userUUID = ${userUUID}
+        AND r.isRunning = TRUE
+  `);
+  } catch (e) {
+    console.log(e);
+    throw new Error("Error killing saved game");
+  }
+};
+
+export const updateSessionStart = async (runId: number) => {
+  try {
+    await db.execute(sql`
+      UPDATE Runs r 
+      INNER JOIN Metadata m
+      USING (metadataId)
+      SET 
+      m.lastSavedAt = CURRENT_TIMESTAMP
+      WHERE r.runId = ${runId}
+      `);
+  } catch {
+    throw new Error("Error updating session start");
+  }
+};
+export const terminateSession = async (sessionId: string) => {
+  const updating = sessionId.replace(/^user:/, "");
+  try {
+    await db.execute(sql`
+        CALL killSession(${updating}); 
       `);
   } catch {
     throw new Error("Error killing session");
   }
 };
-export const updateRun = async (runId: number, data: RunDataGame) => {
+export const saveAndTerminateRun = async (runId: number, data: RunDataGame) => {
   if (typeof runId !== "number" || Number.isNaN(runId))
     throw new Error("RunId not a number");
   try {
@@ -71,12 +106,16 @@ export const updateRun = async (runId: number, data: RunDataGame) => {
 
 type SaveSessionPayload = { sessionId: string; data: SavedGame };
 export const saveSession = async ({ sessionId, data }: SaveSessionPayload) => {
+  const updating = sessionId.replace(/^user:/, "");
   try {
-    await db
-      .update(running)
-      .set({ data })
-      .where(eq(running.sessionID, sessionId));
+    const [{ runId }] = await db
+      .select({ runId: running.runId })
+      .from(running)
+      .where(eq(running.sessionID, updating));
+    if (!runId) throw new Error("No runId");
     await terminateSession(sessionId);
+    await updateSessionStart(runId);
+    await db.update(running).set({ data }).where(eq(running.runId, runId));
   } catch (e) {
     console.error(e);
   }
@@ -108,8 +147,32 @@ export const getCurrentRun = async (userUUID: string) => {
 };
 
 export const clearSession = async (sessionId: string) => {
+  const updating = sessionId.replace(/^user:/, "");
   await db
     .update(running)
     .set({ sessionID: null })
-    .where(eq(running.sessionID, sessionId));
+    .where(eq(running.sessionID, updating));
+};
+
+export const updateRun = async (
+  runId: number,
+  data: Omit<RunDataGame, "typeEnd">,
+) => {
+  if (typeof runId !== "number" || Number.isNaN(runId))
+    throw new Error("RunId not a number");
+  try {
+    await db.execute(sql`
+        UPDATE Runs r 
+        JOIN Metadata m
+          USING (metadataID)
+        SET 
+          r.moneyTotal = ${data.moneyTotal},
+          r.moneySpend = ${data.moneySpend}, 
+          m.level = ${data.level}
+        WHERE r.runID = ${runId};
+    `);
+  } catch (e) {
+    console.error(e);
+    throw new Error("Error updating run");
+  }
 };

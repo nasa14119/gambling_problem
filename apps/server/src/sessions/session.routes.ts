@@ -2,13 +2,18 @@ import type { UserAuth } from "db";
 
 import { GameSinglePlayer } from "core";
 import { SavedGame } from "core/types";
-import { clearSession, getCurrentRun, startNewRun } from "db";
+import {
+  clearSession,
+  getCurrentRun,
+  startNewRun,
+  updateSessionStart,
+} from "db";
 import { Router } from "express";
 import z from "zod";
 
 import { getUserFromToken } from "../middleware/auth.ts";
 import { isDemo } from "../middleware/demo.ts";
-import { hasSession } from "../middleware/hasSession.ts";
+import { clearPrevSession, hasSession } from "../middleware/hasSession.ts";
 import { COOKIES_OPTS } from "./cookieOpts.ts";
 import sessions from "./Singleton.ts";
 
@@ -18,6 +23,7 @@ router.get(
   "/game/new/singlePlayer",
   getUserFromToken,
   isDemo,
+  clearPrevSession,
   async (req, res) => {
     if (sessions.sessionExists(req.cookies.sessionId)) {
       sessions.terminateGame(req.cookies.sessionId, res.locals.playerId);
@@ -67,6 +73,7 @@ router.get("/game/load", getUserFromToken, async (req, res) => {
   game.loadGame(last_run.data as SavedGame);
   game.init();
   const gameIdSession = sessions.newGame(game, "user:");
+  await updateSessionStart(last_run.runId);
   res.cookie("sessionId", gameIdSession);
   res.cookie("playerId", last_run.username);
   res.send(game.getState(last_run.username));
@@ -129,14 +136,19 @@ router.get("/game/status/bank", getUserFromToken, hasSession, (req, res) => {
   }
   res.send(sessions.getUserBank(sessionId, playerId));
 });
-router.get("/game/save-quit", hasSession, getUserFromToken, (req, res) => {
-  if (!res.locals.user) {
-    res.sendStatus(401);
-    return;
-  }
-  const { sessionId } = req.cookies;
-  sessions.saveGameQuit(sessionId, res.locals.user as UserAuth);
-  res.clearCookie("sessionId");
-  res.sendStatus(204);
-});
+router.get(
+  "/game/save-quit",
+  hasSession,
+  getUserFromToken,
+  async (req, res) => {
+    if (!res.locals.user) {
+      res.sendStatus(401);
+      return;
+    }
+    const { sessionId } = req.cookies;
+    await sessions.saveGameQuit(sessionId, res.locals.user as UserAuth);
+    res.clearCookie("sessionId");
+    res.sendStatus(204);
+  },
+);
 export default router;

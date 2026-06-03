@@ -60,12 +60,13 @@ class Singleton {
     this.sessions.set(id, game);
     return id;
   }
-  saveGameQuit(sessionId: string, user: UserAuth) {
+  async saveGameQuit(sessionId: string, user: UserAuth) {
     if (!this.sessionExists(sessionId))
       throw new Error("Session not found for saving");
     const game = this.sessions.get(sessionId)! as GameSinglePlayer;
-    const data = game.quit(user.username);
-    saveSession({ data, sessionId: sessionId.replace("user:", "") });
+    const data = await game.quit(user.username);
+    await saveSession({ data, sessionId });
+    await terminateSession(sessionId);
     this.sessions.delete(sessionId);
   }
   sessionExists(sessionId: string) {

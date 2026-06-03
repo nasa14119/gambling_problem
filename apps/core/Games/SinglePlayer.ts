@@ -1,7 +1,7 @@
 import { SavedGame, SiglePlayerOptions, User } from "../types.ts";
 import { Game } from "../Game.ts";
 import { GameFacade } from "../GameFacade.ts";
-import { getExploitData, updateRun } from "db";
+import { getExploitData, saveAndTerminateRun, updateRun } from "db";
 import { Inventory } from "../Players/Inventory.ts";
 import { Player } from "../Players/Player.ts";
 import { Mafia } from "../Players/Mafia.ts";
@@ -122,9 +122,15 @@ export class GameSinglePlayer extends Game {
       exploitStore: this.exploitsManager.exploitsStore,
     };
   }
-  quit(playerId: string) {
+  async quit(playerId: string) {
     const save = this.save(playerId);
+    const user = this.getUser(playerId);
     this.eventManager.emit("reset:quit", undefined);
+    await updateRun(Number(this.id), {
+      level: this.level,
+      moneySpend: user.bank.moneySpend,
+      moneyTotal: user.bank.moneyTotal,
+    });
     return save;
   }
   async kill(playerId: string) {
@@ -134,7 +140,7 @@ export class GameSinglePlayer extends Game {
         this.players.getPlayer(playerId) as User
       ).bank.getGameState();
       await this.terminate?.();
-      await updateRun(Number(this.id), {
+      await saveAndTerminateRun(Number(this.id), {
         level: this.level,
         typeEnd: this.isEnded,
         ...playerScore,

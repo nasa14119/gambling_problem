@@ -1,6 +1,9 @@
 {
   "extends": "@repo/ts-config",
   "compilerOptions": {
+    "paths": {
+      "env": ["./env.ts"]
+    },
     "types": ["node"]
   }
 }
