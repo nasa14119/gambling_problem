@@ -3,6 +3,7 @@ import type {
   GameEvents,
 } from "../Events/GameEventManager.ts";
 import { Player } from "../types.ts";
+import { sleep } from "./utils.ts";
 type Constructor = {
   /**@type {number} seconds of the timer */
   time: number;
@@ -38,17 +39,26 @@ export class Timer {
       eventId: "resume",
       listener: this.resume.bind(this),
     });
+    this.timer();
   }
   private pause() {
     this.isPaused = true;
   }
   private resume() {
     this.isPaused = false;
+    this.timer();
   }
+  private timer = async () => {
+    if (this.isPaused) return;
+    if (this.time === 0) return;
+    this.time -= 1;
+    await sleep(1000);
+    this.timer();
+  };
   private end() {
     this.clean();
     this.onEnd();
-    this.manager.emit("player:timeexeded", this.player);
+    this.manager.emit("player:timeexeded", { player: this.player });
   }
   cancel() {
     this.clean();

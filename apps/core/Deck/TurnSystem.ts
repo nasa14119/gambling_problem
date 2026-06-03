@@ -4,7 +4,7 @@ import {
   GameEventPayloads,
   GameEvents,
 } from "../Events/GameEventManager.ts";
-import type { Player } from "../types.ts";
+import type { Player, PlayerData, SavedGame, TurnSave } from "../types.ts";
 
 type TurnSystemOptions = {
   blind?: number;
@@ -12,13 +12,19 @@ type TurnSystemOptions = {
 const DEFAULTS = {
   blind: -Infinity,
 };
+type TurnSystemLoad = Omit<
+  NonNullable<TurnSave>,
+  "waiting_queue" | "turn_queue"
+> & { waiting_queue: Player[]; turn_queue: Player[] };
 export class TurnSystem {
   private _moneyPot: number | null = null;
+  public isIdle = true;
   private manager: GameEventManager;
   private turn_queue: Player[] = [];
   private waiting_queue: Player[] = [];
   private _players_pots: Record<string, number> = {};
-  private _playerPlaing: Player["playerId"] | null = null;
+  private _playerPlaing: Player | null = null;
+  private turn_pots: Record<string, number> = {};
   blind = -Infinity;
   private min: number;
   private changeTurn;
@@ -34,7 +40,7 @@ export class TurnSystem {
     this.min = blind;
   }
   get playerPlaing() {
-    return this._playerPlaing;
+    return this._playerPlaing?.playerId ?? null;
   }
   get players_pots() {
     return this._players_pots;
@@ -51,26 +57,51 @@ export class TurnSystem {
   getTurn(): GameState["turn"] {
     if (this._playerPlaing === null) return null;
     return {
-      currentPlayer: this._playerPlaing,
+      currentPlayer: this.playerPlaing!,
       minBet: this.min,
       playersPots: this._players_pots,
     };
   }
-  async startTurn(turns: Player[]) {
-    this.turn_queue = turns;
-    this.waiting_queue = [];
-    this._players_pots = {};
-    const turn_pots: Record<string, number> = {};
+  getSave(): SavedGame["turn"] {
+    if (this.isIdle) return null;
+    const turn_queue: PlayerData[] = this.playerPlaing
+      ? [
+          this._playerPlaing!.getData(),
+          ...(this.turn_queue.map((p) => p.getData()) ?? []),
+        ]
+      : this.turn_queue.map((p) => p.getData());
+    return {
+      moneyPot: this._moneyPot,
+      currentPlayer: this.playerPlaing,
+      minBet: this.min,
+      blind: this.blind,
+      playersPots: this._players_pots,
+      waiting_queue: this.waiting_queue.map((p) => p.getData()),
+      turn_queue,
+      turn_pots: this.turn_pots,
+    };
+  }
+  async loadTurn(turn: TurnSystemLoad) {
+    this._moneyPot = turn.moneyPot;
+    this.min = turn.minBet;
+    this._players_pots = turn.playersPots;
+    this.waiting_queue = turn.waiting_queue;
+    this.turn_queue = turn.turn_queue;
+    this.isIdle = false;
+    this.turn_pots = turn.turn_pots;
+  }
+  async resumeTurn() {
+    return await this.roundLoop();
+  }
+  private async roundLoop() {
     let canCheck = true;
-    this.min = this.blind;
-    this.manager.emit("turn:start", undefined);
     while (this.turn_queue.length > 0) {
       const [current, ...rest] = this.turn_queue;
       if (rest.length <= 0 && this.waiting_queue.length <= 0) {
         this.turn_queue = [];
         break;
       }
-      this._playerPlaing = current.playerId;
+      this._playerPlaing = current;
       // This function make the current player retry to play
       const retry = () => (this.turn_queue = [current, ...rest]);
       // Pop front
@@ -78,7 +109,7 @@ export class TurnSystem {
 
       // Emit turn have changed to the player that was on front
       this.changeTurn(current.playerId);
-      this._playerPlaing = current.playerId;
+      this._playerPlaing = current;
       let { type, chips } = await this.waitForEvent("player:validbet");
       if (type === "check" && canCheck) {
         this.waiting_queue = [current, ...this.waiting_queue];
@@ -98,10 +129,10 @@ export class TurnSystem {
       }
       // From here the player whats to continue in the game
       // Gets the current player money pot added if empty start with 0
-      const playerMoney = turn_pots[current.playerId] ?? 0;
+      const playerMoney = this.turn_pots[current.playerId] ?? 0;
       // Money in this turn
       const playerMoneyInTurn = playerMoney + chips;
-      turn_pots[current.playerId] = playerMoneyInTurn;
+      this.turn_pots[current.playerId] = playerMoneyInTurn;
 
       // Add the inputted chips to player money pot
       this._players_pots[current.playerId] = playerMoney + chips;
@@ -147,9 +178,9 @@ export class TurnSystem {
         player: current,
       });
     }
-
+    this.isIdle = true;
     // Getting the total pot made in turn
-    const turnPot = Object.values(turn_pots).reduce(
+    const turnPot = Object.values(this.turn_pots).reduce(
       (prev, crr) => prev + crr,
       0,
     );
@@ -160,6 +191,16 @@ export class TurnSystem {
     // Emiting the end of the turn
     this.manager.emit("turn:end", { moneyPot: turnPot });
     this._playerPlaing = null;
+  }
+  async startTurn(turns: Player[]) {
+    this.isIdle = false;
+    this.turn_queue = turns;
+    this.min = this.blind;
+    this.waiting_queue = [];
+    this.turn_pots = {};
+    this._players_pots = {};
+    this.manager.emit("turn:start", undefined);
+    await this.roundLoop();
     return;
   }
 }

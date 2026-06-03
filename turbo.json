@@ -19,7 +19,8 @@
       "cache": false
     },
     "db:start": {
-      "cache": false
+      "cache": false,
+      "persistent": false
     },
     "db:stop": {
       "cache": false
@@ -31,14 +32,9 @@
       "cache": false
     },
     "dev": {
-      "dependsOn": ["db:start"],
+      "dependsOn": ["^db#db:start"],
       "cache": false,
       "persistent": true
-    },
-    "dev#server": {
-      "dependsOn": ["^db#db:start"],
-      "persistent": false,
-      "cache": true
     }
   }
 }

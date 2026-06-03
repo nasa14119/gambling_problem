@@ -1,6 +1,7 @@
 {
   "name": "@repo/types",
   "exports": {
+    "./const": "./const.ts",
     "./server": "./server.ts",
     "./client": "./client.ts",
     "./db": "./db.ts",

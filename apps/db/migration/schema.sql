@@ -1,8 +1,3 @@
-CREATE DATABASE IF NOT EXISTS gambling_problem
-DEFAULT CHARACTER SET utf8mb4;
-
-USE gambling_problem;
-
 CREATE TABLE IF NOT EXISTS Users (
     userUUID CHAR(36) PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -13,15 +8,12 @@ DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS Metadata (
     metadataID INT AUTO_INCREMENT PRIMARY KEY,
-    typeEnd VARCHAR(50),
+    typeEnd ENUM("WIN", "BANKRUPT", "TERMINATED", "DEATH") DEFAULT NULL,
     level INT,
-    saveData JSON,
     startedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     endedAt TIMESTAMP NULL,
     lastSavedAt TIMESTAMP NULL,
-    durationSeconds INT GENERATED ALWAYS AS (
-        TIMESTAMPDIFF(SECOND, startedAt, endedAt)
-    ) STORED
+    durationMinutes BIGINT DEFAULT NULL
 )
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
@@ -37,7 +29,8 @@ CREATE TABLE IF NOT EXISTS Runs (
 
     CONSTRAINT fkRunsUser
         FOREIGN KEY (userUUID)
-        REFERENCES Users(userUUID),
+        REFERENCES Users(userUUID)
+        ON DELETE CASCADE,
 
     CONSTRAINT fkRunsMetadata
         FOREIGN KEY (metadataID)
@@ -50,39 +43,42 @@ CREATE TABLE IF NOT EXISTS Running (
     runID INT PRIMARY KEY,
     data JSON,
     sessionID VARCHAR(100),
+    slot TINYINT UNSIGNED DEFAULT 1, 
 
     CONSTRAINT fkRunningRun
         FOREIGN KEY (runID)
         REFERENCES Runs(runID)
+        ON DELETE CASCADE
 )
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS ExploitsData (
-    exploitID INT AUTO_INCREMENT PRIMARY KEY,
+    exploitID VARCHAR(30) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    price DECIMAL(10,2),
-    type VARCHAR(50),
-    description TEXT
+    price DECIMAL(10,2) NOT NULL,
+    type VARCHAR(20) NOT NULL,
+    description TEXT NOT NULL
 )
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS  ExploitsUsed (
     runID INT NOT NULL,
-    exploitID INT NOT NULL,
+    exploitID VARCHAR(30) NOT NULL,
     quantity INT NOT NULL DEFAULT 1,
 
     PRIMARY KEY (runID, exploitID),
 
     CONSTRAINT fkExploitUsedRun
         FOREIGN KEY (runID)
-        REFERENCES Runs(runID),
+        REFERENCES Runs(runID)
+        ON DELETE CASCADE,
 
     CONSTRAINT fkExploitUsedExploit
         FOREIGN KEY (exploitID)
         REFERENCES ExploitsData(exploitID)
-	
+        ON DELETE CASCADE
     
 )
 ENGINE=InnoDB
@@ -90,17 +86,19 @@ DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS Whitelist (
     userUUID CHAR(36) NOT NULL,
-    exploitID INT NOT NULL,
+    exploitID VARCHAR(30) NOT NULL,
 
     PRIMARY KEY (userUUID, exploitID),
 
     CONSTRAINT fk_whitelist_user
         FOREIGN KEY (userUUID)
-        REFERENCES Users(userUUID),
+        REFERENCES Users(userUUID)
+        ON DELETE CASCADE,
 
     CONSTRAINT fk_whitelist_exploit
         FOREIGN KEY (exploitID)
         REFERENCES ExploitsData(exploitID)
+        ON DELETE CASCADE
 )
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;

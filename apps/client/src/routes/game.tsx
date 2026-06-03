@@ -6,10 +6,15 @@ import { MainGame } from '#/components/MainGame'
 import { Bank } from '#/components/Bank/BankUI'
 import { PockerFace, PockerTrigger } from '#/components/PockerFace'
 import { useGameStore } from '#/stores/gameStore'
-import { useEventListener, useEventSocket } from '#/stores/eventsStore'
+import {
+  useEventClear,
+  useEventListener,
+  useEventSocket,
+} from '#/stores/eventsStore'
 import { useGameInit } from '#/hooks/useGameInit'
 import { usePockerFace } from '#/components/PockerFace/store'
 import { ErrorPage } from '#/components/ErrorPage'
+import { PauseScreen } from '#/components/PauseScreen/PauseScreen'
 
 export const Route = createFileRoute('/game')({ component: CreateGame })
 
@@ -18,9 +23,19 @@ function CreateGame() {
   const router = useRouter()
   const isLoading = useGameStore((s) => s.isLoading)
   const data = useEventListener()
+  const clear = useEventClear()
   useEffect(() => {
     if (!data) return
-    if (data.eventId === 'reset:hard') router.navigate({ to: '/summary' })
+    const { eventId } = data
+    if (eventId !== 'reset:hard' && eventId !== 'reset:quit') {
+      return
+    }
+    clear()
+    if (eventId === 'reset:hard') {
+      router.navigate({ to: '/summary' })
+      return
+    }
+    router.navigate({ to: '/user' })
   }, [data])
   const error = useGameStore((s) => s.error)
   if (isLoading) return <div>Loading...</div>
@@ -41,6 +56,7 @@ function Game() {
   }
   return (
     <>
+      <PauseScreen />
       <PockerFace />
       <main className="size-full  h-screen grid grid-cols-1 grid-rows-[auto_1fr_auto] bg-neutral-300">
         <NavGame current={current}>

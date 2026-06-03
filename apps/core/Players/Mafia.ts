@@ -1,8 +1,9 @@
-import { BankData, User } from "@repo/types/server";
+import { BankData, SavedGame, User } from "@repo/types/server";
 import { getQuerryRank } from "db";
 import type { Game } from "../Game.ts";
 import { BackBettting } from "./types.ts";
 
+const bet = getQuerryRank();
 type MafiaData = Pick<BankData, "round_to_end" | "pay" | "credit">;
 export class Mafia {
   private game: Game;
@@ -23,7 +24,10 @@ export class Mafia {
       eventId: "round:end",
       listener: ({ round }) => {
         if (this.player.bank.isBackrupt()) {
-          this.events.emit("reset:hard", undefined);
+          this.events.emit("reset:hard", {
+            end: "BANKRUPT",
+            player: this.player.playerId,
+          });
           return;
         }
         this.roundPassed = round;
@@ -81,10 +85,13 @@ export class Mafia {
   private async updateMafia() {
     if (this.havePay) return;
     if (this.roundPassed < this.roundToEnd) return;
-    this.events.emit("reset:hard", undefined);
+    this.events.emit("reset:hard", {
+      end: "DEATH",
+      player: this.player.playerId,
+    });
   }
   private async getNextDebt() {
-    const data = await getQuerryRank();
+    const data = await bet();
     if (!data) {
       this.havePay = true;
       return;
@@ -100,5 +107,19 @@ export class Mafia {
       round_to_end: this.roundToEnd - this.roundPassed,
       pay: this.playerPay,
     };
+  }
+  getSave(): SavedGame["mafia"] {
+    return {
+      backbett: this.backBettin,
+      playerPay: this.playerPay,
+      playerCredit: this.playerCredit,
+      havePay: this.havePay,
+    };
+  }
+  loadMafia(mafia: SavedGame["mafia"]) {
+    this.backBettin = mafia.backbett;
+    this.playerPay = mafia.playerPay;
+    this.playerCredit = mafia.playerCredit;
+    this.havePay = mafia.havePay;
   }
 }

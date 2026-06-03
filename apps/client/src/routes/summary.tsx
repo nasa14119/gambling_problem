@@ -63,8 +63,8 @@ const formatData = (payload: Record<string, string | number>) => {
 function ContentWithData() {
   const [querry, setQuerry] = useState<any>(null)
   useEffect(() => {
-    getSummary().then((data) => {
-      setQuerry(data)
+    getSummary().then((update) => {
+      setQuerry(update)
     })
   }, [])
   if (!querry) return null

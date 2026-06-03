@@ -1,42 +1,13 @@
-import { SERVER_PATH } from '#/env'
+import { useAuth } from '#/components/Login/store'
+import { fetchStatus } from '#/lib/fetch'
 import { useGameStore } from '#/stores/gameStore'
-import type { GameState } from '@repo/types'
+import { useRouter } from '@tanstack/react-router'
 import { useEffect } from 'react'
 
-const OPTIONS = {
-  method: 'POST',
-  credentials: 'include',
-  headers: { 'Content-Type': 'application/json' },
-} as const
-const createGame = async () => {
-  const res = await fetch(`${SERVER_PATH}/api/game/new/singlePlayer`, OPTIONS)
-  if (res.status !== 200) {
-    throw new Error('Something went wrong')
-  }
-  const stateRes = await fetch(`${SERVER_PATH}/api/game/status`, {
-    credentials: 'include',
-  })
-  if (stateRes.status !== 200) {
-    throw new Error('Something went wrong')
-  }
-  const data = await stateRes.json()
-  return data
-}
-const getStatus = async (): Promise<GameState> => {
-  const res = await fetch(`${SERVER_PATH}/api/game/status`, {
-    credentials: 'include',
-  })
-  if (res.status === 204 || res.status === 404) {
-    return await createGame()
-  }
-  const data = await res.json().catch(() => {
-    throw new Error('Error trying to format data as JSON')
-  })
-  return data
-}
 export const useGameInit = () => {
   const setState = useGameStore((s) => s.setState)
-
+  const auth = useAuth()
+  const { navigate } = useRouter()
   useEffect(() => {
     setState({ isLoading: true })
     const localData = localStorage.getItem('gameState')
@@ -45,7 +16,11 @@ export const useGameInit = () => {
     }
     const fetchData = async () => {
       try {
-        const data = await getStatus()
+        const data = await fetchStatus()
+        if (!data) {
+          navigate({ to: auth.isLogged ? '/user' : '/' })
+          return
+        }
         setState({ gameState: data })
       } catch (e) {
         const error = e as Error

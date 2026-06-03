@@ -1,8 +1,8 @@
-import { GameState, PlayerHand } from "@repo/types";
+import { ExploitId, GameState, PlayerHand } from "@repo/types";
 import type { GameEventPayloads } from "../Events/GameEventManager.ts";
 import { Bank } from "./Bank.ts";
 import { Inventory } from "./Inventory.ts";
-import { ErrorInTurn, ExploitId, UserInput } from "../types.ts";
+import { ErrorInTurn, UserInput } from "../types.ts";
 import type {
   Player as IPlayer,
   PlayerOptions,
@@ -29,10 +29,26 @@ export class Player implements IPlayer {
     options?: PlayerOptions,
   ) {
     this.playerId = playerId;
-    const { money, chips } = { ...DEFAULTS, ...options };
+    let { money, chips }: { money: number; chips: number } = {
+      ...DEFAULTS,
+      ...options,
+    };
+    if (options?.stored) {
+      money = options.stored.user.money;
+      chips = options.stored.user.chips;
+      this.cards = options.stored.user.card;
+      this.isFold = options.stored.user.isFold;
+    }
     this.invetory = invetory;
+    // Loading explits to invetory
+    if (options?.stored?.invetory) {
+      const { invetory } = options.stored;
+      invetory.itmes.forEach((item) => this.invetory.addItem(item));
+    }
     // INVETORY MUST ALLWAYS BE CREATED BEFORE BANK
-    this.bank = new Bank(money, chips, this);
+    // ITEMS SAVED
+    const { moneySpend, moneyTotal } = options?.stored?.user ?? {};
+    this.bank = new Bank(money, chips, this, { moneySpend, moneyTotal });
     this.sendInput = manager.getEmiter("player:validbet");
     this.manager = manager;
     this.manager.on({
@@ -132,7 +148,6 @@ export class Player implements IPlayer {
         return;
       }
       if (type === "TIME_EXEDED") {
-        this.manager.emit("player:timeexeded", this);
         return;
       }
       throw new Error("Unexpected error happend getting" + message);

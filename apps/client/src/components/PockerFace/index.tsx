@@ -48,11 +48,12 @@ function PockerFaceComponent() {
           <Title />
           {items.map((exploit) => (
             <Item
-              key={exploit}
-              id={exploit}
-              desc="hola"
-              title={exploit}
-              onClick={() => handleSend(exploit)}
+              key={exploit.exploitId}
+              exploitId={exploit.exploitId}
+              desc={exploit.description}
+              title={exploit.name}
+              isAvailable={exploit.isAvailable}
+              onClick={() => handleSend(exploit.exploitId)}
               className="text-green-400"
             />
           ))}

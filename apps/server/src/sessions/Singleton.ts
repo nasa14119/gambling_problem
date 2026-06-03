@@ -1,4 +1,5 @@
 import { ExploitFacade, GameFacade } from "core/types";
+import { saveSession, setRunSession, terminateSession, UserAuth } from "db";
 import { v4 as uuid } from "uuid";
 
 import { type Game } from "./interfaceGame.ts";
@@ -32,6 +33,10 @@ class Singleton {
   getGameStatus(sessionId: string, playerId: string) {
     if (!this.sessionExists(sessionId)) throw new Error("Session Id not found");
     const game = this.sessions.get(sessionId)!;
+    if (game.isEnded !== null) {
+      this.sessions.delete(sessionId);
+      return null;
+    }
     return game.getState(playerId);
   }
   getUserBank(sessionId: string, playerId: string) {
@@ -45,12 +50,33 @@ class Singleton {
     return game.getUserStore(playerId);
   }
   newGame(game: Game, prefix = "") {
-    const id = uuid();
-    this.sessions.set(prefix + id, game);
-    return prefix + id;
+    const id = prefix + uuid();
+    game.terminate = () => this.teminateDemo(id);
+    if (prefix === "user:") {
+      setRunSession(Number(game.id), id);
+      game.terminate = () => terminateSession(id);
+    }
+    this.sessions.set(id, game);
+    return id;
+  }
+  saveGameQuit(sessionId: string, user: UserAuth) {
+    if (!this.sessionExists(sessionId))
+      throw new Error("Session not found for saving");
+    const game = this.sessions.get(sessionId)!;
+    const data = game.quit(user.username);
+    saveSession({ data, sessionId: sessionId.replace("user:", "") });
+    this.sessions.delete(sessionId);
   }
   sessionExists(sessionId: string) {
     return this.sessions.has(sessionId);
+  }
+  teminateDemo(id: string) {
+    this.sessions.delete(id);
+  }
+  terminateGame(sessionId: string, playerId: string) {
+    const game = this.sessions.get(sessionId);
+    if (!game) return;
+    game.kill(playerId);
   }
 }
 export default Singleton.getInstance();

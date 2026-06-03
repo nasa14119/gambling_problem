@@ -24,3 +24,7 @@ const CHIPS_FORMAT = new Intl.NumberFormat('en-US', {
 export const formatChips = (value: number): string => {
   return CHIPS_FORMAT.format(Math.floor(Math.round(value)))
 }
+
+export const sleepClient = (ms: number): Promise<void> => {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}

@@ -4,6 +4,7 @@ import type { PlayerHand } from "@repo/types";
 import type { Player, UserInput } from "../types.ts";
 import { GameWinnerPayload } from "./types.ts";
 import { BackBettting } from "../Players/types.ts";
+import { TypeEnd } from "@repo/types/db";
 export type GameEventPayloads = {
   "round:start": Player[];
   "round:start_turn": Player[];
@@ -18,10 +19,10 @@ export type GameEventPayloads = {
   "deck:river": Card[];
   "deck:update_player_hand": PlayerHand;
   "player:validbet": UserInput;
-  "player:insuficientfunds": { min: number; player: Player };
   "player:turn": Player["playerId"];
   "player:input": UserInput;
-  "player:timeexeded": Player;
+  "player:insuficientfunds": { min: number; player: Player };
+  "player:timeexeded": { player: Player };
   "player:invalid_input": { error: string; player: Player };
   "player:withdraw": { chips: number; player: Player };
   "player:deposit": { chips: number; player: Player };
@@ -34,8 +35,9 @@ export type GameEventPayloads = {
   };
   "mafia:backbet_end": { player: Player["playerId"] };
   "mafia:backbet_update": { player: Player };
-  "reset:hard": undefined;
+  "reset:hard": { end: TypeEnd; player: Player["playerId"] };
   "reset:soft": undefined;
+  "reset:quit": undefined;
   pause: undefined;
   resume: undefined;
 };

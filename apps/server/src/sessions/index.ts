@@ -1,4 +1,3 @@
-import cookieParser from "cookie-parser";
 import express from "express";
 import expressWs from "express-ws";
 
@@ -7,8 +6,6 @@ import sessions from "./Singleton.ts";
 export function wsSever(app: express.Application) {
   expressWs(app);
   const appWithWs = app as expressWs.Application;
-  appWithWs.use(cookieParser());
-  appWithWs.use(express.json());
   // Check helth of server
   appWithWs.ws("/api/ping", (ws) => {
     ws.on("message", (mss, isBinary) => {
@@ -58,8 +55,8 @@ export function wsSever(app: express.Application) {
     });
   });
   appWithWs.ws("/api/game/connect", (ws, req) => {
-    const { sessionId } = req.cookies;
-    const playerId = (req.query.playerId ?? "player:admin") as string;
+    const { playerId, sessionId } = req.cookies;
+    if (!playerId) return ws.close(1003, "No playerId");
     if (!sessionId) return ws.close(1003, "No sessionId");
     if (!sessions.sessionExists(sessionId)) {
       console.log("Session not found");

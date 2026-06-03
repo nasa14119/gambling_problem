@@ -95,7 +95,12 @@ export class GameFacade {
     ) {
       const data = payload as { player: Player; error: string };
       if (data.player.playerId !== this.player.playerId) return;
-      this.send(JSON.stringify({ eventId, payload: { error: data.error } }));
+      this.send(
+        JSON.stringify({
+          eventId,
+          payload: { player: this.player.getData(), error: data?.error },
+        }),
+      );
     }
     // Game Start
     if (eventId === "round:start") {
@@ -183,7 +188,11 @@ export class GameFacade {
     if (eventId === "deck:cards_deal") {
       this.send(JSON.stringify({ eventId, payload: this.player.cards }));
     }
-    if (eventId === "reset:hard" || eventId === "reset:soft") {
+    if (
+      eventId === "reset:hard" ||
+      eventId === "reset:soft" ||
+      eventId === "reset:quit"
+    ) {
       this.send(JSON.stringify({ eventId, payload: undefined }));
     }
     // console.log("unhandle " + eventId);

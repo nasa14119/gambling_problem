@@ -1,8 +1,8 @@
 import { drizzle } from "drizzle-orm/mysql2";
-import { env } from "env";
+import { env } from "#env";
 import mysql from "mysql2/promise";
 
-const client = mysql.createPool({
+const client = await mysql.createConnection({
   user: "root", // MUST BE ROOT AND MUST BE PASSED IN THE CONNECTION PARAM
   host: env.MYSQL_HOST,
   port: env.MYSQL_PORT,

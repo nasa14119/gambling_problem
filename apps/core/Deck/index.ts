@@ -10,7 +10,7 @@ export class Deck {
   position: number;
   gameState: Card[];
   history: Set<Card>;
-  private playersHistory: Set<Card>;
+  protected playersHistory: Set<Card>;
   constructor() {
     this.cards = getRandomDeck();
     this.position = 0;

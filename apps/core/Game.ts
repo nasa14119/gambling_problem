@@ -6,13 +6,16 @@ import { Players } from "./Players/index.ts";
 import { TurnSystem } from "./Deck/TurnSystem.ts";
 import { GameFacade } from "./GameFacade.ts";
 import { PokerBot } from "./Players/Bot.ts";
-import type { Card, GameState } from "@repo/types";
+import type { Card, ExploitId, GameState } from "@repo/types";
 import { Inventory } from "./Players/Inventory.ts";
 import { ExploitManager } from "./Exploits/ExploitManager.ts";
 import { ExploitFacade } from "./Exploits/ExploitFacade.ts";
-import { BankData, ExploitId, User } from "@repo/types/server";
+import { BankData, SavedGame, User } from "@repo/types/server";
 import { GameOptions } from "./types.ts";
 import { Mafia } from "./Players/Mafia.ts";
+import type { TypeEnd } from "@repo/types/db";
+import { getExploitData, updateRun } from "db";
+import { PlayerOptions } from "./Players/types.ts";
 
 export class Game {
   id: string;
@@ -21,19 +24,147 @@ export class Game {
   players = new Players();
   turnSystem = new TurnSystem(this.eventManager);
   exploitsManager = new ExploitManager(this);
+  level = 0;
   public exploits_whitelist: ExploitId[] = [];
   private _isStarted = false;
   public round: number = 0;
-  public isEnded = false;
+  public isEnded: TypeEnd | null = null;
   nextRank = 10_000;
-  constructor({ exploits_whitelist = [] }: GameOptions = {}) {
-    this.id = uuid();
+  public terminate: null | (() => Promise<void>) = null;
+  constructor({ runId, exploits_whitelist = [], savedGame }: GameOptions = {}) {
+    this.id = runId?.toString() ?? uuid();
     this.round = 0;
     this.exploits_whitelist = [
       "see_flop",
       "pick_other_player",
       ...exploits_whitelist,
     ];
+    if (savedGame) this.loadGame(savedGame);
+  }
+  public loadGame(savedGame: SavedGame) {
+    this.addPlayer(savedGame.playerId, {
+      stored: {
+        invetory: savedGame.invetory,
+        user: savedGame.user,
+        mafia: savedGame.mafia,
+      },
+    });
+    savedGame.players.forEach((p) => {
+      this.addBot(p.playerId, {
+        saved: p,
+      });
+    });
+    this.id = savedGame.runId;
+    this.round = savedGame.round;
+    this.exploits_whitelist = savedGame.exploits_whitelist;
+    this.level = savedGame.level;
+    this.deck.loadDeck(savedGame.deck);
+    this.exploitsManager.loadExploits(
+      savedGame.invetory.active,
+      savedGame.playerId,
+      savedGame.exploitStore,
+    );
+    this._isStarted = savedGame.isStarted;
+    if (savedGame.turn !== null) {
+      const turn = savedGame.turn;
+      const waiting_queue = this.players
+        .session()
+        .filter((p) =>
+          turn.waiting_queue.some((w) => w.playerId === p.playerId),
+        );
+      const turn_queue = this.players
+        .session()
+        .filter((p) => turn.turn_queue.some((w) => w.playerId === p.playerId));
+      this.turnSystem.loadTurn({ ...turn, waiting_queue, turn_queue });
+    }
+  }
+  private async resumeGame() {
+    if (!this.turnSystem.isIdle) {
+      await this.turnSystem.resumeTurn();
+      if (this.deck.gameState.length === 5) {
+        this.roundEnd();
+        return;
+      }
+    }
+    if (!this.canPlay()) {
+      this.roundEnd();
+      return;
+    }
+    if (this.deck.gameState.length === 0) {
+      this.deck.flop();
+      await this.turnSystem.startTurn(this.players.getPlaingPlayers());
+      if (!this.canPlay()) {
+        this.roundEnd();
+        return;
+      }
+    }
+    if (this.deck.gameState.length === 3) {
+      this.deck.turn();
+      await this.turnSystem.startTurn(this.players.getPlaingPlayers());
+      if (!this.canPlay()) {
+        this.roundEnd();
+        return;
+      }
+    }
+    this.deck.river();
+    await this.turnSystem.startTurn(this.players.getPlaingPlayers());
+    this.roundEnd();
+  }
+  save(id: string): SavedGame {
+    const user = this.players.getPlayer(id) as User;
+    return {
+      isStarted: this.isStarted,
+      playerId: user.playerId,
+      runId: this.id,
+      round: this.round,
+      exploits_whitelist: this.exploits_whitelist,
+      level: this.level,
+      deck: {
+        ...this.deck.saveDeck(),
+      },
+      players: this.players
+        .session()
+        .filter((p) => p.playerId !== id)
+        .map((p) => p.getData()),
+      turn: this.turnSystem.getSave(),
+      user: {
+        money: user.bank.getMoneyValue(),
+        chips: user.bank.getChipsValue(),
+        ...user.bank.getGameState(),
+        next_rank: this.nextRank,
+        card: user.cards,
+        isFold: user.isFold,
+      },
+      mafia: {
+        ...user.mafia.getSave(),
+      },
+      invetory: {
+        itmes: user.invetory.saveItems(),
+        active: this.exploitsManager.getActiveSavePlayer(id),
+      },
+      exploitStore: this.exploitsManager.exploitsStore,
+    };
+  }
+  quit(playerId: string) {
+    const save = this.save(playerId);
+    this.eventManager.emit("reset:quit", undefined);
+    return save;
+  }
+  async kill(playerId: string) {
+    if (!this.isEnded) this.isEnded = "TERMINATED";
+    try {
+      const playerScore = (
+        this.players.getPlayer(playerId) as User
+      ).bank.getGameState();
+      await this.terminate?.();
+      await updateRun(Number(this.id), {
+        level: this.level,
+        typeEnd: this.isEnded,
+        ...playerScore,
+      });
+    } catch {
+      throw new Error("Error trying to update run");
+    }
   }
   private getUser(id: string): User {
     const user = this.players.getPlayer(id) as User;
@@ -41,14 +172,24 @@ export class Game {
       throw new Error("Error trying to get state");
     return user;
   }
-  getUserStore(palyerId: string) {
-    const user = this.players.getPlayer(palyerId) as User;
+  async getUserStore(playerId: string) {
+    const user = this.players.getPlayer(playerId) as User;
     if (!user || user instanceof PokerBot)
       throw new Error("Error trying to get state");
-    const store = this.exploits_whitelist.filter(
-      (e) => !user.invetory.includes(e),
+    const exploitsActive = new Set(
+      this.exploitsManager.eventManger
+        .getActiveExploitsPlayer(playerId)
+        .map((e) => e.type),
     );
-    return store;
+    const store = await Promise.all(
+      this.exploits_whitelist.map((e) => getExploitData(e)),
+    );
+    return store.map((e) => ({
+      ...e,
+      isAvailable:
+        !exploitsActive.has(e.exploitId) &&
+        !user.invetory.includes(e.exploitId),
+    }));
   }
   getState(id: string): GameState {
     const user = this.getUser(id);
@@ -73,8 +214,14 @@ export class Game {
     });
     this.eventManager.on({
       eventId: "reset:hard",
-      listener: () => (this.isEnded = true),
+      listener: ({ end, player }) => {
+        this.isEnded = end;
+        this.kill(player);
+      },
     });
+    if (this._isStarted) {
+      this.resumeGame();
+    }
   }
   get isStarted() {
     return this._isStarted;
@@ -169,23 +316,34 @@ export class Game {
     await this.turnSystem.startTurn(this.players.getPlaingPlayers());
     this.roundEnd();
   }
-  addPlayer(id: string) {
+  addPlayer(id: string, options: PlayerOptions = {}) {
     const invetory = new Inventory(this.exploitsManager.eventManger, id);
-    const player = new Player({
-      manager: this.eventManager.createManage(),
-      playerId: id,
-      invetory,
-    });
+    const player = new Player(
+      {
+        manager: this.eventManager.createManage(),
+        playerId: id,
+        invetory,
+      },
+      options,
+    );
     const mafia = new Mafia(this, player);
     player.mafia = mafia;
+    if (options?.stored?.mafia) {
+      mafia.loadMafia(options.stored.mafia);
+    }
     this.players.attachPlayer(player);
   }
-  addBot(id: string) {
+  addBot(id: string, options?: { saved?: SavedGame["players"][number] }) {
     const bot = new PokerBot({
       difficulty: "easy",
       playerId: id,
       manager: this.eventManager.createManage(),
     });
+    if (options?.saved) {
+      bot.bank.setChips(options.saved.chips);
+      bot.cards = options.saved.cards;
+      bot.isFold = options.saved.isFold;
+    }
     this.players.attachPlayer(bot);
   }
 }
