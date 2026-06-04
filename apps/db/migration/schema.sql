@@ -104,8 +104,9 @@ ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS Ranks(
-    unlockLevel INT PRIMARY KEY,
+    rankUnlock INT PRIMARY KEY,
     exploitID VARCHAR(30) NOT NULL,
+    levelUnlock INT NOT NULL, 
     FOREIGN KEY (exploitID) REFERENCES ExploitsData(exploitID) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; 
 

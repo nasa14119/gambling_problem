@@ -9,6 +9,7 @@ import { PlayerOptions } from "../Players/types.ts";
 import { PokerBot } from "../Players/Bot.ts";
 import { GameState } from "@repo/types";
 import { BankData } from "@repo/types/server";
+import { Rank } from "../Players/Rank.ts";
 
 export class GameSinglePlayer extends Game {
   level = 0;
@@ -165,6 +166,13 @@ export class GameSinglePlayer extends Game {
         this.kill(player);
       },
     });
+    this.exploitsManager.eventManger.on({
+      eventId: "levelup",
+      listener: ({ level, playerId }) => {
+        this.level = level;
+        this.eventManager.emit("levelup", { level, playerId });
+      },
+    });
     if (this._isStarted) {
       this.resumeGame();
     }
@@ -181,7 +189,7 @@ export class GameSinglePlayer extends Game {
     return {
       money: user.bank.getMoneyValue(),
       chips: user.bank.getChipsValue(),
-      next_rank: this.nextRank,
+      next_rank: user.rank.getNextGoal(),
       ...user.mafia.getMafiaData(),
     };
   }
@@ -214,6 +222,16 @@ export class GameSinglePlayer extends Game {
       },
       options,
     );
+    const rank = new Rank(
+      {
+        player,
+        exploits_whitelist: this.exploits_whitelist,
+        exploitsManager: this.exploitsManager.eventManger,
+      },
+      { current_level: 0 },
+    );
+    player.bank.updateRank = rank.updateRank.bind(rank);
+    player.rank = rank;
     const mafia = new Mafia(this, player);
     player.mafia = mafia;
     if (options?.stored?.mafia) {

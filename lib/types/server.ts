@@ -4,7 +4,7 @@ export * from "core/types";
 export type BankData = {
   money: number;
   chips: number;
-  next_rank: number;
+  next_rank: number | null;
   credit: number;
   pay: number;
   round_to_end: number;

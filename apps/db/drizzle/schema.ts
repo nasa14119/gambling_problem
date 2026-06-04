@@ -85,14 +85,15 @@ export const metadata = mysqlTable(
 export const ranks = mysqlTable(
   "Ranks",
   {
-    unlockLevel: int().notNull(),
+    rankUnlock: int().notNull(),
     exploitId: varchar({ length: 30 })
       .notNull()
       .references(() => exploitsData.exploitId, { onDelete: "cascade" }),
+    levelUnlock: int().notNull(),
   },
   (table) => [
     index("exploitID").on(table.exploitId),
-    primaryKey({ columns: [table.unlockLevel], name: "Ranks_unlockLevel" }),
+    primaryKey({ columns: [table.rankUnlock], name: "Ranks_unlockLevel" }),
   ],
 );
 

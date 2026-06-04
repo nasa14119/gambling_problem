@@ -12,6 +12,7 @@ import type {
 import { Timer } from "../lib/TimerGame.ts";
 import { DEFAULTS, VALID_ACTIONS } from "./types.ts";
 import { Mafia } from "./Mafia.ts";
+import { Rank } from "./Rank.ts";
 
 const PLAYER_TURN_TIME_SECONDS = 60;
 
@@ -24,6 +25,7 @@ export class Player implements IPlayer {
   public mafia!: Mafia;
   private sendInput: (payload: GameEventPayloads["player:validbet"]) => void;
   private manager: PlayerConstructor["manager"];
+  public rank!: Rank;
   constructor(
     { playerId, manager, invetory }: PlayerConstrutorWithUserVals,
     options?: PlayerOptions,
@@ -48,7 +50,10 @@ export class Player implements IPlayer {
     // INVETORY MUST ALLWAYS BE CREATED BEFORE BANK
     // ITEMS SAVED
     const { moneySpend, moneyTotal } = options?.stored?.user ?? {};
-    this.bank = new Bank(money, chips, this, { moneySpend, moneyTotal });
+    this.bank = new Bank(money, chips, this, {
+      moneySpend,
+      moneyTotal,
+    });
     this.sendInput = manager.getEmiter("player:validbet");
     this.manager = manager;
     this.manager.on({

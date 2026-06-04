@@ -16,6 +16,7 @@ export class Bank implements BankInterface {
   private playerInvetory: Inventory;
   private _moneyTotal: number = 0;
   private _moneySpend: number = 0;
+  public updateRank!: (amount: number) => void;
   constructor(
     money: number,
     chips: number,
@@ -36,6 +37,16 @@ export class Bank implements BankInterface {
   }
   getGameState() {
     return { moneyTotal: this.moneyTotal, moneySpend: this.moneySpend };
+  }
+  subMoney(amount: number) {
+    this.money -= amount;
+    this._moneySpend += amount;
+    this.updateRank(this._moneyTotal - this._moneySpend);
+  }
+  addMoney(amount: number) {
+    this.money += amount;
+    this._moneySpend -= amount;
+    this.updateRank(this._moneyTotal - this._moneySpend);
   }
   deposit(amount: number) {
     if (amount > this.money || amount <= 0)
@@ -78,8 +89,7 @@ export class Bank implements BankInterface {
       });
       return;
     }
-    this.money -= price;
-    this._moneySpend += price;
+    this.subMoney(price);
     await this.playerInvetory.addItem(exploitId);
     emit("buy:success", {
       playerId: this.player.playerId,
@@ -98,8 +108,7 @@ export class Bank implements BankInterface {
   pay(amount: number) {
     if (amount > this.money)
       throw new ErrorInTurn("Invalid input", "INVALID_INPUT");
-    this.money -= amount;
-    this._moneySpend += amount;
+    this.subMoney(amount);
     return amount;
   }
   getMoneyValue() {
@@ -127,10 +136,6 @@ export class Bank implements BankInterface {
   addChips(amount: number) {
     this._moneyTotal += amount;
     this.chips += amount;
-  }
-  addMoney(amount: number) {
-    this._moneyTotal += amount;
-    this.money += amount;
   }
   isBackrupt() {
     return this.chips <= 0 && this.money <= 0;
