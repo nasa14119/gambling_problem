@@ -37,6 +37,7 @@ export class Game {
     this.exploits_whitelist = [
       "see_flop",
       "pick_other_player",
+      "no_shuffle",
       ...exploits_whitelist,
     ];
     if (savedGame) this.loadGame(savedGame);
@@ -284,6 +285,7 @@ export class Game {
       moneyPot: this.turnSystem.moneyPot ?? 0,
       state: [...this.deck.gameState],
     });
+    this.replaceBrokeBots();
     this.eventManager.emit("round:end", { round: this.round });
   }
   canPlay() {
@@ -345,5 +347,19 @@ export class Game {
       bot.isFold = options.saved.isFold;
     }
     this.players.attachPlayer(bot);
+  }
+  private replaceBrokeBots() {
+    const brokeBots = this.players
+      .session()
+      .filter(
+        (player): player is PokerBot =>
+          player instanceof PokerBot && player.bank.getChipsValue() <= 0,
+      );
+
+    brokeBots.forEach((bot) => {
+      bot.dispose();
+      this.players.detachPlayer(bot);
+      this.addBot(bot.playerId);
+    });
   }
 }

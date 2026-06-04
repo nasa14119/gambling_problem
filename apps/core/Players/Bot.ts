@@ -1,5 +1,5 @@
 import type { Card, PlayerHand, TurnOptions } from "@repo/types";
-import type { GameEventPayloads } from "../Events/GameEventManager.ts";
+import type { GameEventPayloads, GameEvents } from "../Events/GameEventManager.ts";
 import { Bank } from "./BankBot.ts";
 import { DEFAULTS, type Player, type PlayerConstructor } from "./types.ts";
 
@@ -100,45 +100,69 @@ export class PokerBot implements Player {
   private sendInput: (payload: GameEventPayloads["player:validbet"]) => void;
   private playerBets: Record<string, number> = {};
   private currentBet = 0;
+  private cleanup: [GameEvents, string][] = [];
 
   constructor({ manager, difficulty, playerId }: BotConstructor) {
     this.playerId = playerId;
     this.manager = manager;
     this.difficulty = this.resolveDifficulty(difficulty);
     this.sendInput = manager.getEmiter("player:validbet");
-    this.manager.on({
-      eventId: "deck:flop",
-      listener: (payload) => (this.table = payload),
-    });
-    this.manager.on({
-      eventId: "deck:turn",
-      listener: (payload) => (this.table = payload),
-    });
-    this.manager.on({
-      eventId: "deck:river",
-      listener: (payload) => (this.table = payload),
-    });
-    this.manager.on({
-      eventId: "round:end",
-      listener: () => {
-        this.table = [];
-        this.resetTurnBets();
-      },
-    });
-    this.manager.on({
-      eventId: "turn:start",
-      listener: () => this.resetTurnBets(),
-    });
-    this.manager.on({
-      eventId: "player:validbet",
-      listener: ({ chips, player, type }) => {
-        if (type === "check" || type === "fold" || chips <= 0) return;
-        const playerId = player.playerId;
-        const playerBet = (this.playerBets[playerId] ?? 0) + chips;
-        this.playerBets[playerId] = playerBet;
-        this.currentBet = Math.max(this.currentBet, playerBet);
-      },
-    });
+    this.cleanup.push([
+      "deck:flop",
+      this.manager.on({
+        eventId: "deck:flop",
+        listener: (payload) => (this.table = payload),
+      }),
+    ]);
+    this.cleanup.push([
+      "deck:turn",
+      this.manager.on({
+        eventId: "deck:turn",
+        listener: (payload) => (this.table = payload),
+      }),
+    ]);
+    this.cleanup.push([
+      "deck:river",
+      this.manager.on({
+        eventId: "deck:river",
+        listener: (payload) => (this.table = payload),
+      }),
+    ]);
+    this.cleanup.push([
+      "round:end",
+      this.manager.on({
+        eventId: "round:end",
+        listener: () => {
+          this.table = [];
+          this.resetTurnBets();
+        },
+      }),
+    ]);
+    this.cleanup.push([
+      "turn:start",
+      this.manager.on({
+        eventId: "turn:start",
+        listener: () => this.resetTurnBets(),
+      }),
+    ]);
+    this.cleanup.push([
+      "player:validbet",
+      this.manager.on({
+        eventId: "player:validbet",
+        listener: ({ chips, player, type }) => {
+          if (type === "check" || type === "fold" || chips <= 0) return;
+          const playerId = player.playerId;
+          const playerBet = (this.playerBets[playerId] ?? 0) + chips;
+          this.playerBets[playerId] = playerBet;
+          this.currentBet = Math.max(this.currentBet, playerBet);
+        },
+      }),
+    ]);
+  }
+
+  dispose() {
+    this.cleanup.forEach(([eventId, id]) => this.manager.remove(eventId, id));
+    this.cleanup = [];
   }
 
   turn: Player["turn"] = async () => {

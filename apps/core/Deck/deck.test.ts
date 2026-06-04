@@ -31,6 +31,19 @@ test("Player turns", () => {
   expect(cards.length).toBe(2);
   expect(deck.position).toBe(2);
 });
+
+test("No shuffle keeps deck position between rounds", () => {
+  const deck = new Deck();
+  const cards = [...deck.cards];
+  deck.playerTurn();
+  deck.disableShuffle();
+  expect(deck.deckDisableShuffle).toBe(true);
+  deck.resetForNewRound();
+  expect(deck.cards).toStrictEqual(cards);
+  expect(deck.position).toBe(2);
+  expect(deck.gameState).toStrictEqual([]);
+});
+
 test("Cicle", () => {
   const deck = new Deck();
   deck.flush();

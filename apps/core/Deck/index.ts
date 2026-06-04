@@ -10,6 +10,7 @@ export class Deck {
   position: number;
   gameState: Card[];
   history: Set<Card>;
+  deckDisableShuffle = false;
   protected playersHistory: Set<Card>;
   constructor() {
     this.cards = getRandomDeck();
@@ -44,8 +45,10 @@ export class Deck {
     this.history = new Set();
   }
   resetForNewRound() {
-    this.position = 0;
-    this.cards = getRandomDeck();
+    if (!this.deckDisableShuffle) {
+      this.position = 0;
+      this.cards = getRandomDeck();
+    }
     this.gameState = [];
     this.history = new Set();
     this.playersHistory = new Set();
@@ -53,6 +56,15 @@ export class Deck {
   shuffle() {
     this.position = 0;
     this.cards = getRandomDeck();
+  }
+  disableShuffle() {
+    this.deckDisableShuffle = true;
+  }
+  enableShuffle() {
+    this.deckDisableShuffle = false;
+  }
+  isShuffleDisabled() {
+    return this.deckDisableShuffle;
   }
   private getCards(count: number): Card[] {
     if (count < 1) throw new Error("Count must be greater than 0");
