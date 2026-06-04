@@ -5,7 +5,7 @@ import { Player } from "./Players/Player.ts";
 import { Players } from "./Players/index.ts";
 import { TurnSystem } from "./Deck/TurnSystem.ts";
 import { GameFacade } from "./GameFacade.ts";
-import { PokerBot } from "./Players/Bot.ts";
+import { PokerBot, replaceBrokeBots } from "./Players/Bot.ts";
 import type { Card, ExploitId, GameState } from "@repo/types";
 import { Inventory } from "./Players/Inventory.ts";
 import { ExploitManager } from "./Exploits/ExploitManager.ts";
@@ -285,7 +285,7 @@ export class Game {
       moneyPot: this.turnSystem.moneyPot ?? 0,
       state: [...this.deck.gameState],
     });
-    this.replaceBrokeBots();
+    replaceBrokeBots(this.players, (playerId) => this.addBot(playerId));
     this.eventManager.emit("round:end", { round: this.round });
   }
   canPlay() {
@@ -347,19 +347,5 @@ export class Game {
       bot.isFold = options.saved.isFold;
     }
     this.players.attachPlayer(bot);
-  }
-  private replaceBrokeBots() {
-    const brokeBots = this.players
-      .session()
-      .filter(
-        (player): player is PokerBot =>
-          player instanceof PokerBot && player.bank.getChipsValue() <= 0,
-      );
-
-    brokeBots.forEach((bot) => {
-      bot.dispose();
-      this.players.detachPlayer(bot);
-      this.addBot(bot.playerId);
-    });
   }
 }

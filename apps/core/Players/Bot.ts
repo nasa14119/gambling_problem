@@ -1,6 +1,7 @@
 import type { Card, PlayerHand, TurnOptions } from "@repo/types";
 import type { GameEventPayloads, GameEvents } from "../Events/GameEventManager.ts";
 import { Bank } from "./BankBot.ts";
+import type { Players } from "./index.ts";
 import { DEFAULTS, type Player, type PlayerConstructor } from "./types.ts";
 
 type BotDifficulty = "easy" | "medium" | "hard";
@@ -163,6 +164,10 @@ export class PokerBot implements Player {
   dispose() {
     this.cleanup.forEach(([eventId, id]) => this.manager.remove(eventId, id));
     this.cleanup = [];
+  }
+
+  isBroke() {
+    return this.bank.getChipsValue() <= 0;
   }
 
   turn: Player["turn"] = async () => {
@@ -351,4 +356,21 @@ export class PokerBot implements Player {
       [array[i], array[j]] = [array[j], array[i]];
     }
   }
+}
+
+export function replaceBrokeBots(
+  players: Players,
+  addBot: (playerId: string) => void,
+) {
+  const brokeBots = players
+    .session()
+    .filter((player): player is PokerBot => {
+      return player instanceof PokerBot && player.isBroke();
+    });
+
+  brokeBots.forEach((bot) => {
+    bot.dispose();
+    players.detachPlayer(bot);
+    addBot(bot.playerId);
+  });
 }
