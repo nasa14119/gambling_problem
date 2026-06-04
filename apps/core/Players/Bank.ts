@@ -35,18 +35,21 @@ export class Bank implements BankInterface {
   get moneySpend() {
     return this._moneySpend;
   }
+  get earnings() {
+    return this._moneyTotal - this._moneySpend;
+  }
   getGameState() {
     return { moneyTotal: this.moneyTotal, moneySpend: this.moneySpend };
   }
   subMoney(amount: number) {
     this.money -= amount;
     this._moneySpend += amount;
-    this.updateRank(this._moneyTotal - this._moneySpend);
+    this.updateRank(this.earnings);
   }
   addMoney(amount: number) {
     this.money += amount;
     this._moneySpend -= amount;
-    this.updateRank(this._moneyTotal - this._moneySpend);
+    this.updateRank(this.earnings);
   }
   deposit(amount: number) {
     if (amount > this.money || amount <= 0)
@@ -131,11 +134,13 @@ export class Bank implements BankInterface {
     this.currentPot = (this.currentPot ?? 0) + amount;
     this.chips -= amount;
     this._moneySpend += amount;
+    this.updateRank(this.earnings);
     return amount;
   }
   addChips(amount: number) {
     this._moneyTotal += amount;
     this.chips += amount;
+    this.updateRank(this.earnings);
   }
   isBackrupt() {
     return this.chips <= 0 && this.money <= 0;

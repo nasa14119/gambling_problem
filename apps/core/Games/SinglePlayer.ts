@@ -173,6 +173,12 @@ export class GameSinglePlayer extends Game {
         this.eventManager.emit("levelup", { level, playerId });
       },
     });
+    this.exploitsManager.eventManger.on({
+      eventId: "exploit:unlocked",
+      listener: ({ exploit: { exploitId } }) => {
+        this.exploits_whitelist.push(exploitId);
+      },
+    });
     if (this._isStarted) {
       this.resumeGame();
     }
@@ -190,6 +196,7 @@ export class GameSinglePlayer extends Game {
       money: user.bank.getMoneyValue(),
       chips: user.bank.getChipsValue(),
       next_rank: user.rank.getNextGoal(),
+      current_rank: user.rank.getRank(),
       ...user.mafia.getMafiaData(),
     };
   }
@@ -231,6 +238,7 @@ export class GameSinglePlayer extends Game {
       { current_level: 0 },
     );
     player.bank.updateRank = rank.updateRank.bind(rank);
+    rank.updateRank(player.bank.earnings);
     player.rank = rank;
     const mafia = new Mafia(this, player);
     player.mafia = mafia;

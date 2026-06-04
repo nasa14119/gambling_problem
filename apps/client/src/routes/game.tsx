@@ -15,6 +15,8 @@ import { useGameInit } from '#/hooks/useGameInit'
 import { usePockerFace } from '#/components/PockerFace/store'
 import { ErrorPage } from '#/components/ErrorPage'
 import { PauseScreen } from '#/components/PauseScreen/PauseScreen'
+import { useExploitEventSetup } from '#/exploits/store'
+import { NewExploit } from '#/components/NewExploit/NewExploit'
 
 export const Route = createFileRoute('/game')({ component: CreateGame })
 
@@ -49,6 +51,7 @@ function SetUpGame() {
 export type Tabs = 'casino' | 'bank'
 function Game() {
   const setPockerFace = usePockerFace((s) => s.setState)
+  useExploitEventSetup()
   const [current, setCurrent] = useState<Tabs>('casino')
   const handleClick = (path: Tabs) => {
     setPockerFace('idle')
@@ -58,6 +61,7 @@ function Game() {
     <>
       <PauseScreen />
       <PockerFace />
+      <NewExploit />
       <main className="size-full  h-screen grid grid-cols-1 grid-rows-[auto_1fr_auto] bg-neutral-300">
         <NavGame current={current}>
           <NavGameItem

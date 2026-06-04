@@ -86,9 +86,9 @@ export const usePayPercent = () => {
   return Math.floor((pay / credit) * 100)
 }
 export const useRankBank = () => {
-  const { next_rank: rank, money } = useDataBank()
+  const { next_rank: rank, current_rank } = useDataBank()
   if (!rank) return null
-  const percent = Math.min(money / rank, 1)
+  const percent = Math.min(current_rank / rank, 1)
   return percent * 100
 }
 export const useBankChips = () => {

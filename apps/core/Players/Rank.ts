@@ -88,4 +88,7 @@ export class Rank {
     if (!this.nextRank) return null;
     return this.nextRank.rank;
   }
+  getRank() {
+    return this.rank;
+  }
 }
