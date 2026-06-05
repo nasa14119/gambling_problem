@@ -52,9 +52,12 @@ export const fetchLoadGame = async () => {
     ...CREATE_OPTIONS,
     redirect: 'follow',
   })
-  if (res.status !== 200) {
-    throw new Error('Something went wrong')
+  if (res.status === 204) {
+    const data = await fetchNewGame()
+    localStorage.setItem('gameState', JSON.stringify(data))
+    return
   }
-  const data = await fetchStatus()
-  localStorage.setItem('gameState', JSON.stringify(data))
+  if (res.status !== 200) {
+    throw new Error(`Error loading game: ${res.status}`)
+  }
 }

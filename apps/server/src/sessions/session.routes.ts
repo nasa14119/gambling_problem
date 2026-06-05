@@ -59,7 +59,7 @@ router.get("/game/load", getUserFromToken, async (req, res) => {
   }
   const last_run = await getCurrentRun(res.locals.user.userUUID);
   if (last_run === null || !last_run.isRunning) {
-    res.redirect(302, "/api/game/new/singlePlayer");
+    res.sendStatus(204);
     return;
   }
   const newSessionId = "user:" + (last_run.sessionId ?? "");
