@@ -5,6 +5,7 @@ import { SavedGame } from "core/types";
 import {
   clearSession,
   getCurrentRun,
+  getRandomFromUnlock,
   startNewRun,
   updateSessionStart,
 } from "db";
@@ -30,7 +31,9 @@ router.get(
     }
     const { userUUID } = res.locals.user as UserAuth;
     const runId = await startNewRun(userUUID);
-    const game = new GameSinglePlayer({ runId });
+    const exploit = (await getRandomFromUnlock({ userUUID })) ?? undefined;
+    const exploits_whitelist = exploit ? [exploit] : [];
+    const game = new GameSinglePlayer({ exploits_whitelist, runId });
     const playerId = res.locals.playerId;
     game.addBot("bot:1");
     game.addBot("bot:2");

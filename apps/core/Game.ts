@@ -27,7 +27,7 @@ export abstract class Game implements SessionGameInterface {
   constructor({ runId, exploits_whitelist = [] }: GameOptions = {}) {
     this.id = runId?.toString() ?? uuid();
     this.round = 0;
-    this.exploits_whitelist = ["see_flop", ...exploits_whitelist];
+    this.exploits_whitelist = exploits_whitelist;
   }
   abstract getState(id: string): unknown;
   abstract init(): void;

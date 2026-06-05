@@ -7,6 +7,6 @@ INSERT INTO Mafia (level_creadit, credit, rounds) VALUES
 
 DELETE FROM Ranks; 
 INSERT INTO Ranks (rankUnlock, exploitID, levelUnlock) VALUES
-  (2000, 'pick_other_player', 0), 
+  (2100, 'pick_other_player', 0), 
   (2500, 'no_shuffle', 0)
 ;

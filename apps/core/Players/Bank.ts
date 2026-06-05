@@ -42,16 +42,19 @@ export class Bank implements BankInterface {
     return { moneyTotal: this.moneyTotal, moneySpend: this.moneySpend };
   }
   subMoney(amount: number) {
+    amount = this.validate(amount);
     this.money -= amount;
     this._moneySpend += amount;
     this.updateRank(this.earnings);
   }
   addMoney(amount: number) {
+    amount = this.validate(amount);
     this.money += amount;
     this._moneySpend -= amount;
     this.updateRank(this.earnings);
   }
   deposit(amount: number) {
+    amount = this.validate(amount);
     if (amount > this.money || amount <= 0)
       throw new ErrorInTurn("Value is not allow", "INVALID_INPUT");
     this.money -= amount;
@@ -64,6 +67,7 @@ export class Bank implements BankInterface {
     this.currentPot = null;
   }
   withdraw(amount: number) {
+    amount = this.validate(amount);
     if (amount > this.chips || amount <= 0)
       throw new ErrorInTurn("Value is not allow", "INVALID_INPUT");
     this.chips -= amount;
@@ -101,14 +105,17 @@ export class Bank implements BankInterface {
     });
   }
   canPay(amount: number) {
+    amount = this.validate(amount);
     if (this.chips === 0) return false;
     return this.chips - amount >= 0;
   }
   canPayMoney(amount: number) {
+    amount = this.validate(amount);
     if (this.money === 0) return false;
     return this.money - amount >= 0;
   }
   pay(amount: number) {
+    amount = this.validate(amount);
     if (amount > this.money)
       throw new ErrorInTurn("Invalid input", "INVALID_INPUT");
     this.subMoney(amount);
@@ -124,6 +131,7 @@ export class Bank implements BankInterface {
     this.chips = 0;
   }
   getChips(amount: number) {
+    amount = this.validate(amount);
     if (amount > this.chips)
       throw new ErrorInTurn(
         "Invalid input of chips, can't be gratter than the amount store",
@@ -136,6 +144,11 @@ export class Bank implements BankInterface {
     this._moneySpend += amount;
     this.updateRank(this.earnings);
     return amount;
+  }
+  private validate(inp: unknown) {
+    if (inp === null || inp === undefined || !Number.isFinite(inp))
+      throw new Error("Validation error in type of value");
+    return inp as number;
   }
   addChips(amount: number) {
     this._moneyTotal += amount;

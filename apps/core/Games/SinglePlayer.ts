@@ -137,10 +137,10 @@ export class GameSinglePlayer extends Game {
   async kill(playerId: string) {
     if (!this.isEnded) this.isEnded = "TERMINATED";
     try {
+      await this.terminate?.();
       const playerScore = (
         this.players.getPlayer(playerId) as User
       ).bank.getGameState();
-      await this.terminate?.();
       await saveAndTerminateRun(Number(this.id), {
         level: this.level,
         typeEnd: this.isEnded,
