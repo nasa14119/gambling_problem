@@ -26,7 +26,8 @@ FOR EACH ROW
 BEGIN
     IF NEW.metadataID IS NOT NULL THEN
         UPDATE Metadata
-        SET startedAt = CURRENT_TIMESTAMP
+        SET startedAt = CURRENT_TIMESTAMP,
+        lastSavedAt = CURRENT_TIMESTAMP
         WHERE metadataID = NEW.metadataID;
     END IF;
 END //
@@ -79,5 +80,15 @@ BEGIN
             WHERE metadataID = NEW.metadataID 
         ); 
     END IF ; 
+END // 
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS addDefaultExplois; 
+DELIMITER //
+CREATE TRIGGER addDefaultExplois
+AFTER INSERT ON Users
+FOR EACH ROW
+BEGIN
+    INSERT INTO Whitelist (userUUID, exploitId) VALUES (NEW.userUUID, 'see_flop');
 END // 
 DELIMITER ;

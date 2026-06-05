@@ -15,9 +15,12 @@ export const useSound = (
   const [isReady, setIsReady] = useState(false)
   const ref = useRef<HTMLAudioElement>(null)
   useEffect(() => {
-    ref.current = new Audio(path)
+    const audio = new Audio(path)
+    ref.current = audio
     ref.current.volume = volume
-    ref.current.oncanplaythrough = () => setIsReady(true)
+    audio.addEventListener('canplaythrough', () => {
+      setIsReady(true)
+    })
   }, [])
   if (!ref.current || !isReady) return [null, false]
   return [ref.current, isReady]

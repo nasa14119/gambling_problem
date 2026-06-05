@@ -3,6 +3,7 @@ import {
   exploitsData,
   exploitsUsed,
   runs,
+  ranks,
   running,
   metadata,
   users,
@@ -22,6 +23,7 @@ export const exploitsUsedRelations = relations(exploitsUsed, ({ one }) => ({
 
 export const exploitsDataRelations = relations(exploitsData, ({ many }) => ({
   exploitsUseds: many(exploitsUsed),
+  ranks: many(ranks),
   whitelists: many(whitelist),
 }));
 
@@ -33,8 +35,15 @@ export const runsRelations = relations(runs, ({ one, many }) => ({
     references: [metadata.metadataId],
   }),
   user: one(users, {
-    fields: [runs.userUuid],
+    fields: [runs.userUUID],
     references: [users.userUUID],
+  }),
+}));
+
+export const ranksRelations = relations(ranks, ({ one }) => ({
+  exploitsDatum: one(exploitsData, {
+    fields: [ranks.exploitId],
+    references: [exploitsData.exploitId],
   }),
 }));
 
@@ -60,7 +69,7 @@ export const whitelistRelations = relations(whitelist, ({ one }) => ({
     references: [exploitsData.exploitId],
   }),
   user: one(users, {
-    fields: [whitelist.userUuid],
+    fields: [whitelist.userUUID],
     references: [users.userUUID],
   }),
 }));

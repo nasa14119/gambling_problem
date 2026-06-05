@@ -2,10 +2,11 @@ import { cn } from '#/lib/utils'
 import { ArrowRight, DoorOpen, Power, User2 } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '#/shadcn/ui/tooltip'
 import { Link, useRouter } from '@tanstack/react-router'
-import { useAuth } from '#/components/Login/store'
+import { useAuth, useAuthValidate } from '#/components/Login/store'
 import { useLogout } from '#/hooks/useLogout'
 import { RestoreDialog } from '#/components/RestoreDialog'
-import { fetchLoadGame, fetchNewGame, fetchStatus } from '#/lib/fetch'
+import { fetchNewGame } from '#/lib/fetch'
+import { LoadGameBtn } from '#/components/UserPage/LoadGameBtn'
 
 export function UserPage() {
   const { playerId } = useAuth()
@@ -15,11 +16,7 @@ export function UserPage() {
     await fetchNewGame()
     navigate({ to: '/game' })
   }
-  const handleRestoreGame = async () => {
-    await fetchLoadGame()
-    await fetchStatus()
-    navigate({ to: '/game' })
-  }
+  useAuthValidate()
   return (
     <header className={cn('w-screen h-screen relative z-0')}>
       <div className={cn('size-full flex flex-col gap-y-5 justify-center')}>
@@ -33,36 +30,31 @@ export function UserPage() {
         </div>
         <div className="*:py-1">
           <div className="h-[5vh] w-[20vw] grid grid-cols-[1fr_min-content] mx-auto ">
-            <p className="text-xl pl-2 border border-slate-800 border-r-0 flex items-center size-full bg-slate-100 min-w-40">
+            <span className="text-xl pl-2 border border-slate-800 border-r-0 flex items-center size-full bg-slate-100 min-w-40">
               Reset game
-            </p>
+            </span>
             <Tooltip>
-              <TooltipTrigger asChild>
-                <RestoreDialog onAccept={handleNewGame}>
+              <RestoreDialog onAccept={handleNewGame}>
+                <TooltipTrigger asChild>
                   <button className="bg-slate-300 aspect-12/9 border border-slate-800 grid place-content-center">
                     <ArrowRight className="size-5" />
                   </button>
-                </RestoreDialog>
-              </TooltipTrigger>
-              <TooltipContent className="text-current">
+                </TooltipTrigger>
+              </RestoreDialog>
+              <TooltipContent className="text-current" side="right">
                 <span className="text-white">Reset</span>
               </TooltipContent>
             </Tooltip>
           </div>
           <div className="h-[5vh] w-[20vw] grid grid-cols-[1fr_min-content] mx-auto ">
-            <p className="text-xl pl-2 border border-slate-800 border-r-0 flex items-center size-full bg-slate-100 min-w-40">
+            <span className="text-xl pl-2 border border-slate-800 border-r-0 flex items-center size-full bg-slate-100 min-w-40">
               Load game
-            </p>
+            </span>
             <Tooltip>
               <TooltipTrigger asChild>
-                <button
-                  className="bg-slate-300 aspect-12/9 border border-slate-800 grid place-content-center"
-                  onClick={handleRestoreGame}
-                >
-                  <ArrowRight className="size-5" />
-                </button>
+                <LoadGameBtn />
               </TooltipTrigger>
-              <TooltipContent className="text-current">
+              <TooltipContent className="text-current" side="right">
                 <span className="text-white">Start</span>
               </TooltipContent>
             </Tooltip>

@@ -38,6 +38,7 @@ export type GameEventPayloads = {
   "reset:hard": { end: TypeEnd; player: Player["playerId"] };
   "reset:soft": undefined;
   "reset:quit": undefined;
+  levelup: { level: number; playerId: Player["playerId"] };
   pause: undefined;
   resume: undefined;
 };

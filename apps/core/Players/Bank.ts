@@ -16,6 +16,7 @@ export class Bank implements BankInterface {
   private playerInvetory: Inventory;
   private _moneyTotal: number = 0;
   private _moneySpend: number = 0;
+  public updateRank!: (amount: number) => void;
   constructor(
     money: number,
     chips: number,
@@ -34,10 +35,26 @@ export class Bank implements BankInterface {
   get moneySpend() {
     return this._moneySpend;
   }
+  get earnings() {
+    return this._moneyTotal - this._moneySpend;
+  }
   getGameState() {
     return { moneyTotal: this.moneyTotal, moneySpend: this.moneySpend };
   }
+  subMoney(amount: number) {
+    amount = this.validate(amount);
+    this.money -= amount;
+    this._moneySpend += amount;
+    this.updateRank(this.earnings);
+  }
+  addMoney(amount: number) {
+    amount = this.validate(amount);
+    this.money += amount;
+    this._moneySpend -= amount;
+    this.updateRank(this.earnings);
+  }
   deposit(amount: number) {
+    amount = this.validate(amount);
     if (amount > this.money || amount <= 0)
       throw new ErrorInTurn("Value is not allow", "INVALID_INPUT");
     this.money -= amount;
@@ -50,6 +67,7 @@ export class Bank implements BankInterface {
     this.currentPot = null;
   }
   withdraw(amount: number) {
+    amount = this.validate(amount);
     if (amount > this.chips || amount <= 0)
       throw new ErrorInTurn("Value is not allow", "INVALID_INPUT");
     this.chips -= amount;
@@ -78,8 +96,7 @@ export class Bank implements BankInterface {
       });
       return;
     }
-    this.money -= price;
-    this._moneySpend += price;
+    this.subMoney(price);
     await this.playerInvetory.addItem(exploitId);
     emit("buy:success", {
       playerId: this.player.playerId,
@@ -88,18 +105,20 @@ export class Bank implements BankInterface {
     });
   }
   canPay(amount: number) {
+    amount = this.validate(amount);
     if (this.chips === 0) return false;
     return this.chips - amount >= 0;
   }
   canPayMoney(amount: number) {
+    amount = this.validate(amount);
     if (this.money === 0) return false;
     return this.money - amount >= 0;
   }
   pay(amount: number) {
+    amount = this.validate(amount);
     if (amount > this.money)
       throw new ErrorInTurn("Invalid input", "INVALID_INPUT");
-    this.money -= amount;
-    this._moneySpend += amount;
+    this.subMoney(amount);
     return amount;
   }
   getMoneyValue() {
@@ -112,6 +131,7 @@ export class Bank implements BankInterface {
     this.chips = 0;
   }
   getChips(amount: number) {
+    amount = this.validate(amount);
     if (amount > this.chips)
       throw new ErrorInTurn(
         "Invalid input of chips, can't be gratter than the amount store",
@@ -122,15 +142,18 @@ export class Bank implements BankInterface {
     this.currentPot = (this.currentPot ?? 0) + amount;
     this.chips -= amount;
     this._moneySpend += amount;
+    this.updateRank(this.earnings);
     return amount;
+  }
+  private validate(inp: unknown) {
+    if (inp === null || inp === undefined || !Number.isFinite(inp))
+      throw new Error("Validation error in type of value");
+    return inp as number;
   }
   addChips(amount: number) {
     this._moneyTotal += amount;
     this.chips += amount;
-  }
-  addMoney(amount: number) {
-    this._moneyTotal += amount;
-    this.money += amount;
+    this.updateRank(this.earnings);
   }
   isBackrupt() {
     return this.chips <= 0 && this.money <= 0;

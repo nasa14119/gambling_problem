@@ -1,6 +1,6 @@
 set -e
-docker-compose up -d
-files="migration/schema.sql migration/views.sql migration/storeprocedures.sql migration/triggers.sql migration/exploitsData.sql"
+docker compose up -d
+files="migration/schema.sql migration/views.sql migration/storeprocedures.sql migration/triggers.sql migration/exploitsData.sql migration/data.sql"
 
 . ./.env
 

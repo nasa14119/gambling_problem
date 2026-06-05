@@ -5,11 +5,13 @@ import pokersolver, { type Hand } from "./lib/pokersolver.ts";
 type PlayerCards = [Card, Card];
 import { Player } from "../types.ts";
 const pokersolverWinners = pokersolver.Hand.winners;
+const SHUFFLE_THRESHOLD = 0.75;
 export class Deck {
   cards: number[];
   position: number;
   gameState: Card[];
   history: Set<Card>;
+  disableShuffle = false;
   protected playersHistory: Set<Card>;
   constructor() {
     this.cards = getRandomDeck();
@@ -44,13 +46,14 @@ export class Deck {
     this.history = new Set();
   }
   resetForNewRound() {
-    this.position = 0;
-    this.cards = getRandomDeck();
+    this.shuffle();
     this.gameState = [];
     this.history = new Set();
     this.playersHistory = new Set();
   }
   shuffle() {
+    const canNoShuffle = this.position / this.cards.length < SHUFFLE_THRESHOLD;
+    if (this.disableShuffle && canNoShuffle) return;
     this.position = 0;
     this.cards = getRandomDeck();
   }

@@ -1,5 +1,5 @@
 import { useAuth, useAuthValidate } from '#/components/Login/store'
-import { UserPage } from '#/components/UserPage'
+import { UserPage } from '#/components/UserPage/UserPage'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useEffect } from 'react'
 

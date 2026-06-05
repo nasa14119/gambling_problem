@@ -1,8 +1,9 @@
-import { PlayerHand } from "@repo/types";
+import { ExploitId, PlayerHand } from "@repo/types";
 import { BankInterface } from "./Bank.ts";
 import { GameEventManager } from "../Events/GameEventManager.ts";
 import { Inventory } from "./Inventory.ts";
 import { SavedGame } from "@repo/types/server";
+import { Rank } from "./Rank.ts";
 
 export const VALID_ACTIONS: ReadonlySet<string> = new Set([
   "fold",

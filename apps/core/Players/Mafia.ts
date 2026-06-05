@@ -1,13 +1,12 @@
 import { BankData, SavedGame, User } from "@repo/types/server";
-import { getQuerryRank } from "db";
-import type { Game } from "../Game.ts";
+import { getMafiaCredits, getQuerryRank } from "db";
+import type { GameSinglePlayer } from "../Games/SinglePlayer.ts";
 import { BackBettting } from "./types.ts";
 
-const bet = getQuerryRank();
 type MafiaData = Pick<BankData, "round_to_end" | "pay" | "credit">;
 export class Mafia {
-  private game: Game;
-  private events: Game["eventManager"];
+  private game: GameSinglePlayer;
+  private events: GameSinglePlayer["eventManager"];
   private player: User;
   private havePay: boolean = false;
   private backBettin: BackBettting = null;
@@ -15,10 +14,10 @@ export class Mafia {
   private playerCredit: number = 0;
   private roundToEnd: number = 0;
   private roundPassed: number = 0;
-  constructor(game: Game, player: User) {
+  constructor(game: GameSinglePlayer, player: User) {
     this.game = game;
     this.player = player;
-    this.getNextDebt();
+    this.getNextDebt(this.game.level);
     this.events = this.game.eventManager;
     this.events.on({
       eventId: "round:end",
@@ -51,6 +50,10 @@ export class Mafia {
         if (player !== this.player.playerId) return;
         this.payDebt(money);
       },
+    });
+    this.events.on({
+      eventId: "levelup",
+      listener: ({ level }) => this.getNextDebt(level),
     });
   }
   private payDebt(money: number) {
@@ -90,8 +93,8 @@ export class Mafia {
       player: this.player.playerId,
     });
   }
-  private async getNextDebt() {
-    const data = await bet();
+  private async getNextDebt(level: number) {
+    const data = await getMafiaCredits({ level });
     if (!data) {
       this.havePay = true;
       return;
