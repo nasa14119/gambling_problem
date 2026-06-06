@@ -63,23 +63,13 @@ CREATE TABLE IF NOT EXISTS ExploitsData (
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS  ExploitsUsed (
+CREATE TABLE IF NOT EXISTS ExploitsUsed (
     runID INT NOT NULL,
     exploitID VARCHAR(30) NOT NULL,
-    quantity INT NOT NULL DEFAULT 1,
-
-    PRIMARY KEY (runID, exploitID),
-
-    CONSTRAINT fkExploitUsedRun
-        FOREIGN KEY (runID)
-        REFERENCES Runs(runID)
-        ON DELETE CASCADE,
-
-    CONSTRAINT fkExploitUsedExploit
-        FOREIGN KEY (exploitID)
-        REFERENCES ExploitsData(exploitID)
-        ON DELETE CASCADE
-    
+    username VARCHAR(50) DEFAULT NULL, 
+    FOREIGN KEY (runID) REFERENCES Runs(runID) ON DELETE CASCADE,
+    FOREIGN KEY (exploitID) REFERENCES ExploitsData(exploitID) ON DELETE CASCADE , 
+    FOREIGN KEY (username) REFERENCES Users(username) ON DELETE SET NULL
 )
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;

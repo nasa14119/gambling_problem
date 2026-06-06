@@ -1,31 +1,3 @@
-DROP VIEW IF EXISTS Top50PlayersView;
-CREATE VIEW Top50PlayersView AS
-SELECT
-    r.runID,
-    r.userUUID,
-    u.username,
-    m.durationMinutes AS timePlayedSeconds,
-    r.moneyTotal,
-    r.moneySpend,
-    r.earnings,
-    (
-        SELECT ed.name
-        FROM ExploitsUsed eu
-        INNER JOIN ExploitsData ed
-            ON ed.exploitID = eu.exploitID
-        WHERE eu.runID = r.runID
-        ORDER BY eu.quantity DESC, ed.name ASC
-        LIMIT 1
-    ) AS mostUsedExploit
-FROM Runs r
-INNER JOIN Users u
-    ON u.userUUID = r.userUUID
-LEFT JOIN Metadata m
-    ON m.metadataID = r.metadataID
-WHERE r.isRunning = FALSE
-ORDER BY r.earnings DESC, r.moneyTotal DESC, r.runID ASC
-LIMIT 50;
-
 DROP VIEW IF EXISTS Best50ActiveRunsView;
 CREATE VIEW Best50ActiveRunsView AS
 SELECT
@@ -58,13 +30,12 @@ SELECT
     e.name,
     e.type,
     e.price,
-    COALESCE(SUM(eu.quantity), 0) AS totalUsed,
-    COUNT(DISTINCT eu.runID) AS runsUsedIn
+    COUNT(e.exploitID) AS totalUsed
 FROM ExploitsData e
 LEFT JOIN ExploitsUsed eu
     ON eu.exploitID = e.exploitID
 GROUP BY e.exploitID, e.name, e.type, e.price
-ORDER BY totalUsed DESC, runsUsedIn DESC, e.name ASC;
+ORDER BY totalUsed DESC;
 
 DROP VIEW IF EXISTS UserUnlockedExploitsView;
 CREATE VIEW UserUnlockedExploitsView AS
@@ -103,3 +74,44 @@ INNER JOIN Users u
     ON u.userUUID = r.userUUID
 LEFT JOIN Metadata m
     ON m.metadataID = r.metadataID;
+
+DROP VIEW IF EXISTS exploitsUsedInRunView;
+CREATE VIEW exploitsUsedInRunView AS
+SELECT 
+    r.runID,
+    e.exploitID,
+    e.name AS exploit_name,
+    COUNT(eu.exploitID) AS quantity_used
+FROM ExploitsData e
+LEFT JOIN ExploitsUsed eu ON e.exploitID = eu.exploitID
+LEFT JOIN Runs r ON eu.runID = r.runID
+GROUP BY e.exploitID, e.name, r.runID
+ORDER BY r.runID, quantity_used DESC;
+
+DROP VIEW IF EXISTS Top50PlayersView;
+CREATE VIEW Top50PlayersView AS
+SELECT
+    r.runID,
+    u.username,
+    m.durationMinutes AS timePlayed,
+    r.moneyTotal,
+    r.moneySpend,
+    r.earnings,
+    (
+        SELECT ev.exploit_name 
+        FROM exploitsUsedInRunView ev
+        WHERE ev.runID = r.runID AND ev.quantity_used > 0
+        ORDER BY ev.quantity_used DESC, ev.exploit_name ASC
+        LIMIT 1
+    ) AS mostUsedExploit
+FROM Runs r
+INNER JOIN Users u ON u.userUUID = r.userUUID
+LEFT JOIN Metadata m ON m.metadataID = r.metadataID
+INNER JOIN (
+    SELECT userUUID, MAX(earnings) AS max_earning
+    FROM Runs
+    WHERE isRunning = FALSE
+    GROUP BY userUUID
+) BestRuns ON r.userUUID = BestRuns.userUUID AND r.earnings = BestRuns.max_earning
+ORDER BY r.earnings DESC
+LIMIT 50;
