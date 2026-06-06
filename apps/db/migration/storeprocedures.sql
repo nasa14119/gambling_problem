@@ -1,7 +1,7 @@
 DROP PROCEDURE IF EXISTS updLeaderboard;
 DELIMITER //
 CREATE PROCEDURE updLeaderboard(
-    IN p_runID INT,
+    IN p_runId INT,
     IN p_moneyTotal DECIMAL(10,2),
     IN p_moneySpend DECIMAL(10,2)
 )
@@ -10,17 +10,17 @@ BEGIN
     SET
         moneyTotal = p_moneyTotal,
         moneySpend = p_moneySpend
-    WHERE runID = p_runID;
+    WHERE runId = p_runId;
 END //
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS getCurrentRun;
 DELIMITER //
-CREATE PROCEDURE getCurrentRun(IN p_userUUID CHAR(36))
+CREATE PROCEDURE getCurrentRun(IN p_userUuid CHAR(36))
 BEGIN
     SELECT
-        r.runID,
-        r.userUUID,
+        r.runId,
+        r.userUuid,
         u.username,
         r.moneyTotal,
         r.moneySpend,
@@ -31,24 +31,24 @@ BEGIN
         ru.data
     FROM Runs r
     INNER JOIN Users u
-        ON u.userUUID = r.userUUID
+        ON u.userUuid = r.userUuid
     LEFT JOIN Metadata m
         ON m.metadataID = r.metadataID
     LEFT JOIN Running ru
-        ON ru.runID = r.runID
-    WHERE r.userUUID = p_userUUID
-    ORDER BY m.startedAt DESC, r.runID DESC
+        ON ru.runId = r.runId
+    WHERE r.userUuid = p_userUuid
+    ORDER BY m.startedAt DESC, r.runId DESC
     LIMIT 1;
 END //
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS updPersonalBest;
 DELIMITER //
-CREATE PROCEDURE updPersonalBest(IN p_userUUID CHAR(36))
+CREATE PROCEDURE updPersonalBest(IN p_userUuid CHAR(36))
 BEGIN
     SELECT
-        r.runID, 
-        r.userUUID,
+        r.runId, 
+        r.userUuid,
         u.username,
         m.durationMinutes AS timePlayedMinutes,
         r.moneyTotal,
@@ -59,18 +59,18 @@ BEGIN
             FROM ExploitsUsed eu
             INNER JOIN ExploitsData ed
                 ON ed.exploitID = eu.exploitID
-            WHERE eu.runID = r.runID
+            WHERE eu.runId = r.runId
             ORDER BY eu.quantity DESC, ed.name ASC
             LIMIT 1
         ) AS mostUsedExploit
     FROM Runs r
     INNER JOIN Users u
-        ON u.userUUID = r.userUUID
+        ON u.userUuid = r.userUuid
     LEFT JOIN Metadata m
         ON m.metadataID = r.metadataID
-    WHERE r.userUUID = p_userUUID
+    WHERE r.userUuid = p_userUuid
         AND r.isRunning = FALSE
-    ORDER BY r.earnings DESC, r.moneyTotal DESC, r.runID ASC
+    ORDER BY r.earnings DESC, r.moneyTotal DESC, r.runId ASC
     LIMIT 1;
 END //
 DELIMITER ;
@@ -78,7 +78,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS getLastRuns;
 DELIMITER //
 CREATE PROCEDURE getLastRuns(
-    IN p_userUUID CHAR(36),
+    IN p_userUuid CHAR(36),
     IN p_limit INT
 )
 BEGIN
@@ -86,8 +86,8 @@ BEGIN
     SET safeLimit = IF(p_limit IS NULL OR p_limit < 1, 10, p_limit);
 
     SELECT
-        runID,
-        userUUID,
+        runId,
+        userUuid,
         username,
         moneyTotal,
         moneySpend,
@@ -102,8 +102,8 @@ BEGIN
         lastSavedAt,
         durationSeconds
     FROM UserRunsMetadataView
-    WHERE userUUID = p_userUUID
-    ORDER BY startedAt DESC, runID DESC
+    WHERE userUuid = p_userUuid
+    ORDER BY startedAt DESC, runId DESC
     LIMIT safeLimit;
 END //
 DELIMITER ;
@@ -116,8 +116,8 @@ BEGIN
     SET safeLimit = IF(p_limit IS NULL OR p_limit < 1, 10, p_limit);
 
     SELECT
-        r.runID,
-        r.userUUID,
+        r.runId,
+        r.userUuid,
         u.username,
         r.moneyTotal,
         r.moneySpend,
@@ -129,12 +129,12 @@ BEGIN
         m.durationSeconds
     FROM Runs r
     INNER JOIN Users u
-        ON u.userUUID = r.userUUID
+        ON u.userUuid = r.userUuid
     LEFT JOIN Metadata m
         ON m.metadataID = r.metadataID
     WHERE r.isRunning = FALSE
         AND DATE(COALESCE(m.endedAt, m.startedAt)) = CURRENT_DATE()
-    ORDER BY r.earnings DESC, r.moneyTotal DESC, r.runID ASC
+    ORDER BY r.earnings DESC, r.moneyTotal DESC, r.runId ASC
     LIMIT safeLimit;
 END //
 DELIMITER ;
@@ -144,9 +144,9 @@ DELIMITER //
 CREATE PROCEDURE killSession(IN sessionId VARCHAR(36))
 BEGIN
     DECLARE new_time BIGINT; 
-    DECLARE v_runID INT;
+    DECLARE v_runId INT;
     IF sessionId IS NOT NULL THEN
-        SELECT ru.runID INTO v_runID FROM Running as ru 
+        SELECT ru.runId INTO v_runId FROM Running as ru 
         WHERE ru.sessionID = sessionId ;
 
         SELECT TIMESTAMPDIFF(MINUTE, m.lastSavedAt, NOW()) 
@@ -154,12 +154,12 @@ BEGIN
             FROM Runs AS r INNER JOIN 
                 Metadata AS m
                 USING (metadataID)
-            WHERE r.runID = v_runID LIMIT 1; 
+            WHERE r.runId = v_runId LIMIT 1; 
         
         UPDATE Metadata AS m INNER JOIN Runs AS r 
             USING (metadataID)
             SET lastSavedAt = NULL, m.durationMinutes = COALESCE(m.durationMinutes, 0) + new_time 
-            WHERE r.runID = v_runID; 
+            WHERE r.runId = v_runId; 
 
         UPDATE Running as ru 
         SET sessionId = NULL 
@@ -170,8 +170,8 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS endGame;
 DELIMITER //
-CREATE PROCEDURE endGame(IN runID INT, IN typeEnd ENUM("WIN", "BANKRUPT", "TERMINATED", "DEATH"))
+CREATE PROCEDURE endGame(IN runId INT, IN typeEnd ENUM("WIN", "BANKRUPT", "TERMINATED", "DEATH"))
 BEGIN
-    UPDATE Metadata as m SET m.typeEnd = typeEnd WHERE m.metadataID = (SELECT metadataID FROM Runs AS r WHERE r.runID = runID);
+    UPDATE Metadata as m SET m.typeEnd = typeEnd WHERE m.metadataID = (SELECT metadataID FROM Runs AS r WHERE r.runId = runId);
 END //
 DELIMITER ;

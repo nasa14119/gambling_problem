@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS Users (
-    userUUID CHAR(36) PRIMARY KEY,
+    userUuid CHAR(36) PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL
 )
@@ -19,8 +19,8 @@ ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS Runs (
-    runID INT AUTO_INCREMENT PRIMARY KEY,
-    userUUID CHAR(36) NOT NULL,
+    runId INT AUTO_INCREMENT PRIMARY KEY,
+    userUuid CHAR(36) NOT NULL,
     moneyTotal DECIMAL(10,2) DEFAULT 0,
     moneySpend DECIMAL(10,2) DEFAULT 0,
     earnings DECIMAL(10,2) DEFAULT 0,
@@ -28,8 +28,8 @@ CREATE TABLE IF NOT EXISTS Runs (
     metadataID INT,
 
     CONSTRAINT fkRunsUser
-        FOREIGN KEY (userUUID)
-        REFERENCES Users(userUUID)
+        FOREIGN KEY (userUuid)
+        REFERENCES Users(userUuid)
         ON DELETE CASCADE,
 
     CONSTRAINT fkRunsMetadata
@@ -40,14 +40,14 @@ ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS Running (
-    runID INT PRIMARY KEY,
+    runId INT PRIMARY KEY,
     data JSON,
     sessionID VARCHAR(100),
     slot TINYINT UNSIGNED DEFAULT 1, 
 
     CONSTRAINT fkRunningRun
-        FOREIGN KEY (runID)
-        REFERENCES Runs(runID)
+        FOREIGN KEY (runId)
+        REFERENCES Runs(runId)
         ON DELETE CASCADE
 )
 ENGINE=InnoDB
@@ -64,10 +64,10 @@ ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS ExploitsUsed (
-    runID INT NOT NULL,
+    runId INT NOT NULL,
     exploitID VARCHAR(30) NOT NULL,
     username VARCHAR(50) DEFAULT NULL, 
-    FOREIGN KEY (runID) REFERENCES Runs(runID) ON DELETE CASCADE,
+    FOREIGN KEY (runId) REFERENCES Runs(runId) ON DELETE CASCADE,
     FOREIGN KEY (exploitID) REFERENCES ExploitsData(exploitID) ON DELETE CASCADE , 
     FOREIGN KEY (username) REFERENCES Users(username) ON DELETE SET NULL
 )
@@ -75,14 +75,14 @@ ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS Whitelist (
-    userUUID CHAR(36) NOT NULL,
+    userUuid CHAR(36) NOT NULL,
     exploitID VARCHAR(30) NOT NULL,
 
-    PRIMARY KEY (userUUID, exploitID),
+    PRIMARY KEY (userUuid, exploitID),
 
     CONSTRAINT fk_whitelist_user
-        FOREIGN KEY (userUUID)
-        REFERENCES Users(userUUID)
+        FOREIGN KEY (userUuid)
+        REFERENCES Users(userUuid)
         ON DELETE CASCADE,
 
     CONSTRAINT fk_whitelist_exploit

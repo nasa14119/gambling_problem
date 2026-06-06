@@ -55,7 +55,7 @@ export const createUser = async (user: UserCreationInput) => {
   const uuid = randomUUID();
   try {
     await db.insert(users).values({
-      userUUID: uuid,
+      userUuid: uuid,
       username: user.user,
       password: password,
     });
@@ -82,7 +82,7 @@ export const loginUser = async (user: UserCreationInput) => {
   if (!isOk) {
     throw new PasswordError();
   }
-  return { userUUID: userDB.userUUID, username: userDB.username };
+  return { userUUID: userDB.userUuid, username: userDB.username };
 };
 
 export type UserAuth = {
@@ -94,7 +94,7 @@ export const UserExists = async (user: UserAuth["userUUID"]) => {
   const results = await db
     .select()
     .from(users)
-    .where(eq(users.userUUID, user))
+    .where(eq(users.userUuid, user))
     .limit(1);
   return results.length > 0;
 };

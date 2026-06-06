@@ -39,8 +39,8 @@ CREATE TRIGGER trgAddRunning
 AFTER INSERT ON Runs
 FOR EACH ROW
 BEGIN
-    INSERT INTO Running (runID, data, sessionID)
-    VALUES (NEW.runID, NULL, NULL);
+    INSERT INTO Running (runId, data, sessionID)
+    VALUES (NEW.runId, NULL, NULL);
 END // 
 DELIMITER ;
 
@@ -75,7 +75,7 @@ BEGIN
     IF NEW.typeEnd IS NOT NULL THEN
         DELETE FROM Running
         WHERE runId = ( 
-            SELECT runID 
+            SELECT runId 
             FROM Runs 
             WHERE metadataID = NEW.metadataID 
         ); 
@@ -89,6 +89,6 @@ CREATE TRIGGER addDefaultExplois
 AFTER INSERT ON Users
 FOR EACH ROW
 BEGIN
-    INSERT INTO Whitelist (userUUID, exploitId) VALUES (NEW.userUUID, 'see_flop');
+    INSERT INTO Whitelist (userUuid, exploitId) VALUES (NEW.userUuid, 'see_flop');
 END // 
 DELIMITER ;

@@ -85,7 +85,7 @@ export const saveAndTerminateRun = async (runId: number, data: RunDataGame) => {
           r.moneyTotal = ${data.moneyTotal},
           r.moneySpend = ${data.moneySpend}, 
           r.isRunning = FALSE
-        WHERE r.runID = ${runId};
+        WHERE r.runId = ${runId};
     `);
       await t.execute(sql`
       UPDATE Metadata m
@@ -95,7 +95,7 @@ export const saveAndTerminateRun = async (runId: number, data: RunDataGame) => {
         m.typeEnd = ${data.typeEnd},
         m.level = ${data.level}, 
         m.endedAt = CURRENT_TIMESTAMP
-      WHERE r.runID = ${runId}; 
+      WHERE r.runId = ${runId}; 
     `);
     });
   } catch (e) {
@@ -169,7 +169,7 @@ export const updateRun = async (
           r.moneyTotal = ${data.moneyTotal},
           r.moneySpend = ${data.moneySpend}, 
           m.level = ${data.level}
-        WHERE r.runID = ${runId};
+        WHERE r.runId = ${runId};
     `);
   } catch (e) {
     console.error(e);
