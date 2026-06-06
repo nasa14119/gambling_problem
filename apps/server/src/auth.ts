@@ -34,7 +34,7 @@ router.get("/logout", (_, res) => {
   res.sendStatus(204);
 });
 
-router.get("/validate", (req, res) => {
+router.get("/validate", async (req, res) => {
   const { token } = req.cookies;
   if (!token) {
     res.sendStatus(401);
@@ -42,7 +42,9 @@ router.get("/validate", (req, res) => {
   }
   try {
     const data = verifyJWT<UserAuth>(token);
-    if (!UserExists(data.userUUID)) {
+    const isInDb = await UserExists(data.userUUID);
+    if (!isInDb) {
+      console.log("User not found");
       res.clearCookie("token");
       res.sendStatus(401);
       return;
