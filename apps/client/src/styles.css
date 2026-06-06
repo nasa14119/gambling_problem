@@ -27,7 +27,7 @@ body,
 body {
   min-height: 100dvh;
   margin: 0;
-  background-color: hsl(0, 0%, 90%);
+  background-color: var(--background);
   color: hsl(0, 0%, 10%);
   user-select: none;
 }
@@ -66,6 +66,7 @@ body {
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-accent: var(--accent);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
   --radius-sm: calc(var(--radius) * 0.6);
@@ -78,7 +79,7 @@ body {
 }
 
 :root {
-  --background: oklch(1 0 0);
+  --background: hsl(0, 0%, 97%);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -90,7 +91,7 @@ body {
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
+  --accent: hsl(24, 62%, 15%);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
