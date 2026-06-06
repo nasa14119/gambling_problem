@@ -47,7 +47,7 @@ export const getRank = async ({
   return res as NextRank[];
 };
 export const getUserWhiteList = async (userName: string) => {
-  const [{ userUUID }] = await db
+  const [{ userUuid: userUUID }] = await db
     .select()
     .from(users)
     .where(eq(users.username, userName))
@@ -56,7 +56,7 @@ export const getUserWhiteList = async (userName: string) => {
   return (await db
     .select({ ...getTableColumns(exploitsData) })
     .from(whitelist)
-    .where(eq(whitelist.userUUID, userUUID))
+    .where(eq(whitelist.userUuid, userUUID))
     .innerJoin(
       exploitsData,
       eq(whitelist.exploitId, exploitsData.exploitId),
@@ -65,7 +65,7 @@ export const getUserWhiteList = async (userName: string) => {
 
 type UnlockExploit = { exploitId: ExploitId; username: string };
 export const saveRank = async ({ exploitId, username }: UnlockExploit) => {
-  const [{ userUUID }] = await db
+  const [{ userUuid: userUUID }] = await db
     .select()
     .from(users)
     .where(eq(users.username, username))
@@ -75,13 +75,13 @@ export const saveRank = async ({ exploitId, username }: UnlockExploit) => {
     .select()
     .from(whitelist)
     .where(
-      and(eq(whitelist.userUUID, userUUID), eq(whitelist.exploitId, exploitId)),
+      and(eq(whitelist.userUuid, userUUID), eq(whitelist.exploitId, exploitId)),
     )
     .limit(1);
 
   if (existing.length === 0) {
     await db.insert(whitelist).values({
-      userUUID,
+      userUuid: userUUID,
       exploitId,
     });
   }
@@ -93,7 +93,7 @@ export const getRandomFromUnlock = async ({ userUUID }: GetRandomExploit) => {
     .select({ exploitId: exploitsData.exploitId })
     .from(whitelist)
     .innerJoin(exploitsData, eq(whitelist.exploitId, exploitsData.exploitId))
-    .where(eq(whitelist.userUUID, userUUID));
+    .where(eq(whitelist.userUuid, userUUID));
   if (!res || res.length <= 0) return null;
   if (res.length === 1) return res[0].exploitId as ExploitId;
   const randomIndex = Math.floor(Math.random() * res.length);

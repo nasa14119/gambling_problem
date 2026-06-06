@@ -1,14 +1,14 @@
-import { running, runs, users, metadata } from "#schemas";
+import { running, runs, users, metadata, exploitsUsed } from "#schemas";
 import { desc, eq, sql } from "drizzle-orm";
 import { db } from "../connection.ts";
 import { RunDataGame } from "@repo/types/db";
 import { SavedGame } from "core/types";
 
-export const startNewRun = async (userUUID: string) => {
+export const startNewRun = async (userUuid: string) => {
   const [res] = await db
     .insert(runs)
     .values({
-      userUUID: userUUID,
+      userUuid: userUuid,
     })
     .$returningId();
   return res.runId;
@@ -22,7 +22,7 @@ export const setRunSession = async (runId: number, sessionId: string) => {
     await db
       .update(running)
       .set({
-        sessionID: updating,
+        sessionId: updating,
       })
       .where(eq(running.runId, runId));
   } catch (e) {
@@ -31,7 +31,7 @@ export const setRunSession = async (runId: number, sessionId: string) => {
   }
 };
 
-export const terminateGame = async (userUUID: string) => {
+export const terminateGame = async (userUuid: string) => {
   try {
     await db.execute(sql`
       UPDATE Runs r
@@ -41,7 +41,7 @@ export const terminateGame = async (userUUID: string) => {
         m.typeEnd = 'TERMINATED',
         m.endedAt = CURRENT_TIMESTAMP,
         r.isRunning = FALSE
-      WHERE r.userUUID = ${userUUID}
+      WHERE r.userUuid = ${userUuid}
         AND r.isRunning = TRUE
   `);
   } catch (e) {
@@ -111,7 +111,7 @@ export const saveSession = async ({ sessionId, data }: SaveSessionPayload) => {
     const [{ runId }] = await db
       .select({ runId: running.runId })
       .from(running)
-      .where(eq(running.sessionID, updating));
+      .where(eq(running.sessionId, updating));
     if (!runId) throw new Error("No runId");
     await terminateSession(sessionId);
     await updateSessionStart(runId);
@@ -121,25 +121,25 @@ export const saveSession = async ({ sessionId, data }: SaveSessionPayload) => {
   }
 };
 
-export const getCurrentRun = async (userUUID: string) => {
+export const getCurrentRun = async (userUuid: string) => {
   const result = await db
     .select({
       runId: runs.runId,
-      userUUID: runs.userUUID,
+      userUuid: runs.userUuid,
       username: users.username,
       moneyTotal: runs.moneyTotal,
       moneySpend: runs.moneySpend,
       earnings: runs.earnings,
       lastSavedAt: metadata.lastSavedAt,
       isRunning: runs.isRunning,
-      sessionId: running.sessionID,
+      sessionId: running.sessionId,
       data: running.data,
     })
     .from(runs)
-    .innerJoin(users, eq(users.userUUID, runs.userUUID))
+    .innerJoin(users, eq(users.userUuid, runs.userUuid))
     .leftJoin(metadata, eq(metadata.metadataId, runs.metadataId))
     .leftJoin(running, eq(running.runId, runs.runId))
-    .where(eq(runs.userUUID, userUUID))
+    .where(eq(runs.userUuid, userUuid))
     .orderBy(desc(metadata.startedAt), desc(runs.runId))
     .limit(1);
 
@@ -150,8 +150,8 @@ export const clearSession = async (sessionId: string) => {
   const updating = sessionId.replace(/^user:/, "");
   await db
     .update(running)
-    .set({ sessionID: null })
-    .where(eq(running.sessionID, updating));
+    .set({ sessionId: null })
+    .where(eq(running.sessionId, updating));
 };
 
 export const updateRun = async (
@@ -174,5 +174,21 @@ export const updateRun = async (
   } catch (e) {
     console.error(e);
     throw new Error("Error updating run");
+  }
+};
+
+export const useExploit = async (
+  runId: number,
+  exploitID: string,
+  palyerId?: string,
+) => {
+  try {
+    await db.insert(exploitsUsed).values({
+      exploitId: exploitID,
+      runId: runId,
+    });
+  } catch (e) {
+    console.error(e);
+    throw new Error("Error adding exploit used");
   }
 };
