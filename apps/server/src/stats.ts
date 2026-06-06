@@ -17,4 +17,10 @@ app.get("/best-runs", getUserFromToken, async (req, res) => {
   const userData = user?.userUUID ? await getBestRunUser(user.userUUID) : null;
   res.json({ runs, user: userData });
 });
+
+app.get("/exploits-used", async (req, res) => {
+  const exploits = await getMostUsedExploits();
+  if (!exploits) return res.status(204);
+  res.json(exploits);
+});
 export default app;

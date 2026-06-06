@@ -30,7 +30,7 @@ SELECT
     e.name,
     e.type,
     e.price,
-    COUNT(e.exploitID) AS totalUsed
+    COUNT(eu.exploitID) AS totalUsed
 FROM ExploitsData e
 LEFT JOIN ExploitsUsed eu
     ON eu.exploitID = e.exploitID
