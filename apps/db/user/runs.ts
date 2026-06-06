@@ -186,6 +186,7 @@ export const useExploit = async (
     await db.insert(exploitsUsed).values({
       exploitId: exploitID,
       runId: runId,
+      username: palyerId ?? null,
     });
   } catch (e) {
     console.error(e);
