@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '#/shadcn/ui/tooltip'
 import { useSound } from '#/hooks/useSound'
 import { Link } from '@tanstack/react-router'
+import { NavBar } from '#/components/Nav/NavBar'
 
 export function Hero() {
   const [isKeydown, setIsKeydown] = useState(false)
@@ -27,9 +28,12 @@ export function Hero() {
       className={cn('w-screen h-screen relative z-0', styles['hero'])}
       data-keydown={isKeydown}
     >
+      <NavBar
+        className={cn('fixed top-0 inset-x-0 bg-[#f2f2f2]', styles['hero-nav'])}
+      />
       {isKeydown && <div className={styles['background']} />}
       {!isKeydown && (
-        <span className="text-7xl absolute top-1/2 left-1/2 -translate-1/2 text-white">
+        <span className="text-7xl absolute top-1/2 text-nowrap left-1/2 -translate-1/2 text-white">
           press any key to start
         </span>
       )}

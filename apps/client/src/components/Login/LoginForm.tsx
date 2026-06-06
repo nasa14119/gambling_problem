@@ -92,14 +92,14 @@ export function LoginForm() {
           <span className="text-red-600">{errors.user?.message}</span>
         </TooltipContent>
       </Tooltip>
-      <div className="grid grid-cols-[1fr_min-content]">
+      <div className="grid grid-cols-[1fr_min-content] min-w-60">
         <Tooltip>
           <TooltipTrigger asChild>
             <label htmlFor="password" className="relative">
               <input
                 id="password"
                 className={cn(
-                  'min-w-60 text-sm py-1 pl-2 border-2 border-black focus:border-slate-500 flex items-center size-full bg-slate-100 focus:outline-none',
+                  'text-sm py-1 pl-2 border-2 border-black focus:border-slate-500 flex items-center size-full bg-slate-100 focus:outline-none',
                   errors.password && 'border-red-500',
                   isLoading && 'opacity-50',
                 )}

@@ -42,9 +42,15 @@
 }
 .selector-left {
   transform: translateY(100%);
-  transition: all 1s ease-in-out;
-  transition-delay: 2.5s;
+  transition: all 1s ease-out;
+  transition-delay: 1s;
 }
-.hero[data-keydown='true'] .selector-left {
+.hero .hero-nav {
+  transform: translateY(-100%);
+  transition: all 1s ease;
+  transition-delay: 2s;
+}
+.hero[data-keydown='true'] .selector-left,
+.hero[data-keydown='true'] .hero-nav {
   transform: translateY(0);
 }
