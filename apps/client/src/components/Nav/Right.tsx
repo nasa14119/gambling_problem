@@ -1,14 +1,11 @@
-import { NavItem } from '#/components/Nav/NavItem'
+import { LandingNav } from '#/components/Nav/LandingNav'
+import { Login } from '#/components/Nav/LoginNav'
 
 export function Right() {
   return (
-    <div className="flex justify-end items-end">
-      <NavItem
-        type="fill"
-        className="px-2 font-semibold tracking-wide text-2xl"
-        to="/about"
-        text="About"
-      />
+    <div className="flex justify-end items-center gap-x-5 ">
+      <Login />
+      <LandingNav />
     </div>
   )
 }

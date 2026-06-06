@@ -180,11 +180,11 @@ export class GameSinglePlayer extends Game {
       },
     });
     this.exploitsManager.eventManger.on({
-      eventId: "exploit:trigger",
-      listener: ({ exploitId, playerId }) => {
+      eventId: "exploit:wastrigger",
+      listener: async ({ exploitId, playerId }) => {
         const id = Number(this.id);
         if (!Number.isFinite(id)) throw new Error("Id is not a run id");
-        useExploit(id, exploitId, playerId);
+        await useExploit(id, exploitId, playerId);
       },
     });
     if (this._isStarted) {

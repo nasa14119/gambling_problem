@@ -14,14 +14,16 @@ export function NavBar({ className, ...rest }: Props) {
   return (
     <nav
       className={cn(
-        'flex justify-between items-center py-2 px-2 bg-background',
+        'flex justify-between items-center py-2 px-5 bg-background',
         className,
       )}
       {...rest}
     >
       <div className="flex gap-x-5 ">
         {LINKS.map(({ text, to }) => (
-          <NavItem key={text} text={text} to={to} />
+          <NavItem key={text} to={to}>
+            {text}
+          </NavItem>
         ))}
       </div>
       <Right />
