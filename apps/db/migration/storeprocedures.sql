@@ -47,7 +47,7 @@ DELIMITER //
 CREATE PROCEDURE updPersonalBest(IN p_userUuid CHAR(36))
 BEGIN
     SELECT
-        r.runId, 
+        r.runId,
         r.userUuid,
         u.username,
         m.durationMinutes AS timePlayedMinutes,
@@ -60,7 +60,8 @@ BEGIN
             INNER JOIN ExploitsData ed
                 ON ed.exploitID = eu.exploitID
             WHERE eu.runId = r.runId
-            ORDER BY eu.quantity DESC, ed.name ASC
+            GROUP BY ed.exploitID, ed.name
+            ORDER BY COUNT(*) DESC, ed.name ASC
             LIMIT 1
         ) AS mostUsedExploit
     FROM Runs r
@@ -96,11 +97,10 @@ BEGIN
         metadataID,
         typeEnd,
         level,
-        saveData,
         startedAt,
         endedAt,
         lastSavedAt,
-        durationSeconds
+        durationMinutes
     FROM UserRunsMetadataView
     WHERE userUuid = p_userUuid
     ORDER BY startedAt DESC, runId DESC
@@ -126,7 +126,7 @@ BEGIN
         m.level,
         m.startedAt,
         m.endedAt,
-        m.durationSeconds
+        m.durationMinutes
     FROM Runs r
     INNER JOIN Users u
         ON u.userUuid = r.userUuid
@@ -139,15 +139,40 @@ BEGIN
 END //
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS updateTimePlayed; 
+DELIMITER //
+CREATE PROCEDURE updateTimePlayed(IN p_runId INT)
+BEGIN
+    DECLARE new_time BIGINT; 
+
+    SELECT TIMESTAMPDIFF(MINUTE, m.lastSavedAt, CURRENT_TIMESTAMP)
+        INTO new_time 
+        FROM Runs AS r INNER JOIN 
+            Metadata AS m
+            USING (metadataID)
+        WHERE r.runId = p_runId LIMIT 1; 
+    
+    UPDATE Metadata m
+    INNER JOIN Runs r
+        USING (metadataID)
+    SET
+        m.durationMinutes = COALESCE(m.durationMinutes, 0) + new_time ,
+        m.lastSavedAt = CURRENT_TIMESTAMP
+    WHERE r.runId = p_runId;
+END //
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS killSession;
 DELIMITER //
 CREATE PROCEDURE killSession(IN sessionId VARCHAR(36))
 BEGIN
-    DECLARE new_time BIGINT; 
     DECLARE v_runId INT;
+    DECLARE new_time BIGINT; 
+
     IF sessionId IS NOT NULL THEN
         SELECT ru.runId INTO v_runId FROM Running as ru 
         WHERE ru.sessionID = sessionId ;
+
 
         SELECT TIMESTAMPDIFF(MINUTE, m.lastSavedAt, NOW()) 
             INTO new_time 
