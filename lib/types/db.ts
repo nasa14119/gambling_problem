@@ -20,3 +20,20 @@ export type RunDataGame = {
   typeEnd: TypeEnd;
   level: number;
 };
+
+export type RunStats = {
+  username: string;
+  timePlayed: number;
+  moneySpend: number;
+  moneyTotal: number;
+  earnings: number;
+  mostUsedExploit: string | null;
+};
+
+export type ExploitUsedStats = {
+  exploitId: ExploitId;
+  name: string;
+  type: string;
+  price: number;
+  totalUsed: number;
+};

@@ -1,30 +1,28 @@
 import { relations } from "drizzle-orm/relations";
 import {
-  exploitsData,
-  exploitsUsed,
   runs,
+  exploitsUsed,
+  exploitsData,
+  users,
   ranks,
   running,
   metadata,
-  users,
   whitelist,
 } from "./schema.ts";
 
 export const exploitsUsedRelations = relations(exploitsUsed, ({ one }) => ({
-  exploitsDatum: one(exploitsData, {
-    fields: [exploitsUsed.exploitId],
-    references: [exploitsData.exploitId],
-  }),
   run: one(runs, {
     fields: [exploitsUsed.runId],
     references: [runs.runId],
   }),
-}));
-
-export const exploitsDataRelations = relations(exploitsData, ({ many }) => ({
-  exploitsUseds: many(exploitsUsed),
-  ranks: many(ranks),
-  whitelists: many(whitelist),
+  exploitsDatum: one(exploitsData, {
+    fields: [exploitsUsed.exploitId],
+    references: [exploitsData.exploitId],
+  }),
+  user: one(users, {
+    fields: [exploitsUsed.username],
+    references: [users.username],
+  }),
 }));
 
 export const runsRelations = relations(runs, ({ one, many }) => ({
@@ -35,9 +33,21 @@ export const runsRelations = relations(runs, ({ one, many }) => ({
     references: [metadata.metadataId],
   }),
   user: one(users, {
-    fields: [runs.userUUID],
-    references: [users.userUUID],
+    fields: [runs.userUuid],
+    references: [users.userUuid],
   }),
+}));
+
+export const exploitsDataRelations = relations(exploitsData, ({ many }) => ({
+  exploitsUseds: many(exploitsUsed),
+  ranks: many(ranks),
+  whitelists: many(whitelist),
+}));
+
+export const usersRelations = relations(users, ({ many }) => ({
+  exploitsUseds: many(exploitsUsed),
+  runs: many(runs),
+  whitelists: many(whitelist),
 }));
 
 export const ranksRelations = relations(ranks, ({ one }) => ({
@@ -58,18 +68,13 @@ export const metadataRelations = relations(metadata, ({ many }) => ({
   runs: many(runs),
 }));
 
-export const usersRelations = relations(users, ({ many }) => ({
-  runs: many(runs),
-  whitelists: many(whitelist),
-}));
-
 export const whitelistRelations = relations(whitelist, ({ one }) => ({
   exploitsDatum: one(exploitsData, {
     fields: [whitelist.exploitId],
     references: [exploitsData.exploitId],
   }),
   user: one(users, {
-    fields: [whitelist.userUUID],
-    references: [users.userUUID],
+    fields: [whitelist.userUuid],
+    references: [users.userUuid],
   }),
 }));

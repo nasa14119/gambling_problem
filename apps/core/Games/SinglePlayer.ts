@@ -1,7 +1,7 @@
 import { SavedGame, SiglePlayerOptions, User } from "../types.ts";
 import { Game } from "../Game.ts";
 import { GameFacade } from "../GameFacade.ts";
-import { getExploitData, saveAndTerminateRun, updateRun } from "db";
+import { getExploitData, saveAndTerminateRun, updateRun, useExploit } from "db";
 import { Inventory } from "../Players/Inventory.ts";
 import { Player } from "../Players/Player.ts";
 import { Mafia } from "../Players/Mafia.ts";
@@ -177,6 +177,14 @@ export class GameSinglePlayer extends Game {
       eventId: "exploit:unlocked",
       listener: ({ exploit: { exploitId } }) => {
         this.exploits_whitelist.push(exploitId);
+      },
+    });
+    this.exploitsManager.eventManger.on({
+      eventId: "exploit:wastrigger",
+      listener: async ({ exploitId, playerId }) => {
+        const id = Number(this.id);
+        if (!Number.isFinite(id)) throw new Error("Id is not a run id");
+        await useExploit(id, exploitId, playerId);
       },
     });
     if (this._isStarted) {

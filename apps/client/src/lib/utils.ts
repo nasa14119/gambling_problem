@@ -28,3 +28,13 @@ export const formatChips = (value: number): string => {
 export const sleepClient = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
+
+export function formatMinutes(totalMinutes: number) {
+  const hours = Math.floor(totalMinutes / 60)
+  const minutes = totalMinutes % 60
+
+  const padH = String(hours).padStart(2, '0')
+  const padM = String(minutes).padStart(2, '0')
+
+  return `${padH}:${padM}`
+}

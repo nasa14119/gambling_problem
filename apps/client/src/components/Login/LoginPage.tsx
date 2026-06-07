@@ -2,10 +2,12 @@ import { cn } from '#/lib/utils'
 import { Power, User2 } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { LoginForm } from '#/components/Login/LoginForm'
+import { NavBar } from '#/components/Nav/NavBar'
 
 export function LoginMain() {
   return (
-    <header className={cn('w-screen h-screen relative z-0 bg-[#f2f2f2]')}>
+    <header className={cn('w-screen h-screen relative z-0 ')}>
+      <NavBar className="absolute inset-x-0" />
       <div className={cn('size-full flex flex-col gap-y-5 justify-center')}>
         <div className="grid place-content-center">
           <User2 className="size-[25vh] text-current p-5 bg-current/20 rounded-full" />

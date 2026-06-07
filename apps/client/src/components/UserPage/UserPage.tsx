@@ -7,6 +7,7 @@ import { useLogout } from '#/hooks/useLogout'
 import { RestoreDialog } from '#/components/RestoreDialog'
 import { fetchNewGame } from '#/lib/fetch'
 import { LoadGameBtn } from '#/components/UserPage/LoadGameBtn'
+import { NavBar } from '#/components/Nav/NavBar'
 
 export function UserPage() {
   const { playerId } = useAuth()
@@ -19,6 +20,7 @@ export function UserPage() {
   useAuthValidate()
   return (
     <header className={cn('w-screen h-screen relative z-0')}>
+      <NavBar className="absolute inset-x-0" />
       <div className={cn('size-full flex flex-col gap-y-5 justify-center')}>
         <div className="grid place-content-center">
           <User2 className="size-[25vh] text-current p-5 bg-current/20 rounded-full" />

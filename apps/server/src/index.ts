@@ -4,14 +4,16 @@ import express from "express";
 
 import authRouter from "./auth.ts";
 import env from "./env.ts";
+import sessionRouter from "./sessions/session.routes.ts";
+import statsRouter from "./stats.ts";
 
 if (env.MODE === "production" && !env.SERVER_PATH) {
   throw new Error("SERVER_PATH is required in production mode");
 }
 import { wsSever } from "./sessions/index.ts";
-import sessionRouter from "./sessions/session.routes.ts";
 const PORT = process.env.SERVER_PORT ?? 3000;
 const app = express();
+
 // app level middleware
 app.use(cookieParser());
 app.use(express.json());
@@ -27,6 +29,7 @@ wsSever(app);
 // api routes / routers
 app.use("/api", sessionRouter);
 app.use("/api", authRouter);
+app.use("/api/stats", statsRouter);
 
 // Health check
 app.get("/", (_, res) => {
