@@ -1,6 +1,6 @@
 import { SERVER_PATH } from '#/env'
 import type { GameState } from '@repo/types'
-import type { RunStats } from '@repo/types/db'
+import type { ExploitUsedStats, RunStats } from '@repo/types/db'
 
 const CREATE_OPTIONS = {
   method: 'GET',
@@ -63,12 +63,29 @@ export const fetchLoadGame = async () => {
   }
 }
 
-export const fetchBestRuns = async (): Promise<{ runs: RunStats[] | null }> => {
+export const fetchBestRuns = async (): Promise<{
+  runs: RunStats[] | null
+  user: RunStats | null
+}> => {
   const res = await fetch(`${SERVER_PATH}/api/stats/best-runs`, {
     credentials: 'include',
   })
   if (res.status === 204) {
-    return { runs: null }
+    return { runs: null, user: null }
+  }
+  if (res.status !== 200) {
+    throw new Error(`Error loading game: ${res.status}`)
+  }
+  const data = await res.json()
+  return data
+}
+
+export const fetchExploitsUsed = async (): Promise<ExploitUsedStats[]> => {
+  const res = await fetch(`${SERVER_PATH}/api/stats/exploits-used`, {
+    credentials: 'include',
+  })
+  if (res.status === 204) {
+    return []
   }
   if (res.status !== 200) {
     throw new Error(`Error loading game: ${res.status}`)

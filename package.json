@@ -43,5 +43,8 @@
   "bugs": {
     "url": "https://github.com/nasa14119/card_game/issues"
   },
-  "packageManager": "npm@11.6.2"
+  "packageManager": "npm@11.6.2",
+  "dependencies": {
+    "react-dom": "^19.2.7"
+  }
 }

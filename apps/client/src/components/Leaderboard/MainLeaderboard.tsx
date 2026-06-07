@@ -1,21 +1,21 @@
-import { Empty } from '#/components/Leaderboard/Empty'
-import {
-  useBestRunsData,
-  useBestRunsSetup,
-} from '#/components/Leaderboard/store'
+import { ExploitsChart } from '#/components/Leaderboard/ExploitsChart'
 import { TableBest } from '#/components/Leaderboard/TableBest'
+import { UserRow } from '#/components/Leaderboard/TableBest/UserRow'
 
 export function MainLeaderboard() {
-  useBestRunsSetup()
-  const data = useBestRunsData()
   return (
-    <div className="size-full p-2 grid grid-cols-1 grid-rows-[50%_50%]">
-      <div>
+    <div className="px-2 grid grid-cols-1 h-full grid-rows-2 pb-10 gap-y-5">
+      <div className="max-h-full overflow-hidden pt-2 grid grid-cols-1 grid-rows-[auto_1fr_auto]">
         <h2 className="text-lg flex leading-4 mb-2 font-medium">Best Scores</h2>
-        {data && <TableBest data={data} />}
-        {data == null && <Empty />}
+        <TableBest />
+        <UserRow />
       </div>
-      <div></div>
+      <div>
+        <h2 className="text-lg flex leading-4 mb-2 font-medium">
+          Most Used Exploits
+        </h2>
+        <ExploitsChart />
+      </div>
     </div>
   )
 }

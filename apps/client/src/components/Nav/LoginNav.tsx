@@ -9,7 +9,7 @@ export function Login() {
     <NavItem to={isLogged ? '/user' : '/login'}>
       <span className="flex gap-x-2 items-center text-xl">
         <span>{text}</span>
-        <IdCard className="size-7" />
+        {isLogged && <IdCard className="size-7" />}
       </span>
     </NavItem>
   )

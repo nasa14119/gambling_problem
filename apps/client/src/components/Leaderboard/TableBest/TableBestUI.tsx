@@ -1,15 +1,15 @@
 import { cn, formatCurrency, formatMinutes } from '#/lib/utils'
 import type { RunStats } from '@repo/types/db'
-import styles from './styles.module.css'
+import styles from '../styles.module.css'
 
 type Props = {
   data: RunStats[]
 }
-export function TableBest({ data }: Props) {
+export function TableBestUI({ data }: Props) {
   return (
     <div
       className={cn(
-        'size-full pr-5  max-h-full overflow-y-scroll relative scrollbar-thumb-accent scrollbar-track-transparent',
+        'pr-5  max-h-full overflow-y-scroll relative scrollbar-thumb-accent scrollbar-track-transparent',
       )}
     >
       <header
@@ -28,7 +28,7 @@ export function TableBest({ data }: Props) {
       </header>
       <main className={cn('text-md h-full', styles['table-best'])}>
         {data.map((iterarion, i) => (
-          <div className={styles['row']}>
+          <div className={styles['row']} key={i}>
             <span>{i + 1}</span>
             <span>{iterarion.username}</span>
             <span>{formatMinutes(iterarion.timePlayed)}</span>

@@ -7,12 +7,12 @@ export const Route = createFileRoute('/leaderboard')({ component: Leaderboard })
 
 export function Leaderboard() {
   return (
-    <main className="flex flex-col h-screen w-screen overflow-hidden">
+    <main className="h-screen w-screen flex flex-col">
       <NavBar />
       <h1 className="text-6xl font-semibold pl-4 pt-2 tracking-widest uppercase">
         Leaderboard
       </h1>
-      <div className="grid grid-rows-1 grid-cols-[1fr_3fr] h-full">
+      <div className="grid grid-rows-1 grid-cols-[1fr_3fr] min-h-0">
         <Sidebar />
         <MainLeaderboard />
       </div>
