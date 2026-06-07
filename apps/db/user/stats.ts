@@ -75,7 +75,11 @@ export const getBestRunningRuns = async (): Promise<RunStats[] | null> => {
 
 export const getPlayersBestRuns = async (): Promise<RunStats[] | null> => {
   try {
-    const querry = await db.select().from(topplayersview).limit(50);
+    const querry = await db
+      .select()
+      .from(topplayersview)
+      .where(eq(topplayersview.isRunning, 0))
+      .limit(50);
     if (querry.length === 0) return null;
     return querry as RunStats[];
   } catch (e) {

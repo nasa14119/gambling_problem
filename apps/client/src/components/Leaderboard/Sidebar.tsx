@@ -1,4 +1,5 @@
 import { StateBtnExplioitsUsed } from '#/components/Leaderboard/ExploitsChart/ChangeView'
+import { ChangeViewTable } from '#/components/Leaderboard/ExploitsChart/ChangeViewTable'
 import { StateBtn } from '#/components/Leaderboard/TableBest/components/StateBtn'
 
 export function Sidebar() {
@@ -18,12 +19,12 @@ export function Sidebar() {
           <StateBtnExplioitsUsed state="all_time">
             All time
           </StateBtnExplioitsUsed>
-          <StateBtnExplioitsUsed state="board">
+          <ChangeViewTable state="board" table="full">
             In the best 50 runs
-          </StateBtnExplioitsUsed>
-          <StateBtnExplioitsUsed state="player">
+          </ChangeViewTable>
+          <ChangeViewTable state="player" table="unique">
             By the best players
-          </StateBtnExplioitsUsed>
+          </ChangeViewTable>
         </div>
       </main>
     </div>

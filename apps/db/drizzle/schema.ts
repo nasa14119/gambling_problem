@@ -113,7 +113,7 @@ export const running = mysqlTable(
 export const runs = mysqlTable(
   "Runs",
   {
-    runId: int().primaryKey().autoincrement().notNull(),
+    runId: int().autoincrement().notNull().primaryKey(),
     userUuid: char({ length: 36 })
       .notNull()
       .references(() => users.userUuid, { onDelete: "cascade" }),
@@ -225,11 +225,13 @@ export const topplayersview = mysqlView("topplayersview", {
   moneySpend: float(),
   earnings: float(),
   mostUsedExploit: varchar({ length: 100 }),
+  isRunning: tinyint().default(1),
+  metadataId: int(),
 })
   .algorithm("undefined")
   .sqlSecurity("definer")
   .as(
-    sql`select \`r\`.\`runId\` AS \`runId\`,\`u\`.\`username\` AS \`username\`,\`m\`.\`durationMinutes\` AS \`timePlayed\`,\`r\`.\`moneyTotal\` AS \`moneyTotal\`,\`r\`.\`moneySpend\` AS \`moneySpend\`,\`r\`.\`earnings\` AS \`earnings\`,(select \`gambling-problem\`.\`ev\`.\`exploit_name\` from \`gambling-problem\`.\`exploitsusedinrunview\` \`ev\` where ((\`gambling-problem\`.\`ev\`.\`runId\` = \`r\`.\`runId\`) and (\`gambling-problem\`.\`ev\`.\`quantity_used\` > 0)) order by \`gambling-problem\`.\`ev\`.\`quantity_used\` desc,\`gambling-problem\`.\`ev\`.\`exploit_name\` limit 1) AS \`mostUsedExploit\` from (((\`gambling-problem\`.\`runs\` \`r\` join \`gambling-problem\`.\`users\` \`u\` on((\`u\`.\`userUuid\` = \`r\`.\`userUuid\`))) left join \`gambling-problem\`.\`metadata\` \`m\` on((\`m\`.\`metadataID\` = \`r\`.\`metadataID\`))) join (select \`gambling-problem\`.\`runs\`.\`userUuid\` AS \`userUuid\`,max(\`gambling-problem\`.\`runs\`.\`earnings\`) AS \`max_earning\` from \`gambling-problem\`.\`runs\` where (\`gambling-problem\`.\`runs\`.\`isRunning\` = false) group by \`gambling-problem\`.\`runs\`.\`userUuid\`) \`BestRuns\` on(((\`r\`.\`userUuid\` = \`bestruns\`.\`userUuid\`) and (\`r\`.\`earnings\` = \`bestruns\`.\`max_earning\`)))) order by \`r\`.\`earnings\` desc`,
+    sql`select \`r\`.\`runId\` AS \`runId\`,\`u\`.\`username\` AS \`username\`,\`m\`.\`durationMinutes\` AS \`timePlayed\`,\`r\`.\`moneyTotal\` AS \`moneyTotal\`,\`r\`.\`moneySpend\` AS \`moneySpend\`,\`r\`.\`earnings\` AS \`earnings\`,(select \`gambling-problem\`.\`ev\`.\`exploit_name\` from \`gambling-problem\`.\`exploitsusedinrunview\` \`ev\` where ((\`gambling-problem\`.\`ev\`.\`runId\` = \`r\`.\`runId\`) and (\`gambling-problem\`.\`ev\`.\`quantity_used\` > 0)) order by \`gambling-problem\`.\`ev\`.\`quantity_used\` desc,\`gambling-problem\`.\`ev\`.\`exploit_name\` limit 1) AS \`mostUsedExploit\`,\`r\`.\`isRunning\` AS \`isRunning\`,\`r\`.\`metadataID\` AS \`metadataID\` from (((\`gambling-problem\`.\`runs\` \`r\` join \`gambling-problem\`.\`users\` \`u\` on((\`u\`.\`userUuid\` = \`r\`.\`userUuid\`))) left join \`gambling-problem\`.\`metadata\` \`m\` on((\`m\`.\`metadataID\` = \`r\`.\`metadataID\`))) join (select \`gambling-problem\`.\`runs\`.\`userUuid\` AS \`userUuid\`,max(\`gambling-problem\`.\`runs\`.\`earnings\`) AS \`max_earning\` from \`gambling-problem\`.\`runs\` where (\`gambling-problem\`.\`runs\`.\`isRunning\` = false) group by \`gambling-problem\`.\`runs\`.\`userUuid\`) \`BestRuns\` on(((\`r\`.\`userUuid\` = \`bestruns\`.\`userUuid\`) and (\`r\`.\`earnings\` = \`bestruns\`.\`max_earning\`)))) order by \`r\`.\`earnings\` desc`,
   );
 
 export const topactiverunsview = mysqlView("topactiverunsview", {
@@ -240,11 +242,12 @@ export const topactiverunsview = mysqlView("topactiverunsview", {
   moneySpend: float(),
   earnings: float(),
   mostUsedExploit: varchar({ length: 100 }),
+  metadataId: int(),
 })
   .algorithm("undefined")
   .sqlSecurity("definer")
   .as(
-    sql`select \`r\`.\`runId\` AS \`runId\`,\`u\`.\`username\` AS \`username\`,\`m\`.\`durationMinutes\` AS \`timePlayed\`,\`r\`.\`moneyTotal\` AS \`moneyTotal\`,\`r\`.\`moneySpend\` AS \`moneySpend\`,\`r\`.\`earnings\` AS \`earnings\`,(select \`gambling-problem\`.\`ev\`.\`exploit_name\` from \`gambling-problem\`.\`exploitsusedinrunview\` \`ev\` where ((\`gambling-problem\`.\`ev\`.\`runId\` = \`r\`.\`runId\`) and (\`gambling-problem\`.\`ev\`.\`quantity_used\` > 0)) order by \`gambling-problem\`.\`ev\`.\`quantity_used\` desc,\`gambling-problem\`.\`ev\`.\`exploit_name\` limit 1) AS \`mostUsedExploit\` from ((\`gambling-problem\`.\`runs\` \`r\` join \`gambling-problem\`.\`users\` \`u\` on((\`u\`.\`userUuid\` = \`r\`.\`userUuid\`))) left join \`gambling-problem\`.\`metadata\` \`m\` on((\`m\`.\`metadataID\` = \`r\`.\`metadataID\`))) where (\`r\`.\`isRunning\` = true) order by \`r\`.\`earnings\` desc`,
+    sql`select \`r\`.\`runId\` AS \`runId\`,\`u\`.\`username\` AS \`username\`,\`m\`.\`durationMinutes\` AS \`timePlayed\`,\`r\`.\`moneyTotal\` AS \`moneyTotal\`,\`r\`.\`moneySpend\` AS \`moneySpend\`,\`r\`.\`earnings\` AS \`earnings\`,(select \`gambling-problem\`.\`ev\`.\`exploit_name\` from \`gambling-problem\`.\`exploitsusedinrunview\` \`ev\` where ((\`gambling-problem\`.\`ev\`.\`runId\` = \`r\`.\`runId\`) and (\`gambling-problem\`.\`ev\`.\`quantity_used\` > 0)) order by \`gambling-problem\`.\`ev\`.\`quantity_used\` desc,\`gambling-problem\`.\`ev\`.\`exploit_name\` limit 1) AS \`mostUsedExploit\`,\`r\`.\`metadataID\` AS \`metadataID\` from ((\`gambling-problem\`.\`runs\` \`r\` join \`gambling-problem\`.\`users\` \`u\` on((\`u\`.\`userUuid\` = \`r\`.\`userUuid\`))) left join \`gambling-problem\`.\`metadata\` \`m\` on((\`m\`.\`metadataID\` = \`r\`.\`metadataID\`))) where (\`r\`.\`isRunning\` = true) order by \`r\`.\`earnings\` desc`,
   );
 
 export const toprunsview = mysqlView("toprunsview", {
@@ -255,11 +258,13 @@ export const toprunsview = mysqlView("toprunsview", {
   moneySpend: float(),
   earnings: float(),
   mostUsedExploit: varchar({ length: 100 }),
+  isRunning: tinyint().default(1),
+  metadataId: int(),
 })
   .algorithm("undefined")
   .sqlSecurity("definer")
   .as(
-    sql`select \`r\`.\`runId\` AS \`runId\`,\`u\`.\`username\` AS \`username\`,\`m\`.\`durationMinutes\` AS \`timePlayed\`,\`r\`.\`moneyTotal\` AS \`moneyTotal\`,\`r\`.\`moneySpend\` AS \`moneySpend\`,\`r\`.\`earnings\` AS \`earnings\`,(select \`gambling-problem\`.\`ev\`.\`exploit_name\` from \`gambling-problem\`.\`exploitsusedinrunview\` \`ev\` where ((\`gambling-problem\`.\`ev\`.\`runId\` = \`r\`.\`runId\`) and (\`gambling-problem\`.\`ev\`.\`quantity_used\` > 0)) order by \`gambling-problem\`.\`ev\`.\`quantity_used\` desc,\`gambling-problem\`.\`ev\`.\`exploit_name\` limit 1) AS \`mostUsedExploit\` from ((\`gambling-problem\`.\`runs\` \`r\` join \`gambling-problem\`.\`users\` \`u\` on((\`u\`.\`userUuid\` = \`r\`.\`userUuid\`))) left join \`gambling-problem\`.\`metadata\` \`m\` on((\`m\`.\`metadataID\` = \`r\`.\`metadataID\`))) where (\`r\`.\`isRunning\` = false) order by \`r\`.\`earnings\` desc`,
+    sql`select \`r\`.\`runId\` AS \`runId\`,\`u\`.\`username\` AS \`username\`,\`m\`.\`durationMinutes\` AS \`timePlayed\`,\`r\`.\`moneyTotal\` AS \`moneyTotal\`,\`r\`.\`moneySpend\` AS \`moneySpend\`,\`r\`.\`earnings\` AS \`earnings\`,(select \`gambling-problem\`.\`ev\`.\`exploit_name\` from \`gambling-problem\`.\`exploitsusedinrunview\` \`ev\` where ((\`gambling-problem\`.\`ev\`.\`runId\` = \`r\`.\`runId\`) and (\`gambling-problem\`.\`ev\`.\`quantity_used\` > 0)) order by \`gambling-problem\`.\`ev\`.\`quantity_used\` desc,\`gambling-problem\`.\`ev\`.\`exploit_name\` limit 1) AS \`mostUsedExploit\`,\`r\`.\`isRunning\` AS \`isRunning\`,\`r\`.\`metadataID\` AS \`metadataID\` from ((\`gambling-problem\`.\`runs\` \`r\` join \`gambling-problem\`.\`users\` \`u\` on((\`u\`.\`userUuid\` = \`r\`.\`userUuid\`))) left join \`gambling-problem\`.\`metadata\` \`m\` on((\`m\`.\`metadataID\` = \`r\`.\`metadataID\`))) where (\`r\`.\`isRunning\` = false) order by \`r\`.\`earnings\` desc`,
   );
 
 export const topexploitsusedrank = mysqlView("topexploitsusedrank", {

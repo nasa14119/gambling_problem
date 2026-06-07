@@ -78,7 +78,9 @@ SELECT
         WHERE ev.runId = r.runId AND ev.quantity_used > 0
         ORDER BY ev.quantity_used DESC, ev.exploit_name ASC
         LIMIT 1
-    ) AS mostUsedExploit
+    ) AS mostUsedExploit, 
+    r.isRunning,
+    r.metadataID
 FROM Runs r
 INNER JOIN Users u ON u.userUuid = r.userUuid
 LEFT JOIN Metadata m ON m.metadataID = r.metadataID
@@ -105,7 +107,8 @@ SELECT
         WHERE ev.runId = r.runId AND ev.quantity_used > 0
         ORDER BY ev.quantity_used DESC, ev.exploit_name ASC
         LIMIT 1
-    ) AS mostUsedExploit
+    ) AS mostUsedExploit,
+    r.metadataID
 FROM Runs r
 INNER JOIN Users u
     ON u.userUuid = r.userUuid
@@ -129,7 +132,9 @@ SELECT
         WHERE ev.runId = r.runId AND ev.quantity_used > 0
         ORDER BY ev.quantity_used DESC, ev.exploit_name ASC
         LIMIT 1
-    ) AS mostUsedExploit
+    ) AS mostUsedExploit,
+    r.isRunning,
+    r.metadataID
 FROM Runs r
 INNER JOIN Users u
     ON u.userUuid = r.userUuid
