@@ -58,3 +58,6 @@ export const useBestRunsSetup = () => {
 export const useBestRunsData = () => {
   return useBestRunsStore((s) => s.data)
 }
+export const useBestRunUserData = () => {
+  return useBestRunsStore((s) => s.userData)
+}

@@ -10,7 +10,7 @@
 .row {
   display: grid;
   text-align: right;
-  grid-template-columns: 2rem 1.5fr 0.5fr 1fr 1.5fr 1.5fr 1.5fr;
+  grid-template-columns: 2rem 1.5fr 0.5fr 1.2fr 1.5fr 1.5fr 1.5fr;
   gap: 0.5rem;
 }
 .row > *:nth-child(1),

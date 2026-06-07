@@ -1,11 +1,13 @@
 import { MainLeaderboard } from '#/components/Leaderboard/MainLeaderboard'
 import { Sidebar } from '#/components/Leaderboard/Sidebar'
+import { useAuthValidate } from '#/components/Login/store'
 import { NavBar } from '#/components/Nav/NavBar'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/leaderboard')({ component: Leaderboard })
 
-export function Leaderboard() {
+function Leaderboard() {
+  useAuthValidate()
   return (
     <main className="h-screen w-screen flex flex-col">
       <NavBar />
