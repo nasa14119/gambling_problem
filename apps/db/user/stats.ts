@@ -3,6 +3,8 @@ import {
   metadata,
   runs,
   topactiverunsview,
+  topexploitsusedplayerrank,
+  topexploitsusedrank,
   topexploitsusedview,
   topplayersview,
   toprunsview,
@@ -24,6 +26,31 @@ export const getMostUsedExploits = async (): Promise<
   }
 };
 
+export const getExploitsUsedRank = async (): Promise<
+  ExploitUsedStats[] | null
+> => {
+  try {
+    const querry = await db.select().from(topexploitsusedrank).limit(50);
+    if (querry.length === 0) return null;
+    return querry as ExploitUsedStats[];
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
+
+export const getBestExploitsUsedPlayerRank = async (): Promise<
+  ExploitUsedStats[] | null
+> => {
+  try {
+    const querry = await db.select().from(topexploitsusedplayerrank).limit(50);
+    if (querry.length === 0) return null;
+    return querry as ExploitUsedStats[];
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
 export const getBestRuns = async (): Promise<RunStats[] | null> => {
   try {
     const querry = await db.select().from(toprunsview).limit(50);

@@ -1,3 +1,4 @@
+import { StateBtnExplioitsUsed } from '#/components/Leaderboard/ExploitsChart/ChangeView'
 import { StateBtn } from '#/components/Leaderboard/TableBest/components/StateBtn'
 
 export function Sidebar() {
@@ -13,6 +14,17 @@ export function Sidebar() {
           </StateBtn>
         </div>
         <h3 className="font-light text-3xl font-base">Exploits</h3>
+        <div className="flex flex-col gap-2">
+          <StateBtnExplioitsUsed state="all_time">
+            All time
+          </StateBtnExplioitsUsed>
+          <StateBtnExplioitsUsed state="board">
+            In the best 50 runs
+          </StateBtnExplioitsUsed>
+          <StateBtnExplioitsUsed state="player">
+            By the best players
+          </StateBtnExplioitsUsed>
+        </div>
       </main>
     </div>
   )

@@ -1,7 +1,9 @@
 import {
+  getBestExploitsUsedPlayerRank,
   getBestRunningRuns,
   getBestRuns,
   getBestRunUser,
+  getExploitsUsedRank,
   getMostUsedExploits,
   getPlayersBestRuns,
   UserAuth,
@@ -11,11 +13,6 @@ import { Router } from "express";
 import { getUserFromToken } from "./middleware/auth.ts";
 
 const app = Router();
-app.get("/exploits-used", async (req, res) => {
-  const exploits = await getMostUsedExploits();
-  if (!exploits) return res.status(204);
-  res.json(exploits);
-});
 
 app.get("/best-runs", getUserFromToken, async (req, res) => {
   const runs = await getBestRuns();
@@ -42,9 +39,22 @@ app.get("/best-unique", getUserFromToken, async (req, res) => {
   if (!runs) return res.sendStatus(204);
   res.json({ runs, user });
 });
+
 app.get("/exploits-used", async (req, res) => {
   const exploits = await getMostUsedExploits();
-  if (!exploits) return res.status(204);
+  if (!exploits) return res.sendStatus(204);
+  res.json(exploits);
+});
+
+app.get("/exploits-rank", async (req, res) => {
+  const exploits = await getExploitsUsedRank();
+  if (!exploits) return res.sendStatus(204);
+  res.json(exploits);
+});
+
+app.get("/exploits-player", async (req, res) => {
+  const exploits = await getBestExploitsUsedPlayerRank();
+  if (!exploits) return res.sendStatus(204);
   res.json(exploits);
 });
 export default app;

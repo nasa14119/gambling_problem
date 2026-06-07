@@ -50,7 +50,7 @@ INNER JOIN Users u
 LEFT JOIN Metadata m
     ON m.metadataID = r.metadataID;
 
-DROP VIEW IF EXISTS exploitsUsedInRunView;
+DROP VIEW IF EXISTS ExploitsUsedInRunView;
 CREATE VIEW ExploitsUsedInRunView AS
 SELECT 
     r.runId,
@@ -137,3 +137,27 @@ LEFT JOIN Metadata m
     ON m.metadataID = r.metadataID
 WHERE r.isRunning = FALSE
 ORDER BY r.earnings DESC;
+
+DROP VIEW IF EXISTS TopExploitsUsedRank;
+CREATE VIEW TopExploitsUsedRank AS
+SELECT
+e.*,
+CAST(SUM(eu.quantity_used) AS UNSIGNED)  AS totalUsed
+FROM ExploitsData e
+LEFT JOIN ExploitsUsedInRunView eu
+ON eu.exploitID = e.exploitID
+LEFT JOIN TopRunsView r
+ON eu.runId = r.runId
+GROUP BY e.exploitID, e.name, e.type, e.price, e.description;
+
+DROP VIEW IF EXISTS TopExploitsUsedPlayerRank;
+CREATE VIEW TopExploitsUsedPlayerRank AS
+SELECT
+e.*,
+CAST(SUM(eu.quantity_used) AS UNSIGNED) AS totalUsed
+FROM ExploitsData e
+LEFT JOIN ExploitsUsedInRunView eu
+ON eu.exploitID = e.exploitID
+LEFT JOIN TopPlayersView r
+ON eu.runId = r.runId
+GROUP BY e.exploitID, e.name, e.type, e.price, e.description; 

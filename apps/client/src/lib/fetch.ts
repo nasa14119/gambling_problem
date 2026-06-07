@@ -78,8 +78,10 @@ export const fetchStats = async (url: string): Promise<BestRunsQuery> => {
   return data
 }
 
-export const fetchExploitsUsed = async (): Promise<ExploitUsedStats[]> => {
-  const res = await fetch(`${SERVER_PATH}/api/stats/exploits-used`, {
+export const fetchExploitsUsed = async (
+  url: string,
+): Promise<ExploitUsedStats[]> => {
+  const res = await fetch(`${SERVER_PATH}/api/stats${url}`, {
     credentials: 'include',
   })
   if (res.status === 204) {
