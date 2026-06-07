@@ -1,4 +1,5 @@
 import type { Card, GameState, PlayerHand, TurnOptions } from '@repo/types'
+import type { RunStats } from '@repo/types/db'
 import type { GameEventPayloads, PlayerData } from '@repo/types/server'
 
 type Overwrites = keyof Pick<
@@ -39,3 +40,8 @@ export type EventData = {
     payload: ClientEvents[K]
   }
 }[GameEventsClient]
+
+export type BestRunsQuery = {
+  runs: RunStats[] | null
+  user: RunStats | null
+}

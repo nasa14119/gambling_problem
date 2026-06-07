@@ -19,7 +19,7 @@ export function UserRow() {
   return (
     <div
       className={cn(
-        'bg-accent/20 py-1 pr-5 rounded-xs text-accent',
+        'bg-accent/10 py-1 pr-5 rounded-xs text-accent',
         styles['row'],
       )}
     >
@@ -28,8 +28,8 @@ export function UserRow() {
       <span>{formatMinutes(data.timePlayed)}</span>
       <span>{data.mostUsedExploit ?? 'No exploit used'}</span>
       <span>${formatCurrency(data.moneyTotal)}</span>
-      <span>${formatCurrency(data.moneyTotal)}</span>
-      <span>${formatCurrency(data.moneyTotal)}</span>
+      <span>${formatCurrency(data.moneySpend)}</span>
+      <span>${formatCurrency(data.earnings)}</span>
     </div>
   )
 }

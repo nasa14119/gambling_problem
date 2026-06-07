@@ -69,7 +69,12 @@ export const getBestRunUser = async (userUUID: string, isRunning = false) => {
       })
       .from(runs)
       .where(
-        and(eq(runs.userUuid, userUUID), eq(runs.isRunning, Number(isRunning))),
+        !isRunning
+          ? and(
+              eq(runs.userUuid, userUUID),
+              eq(runs.isRunning, Number(isRunning)),
+            )
+          : eq(runs.userUuid, userUUID),
       )
       .innerJoin(metadata, eq(metadata.metadataId, runs.metadataId))
       .orderBy(desc(runs.earnings))

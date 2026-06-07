@@ -1,11 +1,13 @@
 import { cn, formatCurrency, formatMinutes } from '#/lib/utils'
 import type { RunStats } from '@repo/types/db'
-import styles from '../styles.module.css'
+import styles from '../../styles.module.css'
+import { Empty } from '#/components/Leaderboard/Empty'
 
 type Props = {
-  data: RunStats[]
+  data: RunStats[] | null
 }
 export function TableBestUI({ data }: Props) {
+  if (!data) return <Empty />
   return (
     <div
       className={cn(

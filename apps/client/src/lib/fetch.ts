@@ -1,4 +1,5 @@
 import { SERVER_PATH } from '#/env'
+import type { BestRunsQuery } from '#/types'
 import type { GameState } from '@repo/types'
 import type { ExploitUsedStats, RunStats } from '@repo/types/db'
 
@@ -63,11 +64,8 @@ export const fetchLoadGame = async () => {
   }
 }
 
-export const fetchBestRuns = async (): Promise<{
-  runs: RunStats[] | null
-  user: RunStats | null
-}> => {
-  const res = await fetch(`${SERVER_PATH}/api/stats/best-runs`, {
+export const fetchStats = async (url: string): Promise<BestRunsQuery> => {
+  const res = await fetch(`${SERVER_PATH}/api/stats${url}`, {
     credentials: 'include',
   })
   if (res.status === 204) {
