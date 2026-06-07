@@ -19,11 +19,11 @@ ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS Runs (
-    runId INT AUTO_INCREMENT PRIMARY KEY,
+    runId INT PRIMARY KEY AUTO_INCREMENT,
     userUuid CHAR(36) NOT NULL,
-    moneyTotal DECIMAL(10,2) DEFAULT 0,
-    moneySpend DECIMAL(10,2) DEFAULT 0,
-    earnings DECIMAL(10,2) DEFAULT 0,
+    moneyTotal FLOAT DEFAULT 0,
+    moneySpend FLOAT DEFAULT 0,
+    earnings FLOAT DEFAULT 0,
     isRunning BOOLEAN DEFAULT TRUE,
     metadataID INT,
 
@@ -56,7 +56,7 @@ DEFAULT CHARSET=utf8mb4;
 CREATE TABLE IF NOT EXISTS ExploitsData (
     exploitID VARCHAR(30) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    price DECIMAL(10,2) NOT NULL,
+    price FLOAT NOT NULL,
     type VARCHAR(20) NOT NULL,
     description TEXT NOT NULL
 )

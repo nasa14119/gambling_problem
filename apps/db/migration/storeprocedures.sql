@@ -2,8 +2,8 @@ DROP PROCEDURE IF EXISTS updLeaderboard;
 DELIMITER //
 CREATE PROCEDURE updLeaderboard(
     IN p_runId INT,
-    IN p_moneyTotal DECIMAL(10,2),
-    IN p_moneySpend DECIMAL(10,2)
+    IN p_moneyTotal FLOAT,
+    IN p_moneySpend FLOAT
 )
 BEGIN
     UPDATE Runs

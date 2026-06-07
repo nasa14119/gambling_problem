@@ -2,12 +2,14 @@ import {
   exploitsusedinrunview,
   metadata,
   runs,
-  top50Playersview,
+  topactiverunsview,
   topexploitsusedview,
+  topplayersview,
+  toprunsview,
 } from "#schemas";
 import { ExploitUsedStats, RunStats } from "@repo/types/db";
 import { db } from "../connection.ts";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
 export const getMostUsedExploits = async (): Promise<
   ExploitUsedStats[] | null
@@ -24,7 +26,7 @@ export const getMostUsedExploits = async (): Promise<
 
 export const getBestRuns = async (): Promise<RunStats[] | null> => {
   try {
-    const querry = await db.select().from(top50Playersview);
+    const querry = await db.select().from(toprunsview).limit(50);
     if (querry.length === 0) return null;
     return querry as RunStats[];
   } catch (e) {
@@ -33,7 +35,29 @@ export const getBestRuns = async (): Promise<RunStats[] | null> => {
   }
 };
 
-export const getBestRunUser = async (userUUID: string) => {
+export const getBestRunningRuns = async (): Promise<RunStats[] | null> => {
+  try {
+    const querry = await db.select().from(topactiverunsview).limit(50);
+    if (querry.length === 0) return null;
+    return querry as RunStats[];
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
+
+export const getPlayersBestRuns = async (): Promise<RunStats[] | null> => {
+  try {
+    const querry = await db.select().from(topplayersview).limit(50);
+    if (querry.length === 0) return null;
+    return querry as RunStats[];
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
+
+export const getBestRunUser = async (userUUID: string, isRunning = false) => {
   try {
     const [querry] = await db
       .select({
@@ -44,7 +68,9 @@ export const getBestRunUser = async (userUUID: string) => {
         earnings: runs.earnings,
       })
       .from(runs)
-      .where(eq(runs.userUuid, userUUID))
+      .where(
+        and(eq(runs.userUuid, userUUID), eq(runs.isRunning, Number(isRunning))),
+      )
       .innerJoin(metadata, eq(metadata.metadataId, runs.metadataId))
       .orderBy(desc(runs.earnings))
       .limit(1);

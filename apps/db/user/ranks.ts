@@ -1,14 +1,5 @@
 import { exploitsData, ranks, users, whitelist } from "#schemas";
-import {
-  and,
-  asc,
-  between,
-  eq,
-  getTableColumns,
-  gt,
-  gte,
-  lt,
-} from "drizzle-orm";
+import { and, asc, eq, getTableColumns, gt, gte, lt } from "drizzle-orm";
 import { db } from "../connection.ts";
 import { ExploitData } from "@repo/types/db";
 import { ExploitId } from "@repo/types";

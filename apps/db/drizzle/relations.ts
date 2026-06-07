@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { runs, exploitsUsed, exploitsData, users, ranks, running, metadata, whitelist } from "./schema";
+import { runs, exploitsUsed, exploitsData, users, ranks, running, metadata, whitelist } from "./schema.ts";
 
 export const exploitsUsedRelations = relations(exploitsUsed, ({one}) => ({
 	run: one(runs, {
