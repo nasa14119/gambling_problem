@@ -10,10 +10,15 @@ type Store = {
   updateGameState: (param: UpdateGameState) => void
   error: string | null
 }
+const setLocal = () => {
+  const local = localStorage.getItem('gameState')
+  if (!local) return null
+  return JSON.parse(local)
+}
 export const useGameStore = create<Store>((set) => ({
   error: null,
   isLoading: true,
-  gameState: null,
+  gameState: setLocal(),
   setState: (changing) => {
     set((prev) => {
       const newState = { ...prev, ...changing }

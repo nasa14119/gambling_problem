@@ -1,8 +1,8 @@
-import { getRank, getUserWhiteList, saveRank, type NextRank } from "db";
+import { getRank, getUserWhiteList, saveRank } from "db";
 import type { Player } from "./Player.ts";
 import { ExploitId } from "@repo/types";
 import { ExpoitEventManager } from "../Events/ExploitsEventManager.ts";
-import { ExploitData } from "@repo/types/db";
+import { ExploitData, NextRank } from "@repo/types/db";
 
 type RankConstructor = {
   player: Player;

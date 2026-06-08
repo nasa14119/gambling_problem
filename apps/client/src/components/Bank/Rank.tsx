@@ -12,7 +12,7 @@ export function Rank() {
         <span className="relative rounded-4xl border-2 border-white border-dashed w-full h-[3vh]">
           <span
             className={cn(
-              'absolute top-0 left-0 h-full bg-blue-800/10 border-2 border-blue-800 border-dashed rounded-4xl transition-all duration-125 ease overflow-hidden',
+              'absolute top-0 left-0 h-full bg-blue-500/30 border-2 border-cyan-500  border-dashed rounded-4xl transition-all duration-125 ease overflow-hidden',
               rank === null && 'border-yellow-500 bg-yellow-500/30',
             )}
             style={{ width: `${rank ?? 100}%` }}

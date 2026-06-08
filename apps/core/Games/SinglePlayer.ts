@@ -1,15 +1,23 @@
-import { SavedGame, SiglePlayerOptions, User } from "../types.ts";
+import { User } from "../types.ts";
 import { Game } from "../Game.ts";
 import { GameFacade } from "../GameFacade.ts";
-import { getExploitData, saveAndTerminateRun, updateRun, useExploit } from "db";
+import {
+  getExploitData,
+  saveAndTerminateRun,
+  updateRun,
+  useExploit,
+  softSafe as softSaveDB,
+} from "db";
 import { Inventory } from "../Players/Inventory.ts";
 import { Player } from "../Players/Player.ts";
 import { Mafia } from "../Players/Mafia.ts";
 import { PlayerOptions } from "../Players/types.ts";
-import { PokerBot } from "../Players/Bot.ts";
+import { PokerBot } from "../Players/Bots/Bot.ts";
 import { GameState } from "@repo/types";
-import { BankData } from "@repo/types/server";
+import { BankData, SavedGame, SiglePlayerOptions } from "@repo/types/server";
 import { Rank } from "../Players/Rank.ts";
+import { generateBotName } from "../Players/Bots/genName.ts";
+import { ExploitData } from "@repo/types/db";
 
 export class GameSinglePlayer extends Game {
   level = 0;
@@ -30,6 +38,8 @@ export class GameSinglePlayer extends Game {
     savedGame.players.forEach((p) => {
       this.addBot(p.playerId, {
         saved: p,
+        min_bet: savedGame.turn?.minBet,
+        currentBet: savedGame.turn?.playersPots[p.playerId],
       });
     });
     this.id = savedGame.runId;
@@ -123,6 +133,18 @@ export class GameSinglePlayer extends Game {
       exploitStore: this.exploitsManager.exploitsStore,
     };
   }
+  async softSave(playerId: string) {
+    const save = this.save(playerId);
+    const user = this.getUser(playerId);
+    await softSaveDB({
+      runId: this.id,
+      level: this.level,
+      moneySpend: user.bank.moneySpend,
+      moneyTotal: user.bank.moneyTotal,
+      data: save,
+    });
+    return save;
+  }
   async quit(playerId: string) {
     const save = this.save(playerId);
     const user = this.getUser(playerId);
@@ -166,6 +188,13 @@ export class GameSinglePlayer extends Game {
         this.kill(player);
       },
     });
+    this.eventManager.on({
+      eventId: "bot:reset",
+      listener: ({ prevPlayer, newPlayer }) => {
+        this.players.rename(prevPlayer.playerId, newPlayer.playerId);
+        console.log(this.players.session());
+      },
+    });
     this.exploitsManager.eventManger.on({
       eventId: "levelup",
       listener: ({ level, playerId }) => {
@@ -176,15 +205,16 @@ export class GameSinglePlayer extends Game {
     this.exploitsManager.eventManger.on({
       eventId: "exploit:unlocked",
       listener: ({ exploit: { exploitId } }) => {
-        this.exploits_whitelist.push(exploitId);
+        const items = new Set([...this.exploits_whitelist, exploitId]);
+        this.exploits_whitelist = [...items];
       },
     });
     this.exploitsManager.eventManger.on({
       eventId: "exploit:wastrigger",
-      listener: async ({ exploitId, playerId }) => {
+      listener: async ({ exploitId }) => {
         const id = Number(this.id);
         if (!Number.isFinite(id)) throw new Error("Id is not a run id");
-        await useExploit(id, exploitId, playerId);
+        await useExploit(id, exploitId);
       },
     });
     if (this._isStarted) {
@@ -220,12 +250,51 @@ export class GameSinglePlayer extends Game {
     const store = await Promise.all(
       this.exploits_whitelist.map((e) => getExploitData(e)),
     );
-    return store.map((e) => ({
+    return store.map((e: ExploitData) => ({
       ...e,
       isAvailable:
         !exploitsActive.has(e.exploitId) &&
         !user.invetory.includes(e.exploitId),
     }));
+  }
+  addAutoSave(playerId: string) {
+    const listener = () => this.softSave(playerId);
+    this.eventManager.on({
+      eventId: "round:start_turn",
+      listener,
+    });
+    this.eventManager.on({
+      eventId: "turn:end",
+      listener,
+    });
+    this.eventManager.on({
+      eventId: "round:end",
+      listener,
+    });
+    this.eventManager.on({
+      eventId: "reset:soft",
+      listener,
+    });
+    this.exploitsManager.eventManger.on({
+      eventId: "exploit:unlocked",
+      listener,
+    });
+    this.exploitsManager.eventManger.on({
+      eventId: "exploit:wastrigger",
+      listener,
+    });
+    this.exploitsManager.eventManger.on({
+      eventId: "levelup",
+      listener,
+    });
+    this.exploitsManager.eventManger.on({
+      eventId: "buy:success",
+      listener,
+    });
+    this.eventManager.on({
+      eventId: "player:turn",
+      listener: (player) => player === playerId && listener(),
+    });
   }
   addPlayer(id: string, options: PlayerOptions = {}) {
     const invetory = new Inventory(this.exploitsManager.eventManger, id);
@@ -253,14 +322,29 @@ export class GameSinglePlayer extends Game {
     if (options?.stored?.mafia) {
       mafia.loadMafia(options.stored.mafia);
     }
+    this.addAutoSave(id);
     this.players.attachPlayer(player);
   }
-  addBot(id: string, options?: { saved?: SavedGame["players"][number] }) {
-    const bot = new PokerBot({
-      difficulty: "easy",
-      playerId: id,
-      manager: this.eventManager.createManage(),
-    });
+  addBot(
+    id?: string,
+    options?: {
+      saved?: SavedGame["players"][number];
+      min_bet?: number;
+      currentBet?: number;
+    },
+  ) {
+    const name = id ?? generateBotName();
+    const bot = new PokerBot(
+      {
+        difficulty: "easy",
+        playerId: name,
+        manager: this.eventManager.createManage(),
+      },
+      {
+        min_bet: options?.min_bet,
+        currentBet: options?.currentBet,
+      },
+    );
     if (options?.saved) {
       bot.bank.setChips(options.saved.chips);
       bot.cards = options.saved.cards;

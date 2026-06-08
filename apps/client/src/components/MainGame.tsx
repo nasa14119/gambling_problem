@@ -18,16 +18,24 @@ export function MainGame() {
       <div className="absolute inset-x-0 flex justify-center top-0 pt-2">
         <TableWithStore />
       </div>
-      <div className="absolute top-[15%] inset-x-0">
-        <div className="flex justify-between px-[9%]">
-          <OtherPlayer playerId={keys[0]} className="" />
-          <OtherPlayer playerId={keys[1]} className="" position="left" />
-        </div>
-        <div className="flex justify-between px-[15%] py-2">
-          <OtherPlayer playerId={keys[2]} className="" />
-          <OtherPlayer playerId={keys[3]} position="left" />
-        </div>
-      </div>
+      <OtherPlayer
+        playerId={keys[0]}
+        className="absolute top-[15%] left-[5%]"
+      />
+      <OtherPlayer
+        playerId={keys[1]}
+        className="absolute top-[15%] right-[5%]"
+        position="left"
+      />
+      <OtherPlayer
+        playerId={keys[2]}
+        className="absolute top-[40%] left-[10%]"
+      />
+      <OtherPlayer
+        playerId={keys[3]}
+        className="absolute top-[40%] right-[10%]"
+        position="left"
+      />
       <UserCards />
       <Pot />
       <StartGameBtn />

@@ -1,16 +1,17 @@
 import { NavItem } from '#/components/Nav/NavItem'
 import { Right } from '#/components/Nav/Right'
 import { cn } from '#/lib/utils'
+import { useGameStore } from '#/stores/gameStore'
 import type { ComponentProps } from 'react'
 
 const LINKS = [
   { text: 'Home', to: '/' },
   { text: 'Leaderboard', to: '/leaderboard' },
-  { text: 'Game', to: '/game' },
 ]
 
 type Props = ComponentProps<'nav'>
 export function NavBar({ className, ...rest }: Props) {
+  const game = useGameStore((s) => s.gameState)
   return (
     <nav
       className={cn(
@@ -25,6 +26,7 @@ export function NavBar({ className, ...rest }: Props) {
             {text}
           </NavItem>
         ))}
+        <NavItem to={game ? '/game' : '/login'}>Game</NavItem>
       </div>
       <Right />
     </nav>

@@ -1,14 +1,9 @@
+import { BankInterface, ExploitBuyPayload } from "@repo/types/server";
 import { ExpoitEventManager } from "../Events/ExploitsEventManager.ts";
-import { ErrorInTurn, ExploitBuyPayload } from "../types.ts";
+import { ErrorInTurn } from "../types.ts";
 import { Inventory } from "./Inventory.ts";
 import { Player } from "./Player.ts";
 
-export interface BankInterface {
-  getChipsValue(): number;
-  getMoneyValue(): number;
-  canPay(amount: number): boolean;
-  addChips(amout: number): void;
-}
 export class Bank implements BankInterface {
   private money: number = 0;
   private chips: number = 0;

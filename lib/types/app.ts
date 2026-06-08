@@ -1,6 +1,6 @@
-import { PlayerData } from "core/types";
 import { EXPLOITS } from "./const.ts";
 import { ExploitData } from "./db.ts";
+import { BankInterface, PlayerData } from "./save.ts";
 
 export type Result<T, E> =
   | { success: true; data: T; error?: never }
@@ -30,16 +30,21 @@ export type Num =
   | "A";
 export type Card = `${Num}${Suit}`;
 export type PlayerHand = [Card, Card] | null;
-export type Player = {
+export interface Player {
   playerId: string;
   cards: PlayerHand;
-};
+  bank: BankInterface;
+  isFold: boolean;
+  getData: () => PlayerData;
+  turn: () => void;
+}
+
 export type TurnOptions = "fold" | "raise" | "pay" | "check";
 export type InvetoryData = { [K in ExploitId]?: ExploitData }[];
 export type GameState = {
   isStarted: boolean;
   table: null | (Card | null)[];
-  players: Record<string, Omit<PlayerData, "money" | "cards">>;
+  players: Record<string, Omit<PlayerData, "money" | "cards"> | null>;
   user: PlayerData & { invetory: ExploitData[]; currentBet: number | null };
   turn: {
     currentPlayer: string;

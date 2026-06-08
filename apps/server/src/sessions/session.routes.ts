@@ -1,7 +1,7 @@
+import type { SavedGame } from "@repo/types/server";
 import type { UserAuth } from "db";
 
 import { GameSinglePlayer } from "core";
-import { SavedGame } from "core/types";
 import {
   clearSession,
   getCurrentRun,
@@ -35,10 +35,10 @@ router.get(
     const exploits_whitelist = exploit ? [exploit] : [];
     const game = new GameSinglePlayer({ exploits_whitelist, runId });
     const playerId = res.locals.playerId;
-    game.addBot("bot:1");
-    game.addBot("bot:2");
-    game.addBot("bot:3");
-    game.addBot("bot:4");
+    game.addBot();
+    game.addBot();
+    game.addBot();
+    game.addBot();
     game.addPlayer(playerId);
     game.init();
     res.cookie("sessionId", sessions.newGame(game, "user:"));

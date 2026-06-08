@@ -1,7 +1,7 @@
-import type { Card } from "@repo/types";
-import type { Player, SavedGame } from "../types.ts";
+import type { Card, Player } from "@repo/types";
 import { Deck } from "./index.ts";
 import { GameEventManager } from "../Events/GameEventManager.ts";
+import { SavedGame } from "@repo/types/server";
 
 export class DeckEventsManager extends Deck {
   manager: ReturnType<GameEventManager["createManage"]>;

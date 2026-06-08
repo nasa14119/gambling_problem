@@ -2,8 +2,7 @@ import { running, runs, users, metadata, exploitsUsed } from "#schemas";
 import { desc, eq, sql } from "drizzle-orm";
 import { db } from "../connection.ts";
 import { RunDataGame } from "@repo/types/db";
-import { SavedGame } from "core/types";
-
+import type { SavedGame } from "@repo/types/server";
 export const startNewRun = async (userUuid: string) => {
   const [res] = await db
     .insert(runs)
@@ -177,19 +176,48 @@ export const updateRun = async (
   }
 };
 
-export const useExploit = async (
-  runId: number,
-  exploitID: string,
-  palyerId?: string,
-) => {
+export const useExploit = async (runId: number, exploitID: string) => {
   try {
     await db.insert(exploitsUsed).values({
       exploitId: exploitID,
       runId: runId,
-      username: palyerId ?? null,
     });
   } catch (e) {
     console.error(e);
     throw new Error("Error adding exploit used");
+  }
+};
+
+type SoftSafePayload = {
+  runId: string;
+  data: SavedGame;
+  moneyTotal: number;
+  moneySpend: number;
+  level: number;
+};
+export const softSafe = async ({
+  runId,
+  data,
+  moneyTotal,
+  moneySpend,
+  level,
+}: SoftSafePayload) => {
+  const id = Number(runId);
+  if (!Number.isFinite(id)) throw new Error("RunId not a number");
+  try {
+    await db.transaction(async (t) => {
+      await t
+        .update(runs)
+        .set({ moneyTotal, moneySpend })
+        .where(eq(runs.runId, id));
+      await t
+        .update(metadata)
+        .set({ level })
+        .where(eq(metadata.metadataId, id));
+      await t.update(running).set({ data }).where(eq(running.runId, id));
+    });
+  } catch (e) {
+    console.log(e);
+    throw new Error("Error killing saved game");
   }
 };

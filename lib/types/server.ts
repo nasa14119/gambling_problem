@@ -1,6 +1,8 @@
+import { Card, ExploitId, Player, PlayerHand, TurnOptions } from "./app.ts";
 import { TypeEnd } from "./db.ts";
-
-export * from "core/types";
+export * from "./save.ts";
+export * from "./events.ts";
+// export * from "core/types";
 export type BankData = {
   money: number;
   chips: number;
@@ -22,3 +24,18 @@ export interface SessionGameInterface {
   quit(id: string): unknown;
   terminate: (() => void) | null;
 }
+
+export type GameOptions = {
+  runId?: number;
+  exploits_whitelist?: ExploitId[];
+};
+
+export type GameWinnerPayload = {
+  moneyWin: number;
+  gameState: Card[];
+  winners: { player: Player; for: string }[];
+};
+export type BackBettting = {
+  round: number;
+  factor: number;
+} | null;

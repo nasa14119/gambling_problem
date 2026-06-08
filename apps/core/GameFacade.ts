@@ -1,10 +1,7 @@
+import { GameEventPayloads, GameEvents } from "@repo/types/server";
 import { Game } from "./Game.ts";
-import {
-  type GameEventPayloads,
-  type GameEvents,
-} from "./Events/GameEventManager.ts";
-import type { Player } from "./types.ts";
 import { z } from "zod";
+import { Player } from "@repo/types";
 export type GameEventPayload<T extends GameEvents> = {
   eventId: T;
   payload: GameEventPayloads[T];
@@ -194,6 +191,9 @@ export class GameFacade {
       eventId === "reset:quit"
     ) {
       this.send(JSON.stringify({ eventId, payload: undefined }));
+    }
+    if (eventId === "bot:reset") {
+      this.send(JSON.stringify({ eventId, payload }));
     }
     // console.log("unhandle " + eventId);
   }

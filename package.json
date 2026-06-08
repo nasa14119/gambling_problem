@@ -8,6 +8,7 @@
     "setenv": "cat bin/setup_env.sh | sh",
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "start": "turbo run start",
     "dev:not_db": "turbo run dev --filter=!db",
     "dev:server": "turbo run dev --filter=server",
     "db:start": "turbo run db:start --filter=db",

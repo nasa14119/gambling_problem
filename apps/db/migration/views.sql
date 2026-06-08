@@ -147,7 +147,7 @@ DROP VIEW IF EXISTS TopExploitsUsedRank;
 CREATE VIEW TopExploitsUsedRank AS
 SELECT
 e.*,
-CAST(SUM(eu.quantity_used) AS UNSIGNED)  AS totalUsed
+COUNT(r.runId)  AS totalUsed
 FROM ExploitsData e
 LEFT JOIN ExploitsUsedInRunView eu
 ON eu.exploitID = e.exploitID
@@ -155,14 +155,14 @@ LEFT JOIN TopRunsView r
 ON eu.runId = r.runId
 GROUP BY e.exploitID, e.name, e.type, e.price, e.description;
 
-DROP VIEW IF EXISTS TopExploitsUsedPlayerRank;
+DROP VIEW IF EXISTS TopExploitsUsedPlayerRank; 
 CREATE VIEW TopExploitsUsedPlayerRank AS
 SELECT
 e.*,
-CAST(SUM(eu.quantity_used) AS UNSIGNED) AS totalUsed
+COUNT(r.runId) AS totalUsed
 FROM ExploitsData e
 LEFT JOIN ExploitsUsedInRunView eu
 ON eu.exploitID = e.exploitID
 LEFT JOIN TopPlayersView r
 ON eu.runId = r.runId
-GROUP BY e.exploitID, e.name, e.type, e.price, e.description; 
+GROUP BY e.exploitID, e.name, e.type, e.price, e.description;

@@ -1,5 +1,5 @@
+import { BankInterface } from "@repo/types/server";
 import { ErrorInTurn } from "../types.ts";
-import { BankInterface } from "./Bank.ts";
 
 export class Bank implements BankInterface {
   private chips: number = 0;

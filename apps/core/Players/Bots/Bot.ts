@@ -1,8 +1,8 @@
-import type { Card, PlayerHand, TurnOptions } from "@repo/types";
-import type { GameEventPayloads } from "../Events/GameEventManager.ts";
-import { Bank } from "./BankBot.ts";
-import type { Players } from "./index.ts";
-import { DEFAULTS, type Player, type PlayerConstructor } from "./types.ts";
+import type { Card, Player, PlayerHand, TurnOptions } from "@repo/types";
+import { Bank } from "../BankBot.ts";
+import { DEFAUTS_BOTS, type PlayerConstructor } from "../types.ts";
+import { GameEventPayloads, PlayerData } from "@repo/types/server";
+import { generateBotName } from "./genName.ts";
 
 type BotDifficulty = "easy" | "medium" | "hard";
 type BotConstructor = PlayerConstructor & { difficulty: BotDifficulty };
@@ -15,7 +15,6 @@ type BotTurnContext = {
   chipsToCall: number;
 };
 
-const MIN_BOT_BET_CHIPS = 50;
 const DIFFICULTY_PROFILES: Record<
   BotDifficulty,
   {
@@ -34,7 +33,7 @@ const DIFFICULTY_PROFILES: Record<
     callThreshold: 0.5,
     raiseThreshold: 0.82,
     openBetChance: 0.15,
-    openBetChips: MIN_BOT_BET_CHIPS,
+    openBetChips: 50,
     raiseChips: 100,
   },
   medium: {
@@ -90,11 +89,19 @@ const VALUES = [
   "A",
 ] as const;
 
+type BotOptions = {
+  currentBet?: number;
+  min_bet?: number;
+};
+const restoreChips = (level = 0) => {
+  return DEFAUTS_BOTS.chips;
+};
 export class PokerBot implements Player {
+  min_bet: number;
   difficulty: BotDifficulty;
   playerId: string;
   table: Card[] = [];
-  bank = new Bank(DEFAULTS.chips);
+  bank: Bank = new Bank(DEFAUTS_BOTS.chips);
   cards: PlayerHand = null;
   isFold = false;
   private manager: BotConstructor["manager"];
@@ -102,7 +109,16 @@ export class PokerBot implements Player {
   private playerBets: Record<string, number> = {};
   private currentBet = 0;
 
-  constructor({ manager, difficulty, playerId }: BotConstructor) {
+  constructor(
+    { manager, difficulty, playerId }: BotConstructor,
+    options: BotOptions,
+  ) {
+    const options_ = {
+      currentBet: options.currentBet ?? 0,
+      min_bet: Math.max(options.min_bet ?? 0, 50),
+    };
+    this.currentBet = options_.currentBet;
+    this.min_bet = options_.min_bet;
     this.playerId = playerId;
     this.manager = manager;
     this.difficulty = this.resolveDifficulty(difficulty);
@@ -140,12 +156,32 @@ export class PokerBot implements Player {
         this.currentBet = Math.max(this.currentBet, playerBet);
       },
     });
+    this.manager.on({
+      eventId: "round:end",
+      listener: () => {
+        if (this.isBroke()) {
+          this.restoreBot();
+        }
+      },
+    });
   }
 
   isBroke() {
-    return this.bank.getChipsValue() <= 0;
+    return this.bank.getChipsValue() <= DEFAUTS_BOTS.minMoney;
   }
-
+  restoreBot() {
+    const prevPlayer = this.getData();
+    const newPlayer: PlayerData = {
+      cards: null,
+      chips: restoreChips(),
+      isFold: false,
+      playerId: generateBotName(),
+      money: 0,
+    };
+    this.bank.setChips(newPlayer.chips);
+    this.playerId = newPlayer.playerId;
+    this.manager.emit("bot:reset", { newPlayer, prevPlayer });
+  }
   turn: Player["turn"] = async () => {
     const action = this.getAction();
     const chips =
@@ -187,10 +223,7 @@ export class PokerBot implements Player {
   }
 
   private pay(chips: number) {
-    if (
-      chips < MIN_BOT_BET_CHIPS ||
-      this.bank.getChipsValue() < MIN_BOT_BET_CHIPS
-    )
+    if (chips < this.min_bet || this.bank.getChipsValue() < this.min_bet)
       return 0;
     return this.bank.getChips(Math.min(chips, this.bank.getChipsValue()));
   }
@@ -271,8 +304,7 @@ export class PokerBot implements Player {
     { canCheck, chipsToCall }: BotTurnContext,
   ): BotAction {
     const profile = DIFFICULTY_PROFILES[this.difficulty];
-    const canOpenBet =
-      canCheck && this.bank.getChipsValue() >= MIN_BOT_BET_CHIPS;
+    const canOpenBet = canCheck && this.bank.getChipsValue() >= this.min_bet;
 
     if (canCheck) {
       if (canOpenBet && winRate >= profile.raiseThreshold) {
@@ -286,10 +318,7 @@ export class PokerBot implements Player {
       return { type: "check", chips: 0 };
     }
 
-    if (
-      chipsToCall < MIN_BOT_BET_CHIPS ||
-      chipsToCall > this.bank.getChipsValue()
-    ) {
+    if (chipsToCall < this.min_bet || chipsToCall > this.bank.getChipsValue()) {
       return { type: "fold", chips: 0 };
     }
 
@@ -302,7 +331,7 @@ export class PokerBot implements Player {
         this.bank.getChipsValue(),
         chipsToCall + profile.raiseChips,
       );
-      if (chips > chipsToCall && chips >= MIN_BOT_BET_CHIPS) {
+      if (chips > chipsToCall && chips >= this.min_bet) {
         return { type: "raise", chips };
       }
     }
@@ -332,21 +361,4 @@ export class PokerBot implements Player {
       [array[i], array[j]] = [array[j], array[i]];
     }
   }
-}
-
-export function replaceBrokeBots(
-  players: Players,
-  addBot: (playerId: string) => void,
-) {
-  const brokeBots = players
-    .session()
-    .filter((player): player is PokerBot => {
-      return player instanceof PokerBot && player.isBroke();
-    });
-
-  brokeBots.forEach((bot) => {
-    bot.dispose();
-    players.detachPlayer(bot);
-    addBot(bot.playerId);
-  });
 }

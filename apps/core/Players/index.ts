@@ -1,5 +1,4 @@
-import type { GameState } from "@repo/types";
-import { type Player } from "../types.ts";
+import type { GameState, Player } from "@repo/types";
 
 export class Players {
   players: Map<string, Player> = new Map();
@@ -39,5 +38,9 @@ export class Players {
       players[key] = playerData;
     }
     return players as GameState["players"];
+  }
+  rename(prev: string, newName: string) {
+    this.players.set(newName, this.players.get(prev)!);
+    this.players.delete(prev);
   }
 }

@@ -1,7 +1,7 @@
 import { SERVER_PATH } from '#/env'
-import type { BestRunsQuery } from '#/types'
 import type { GameState } from '@repo/types'
-import type { ExploitUsedStats, RunStats } from '@repo/types/db'
+import type { BestRunsQuery } from '@repo/types/client'
+import type { ExploitUsedStats } from '@repo/types/db'
 
 const CREATE_OPTIONS = {
   method: 'GET',
@@ -62,6 +62,8 @@ export const fetchLoadGame = async () => {
   if (res.status !== 200) {
     throw new Error(`Error loading game: ${res.status}`)
   }
+  const data = res.json()
+  localStorage.setItem('gameState', JSON.stringify(data))
 }
 
 export const fetchStats = async (url: string): Promise<BestRunsQuery> => {

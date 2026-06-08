@@ -2,7 +2,7 @@ import {
   REFRESH_INTERVAL_SECONDS,
   useBestRunsStore,
 } from '#/components/Leaderboard/TableBest/store'
-import type { BestRunsQuery } from '#/types'
+import type { BestRunsQuery } from '@repo/types/client'
 import { useEffect } from 'react'
 
 export const useBestRunsQuerry = (querry: () => Promise<BestRunsQuery>) => {

@@ -1,18 +1,18 @@
 import { ExploitId, GameState, PlayerHand } from "@repo/types";
-import type { GameEventPayloads } from "../Events/GameEventManager.ts";
 import { Bank } from "./Bank.ts";
 import { Inventory } from "./Inventory.ts";
-import { ErrorInTurn, UserInput } from "../types.ts";
+import { ErrorInTurn } from "../types.ts";
 import type {
-  Player as IPlayer,
   PlayerOptions,
   PlayerConstructor,
   PlayerConstrutorWithUserVals,
 } from "./types.ts";
+import { Player as IPlayer } from "@repo/types";
 import { Timer } from "../lib/TimerGame.ts";
 import { DEFAULTS, VALID_ACTIONS } from "./types.ts";
 import { Mafia } from "./Mafia.ts";
 import { Rank } from "./Rank.ts";
+import { GameEventPayloads, UserInput } from "@repo/types/server";
 
 const PLAYER_TURN_TIME_SECONDS = 60;
 

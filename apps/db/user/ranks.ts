@@ -1,10 +1,9 @@
 import { exploitsData, ranks, users, whitelist } from "#schemas";
 import { and, asc, eq, getTableColumns, gt, gte, lt } from "drizzle-orm";
 import { db } from "../connection.ts";
-import { ExploitData } from "@repo/types/db";
+import { ExploitData, NextRank } from "@repo/types/db";
 import { ExploitId } from "@repo/types";
 
-export type NextRank = ExploitData & { rank: number; level: number };
 type RankPayload = { currentLevel: number; prevRank: number };
 export const getRank = async ({
   currentLevel,

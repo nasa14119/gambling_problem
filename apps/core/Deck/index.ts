@@ -1,9 +1,8 @@
 import { getRandomDeck } from "./lib/index.cjs";
 import { getCardName } from "./Card.ts";
-import { type Card } from "@repo/types";
-import pokersolver, { type Hand } from "./lib/pokersolver.ts";
+import { Player, type Card } from "@repo/types";
+import pokersolver, { type Hand } from "./lib/pokersolver.cjs";
 type PlayerCards = [Card, Card];
-import { Player } from "../types.ts";
 const pokersolverWinners = pokersolver.Hand.winners;
 const SHUFFLE_THRESHOLD = 0.75;
 export class Deck {
