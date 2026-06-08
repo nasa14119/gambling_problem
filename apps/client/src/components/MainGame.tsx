@@ -29,12 +29,12 @@ export function MainGame() {
       />
       <OtherPlayer
         playerId={keys[2]}
-        className="absolute top-[40%] right-[10%]"
-        position="left"
+        className="absolute top-[40%] left-[10%]"
       />
       <OtherPlayer
         playerId={keys[3]}
-        className="absolute top-[40%] left-[10%]"
+        className="absolute top-[40%] right-[10%]"
+        position="left"
       />
       <UserCards />
       <Pot />

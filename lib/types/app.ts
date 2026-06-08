@@ -44,7 +44,7 @@ export type InvetoryData = { [K in ExploitId]?: ExploitData }[];
 export type GameState = {
   isStarted: boolean;
   table: null | (Card | null)[];
-  players: Record<string, Omit<PlayerData, "money" | "cards">>;
+  players: Record<string, Omit<PlayerData, "money" | "cards"> | null>;
   user: PlayerData & { invetory: ExploitData[]; currentBet: number | null };
   turn: {
     currentPlayer: string;

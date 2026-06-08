@@ -15,6 +15,11 @@ export const DEFAULTS = {
   money: 1000,
   chips: 1000,
 } as const;
+
+export const DEFAUTS_BOTS = {
+  chips: DEFAULTS.money + DEFAULTS.chips,
+  minMoney: 300,
+} as const;
 export type PlayerOptions = Partial<typeof DEFAULTS> & {
   stored?: {
     user: SavedGame["user"];

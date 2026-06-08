@@ -188,6 +188,13 @@ export class GameSinglePlayer extends Game {
         this.kill(player);
       },
     });
+    this.eventManager.on({
+      eventId: "bot:reset",
+      listener: ({ prevPlayer, newPlayer }) => {
+        this.players.rename(prevPlayer.playerId, newPlayer.playerId);
+        console.log(this.players.session());
+      },
+    });
     this.exploitsManager.eventManger.on({
       eventId: "levelup",
       listener: ({ level, playerId }) => {
@@ -283,6 +290,10 @@ export class GameSinglePlayer extends Game {
     this.exploitsManager.eventManger.on({
       eventId: "buy:success",
       listener,
+    });
+    this.eventManager.on({
+      eventId: "player:turn",
+      listener: (player) => player === playerId && listener(),
     });
   }
   addPlayer(id: string, options: PlayerOptions = {}) {

@@ -192,6 +192,9 @@ export class GameFacade {
     ) {
       this.send(JSON.stringify({ eventId, payload: undefined }));
     }
+    if (eventId === "bot:reset") {
+      this.send(JSON.stringify({ eventId, payload }));
+    }
     // console.log("unhandle " + eventId);
   }
   handleInput(input: string) {

@@ -1,9 +1,15 @@
 import { useEventListener } from '#/stores/eventsStore'
 import { useGameState, useGameUpdate } from '#/stores/gameStore'
-import type { PlayerHand } from '@repo/types'
+import type { GameState, PlayerHand } from '@repo/types'
 import { useEffect, useState } from 'react'
 
-export const usePlayerData = (id: string) => {
+export type PlayerUseData =
+  | null
+  | (NonNullable<GameState['players'][string]> & {
+      isActive: boolean
+      cards: PlayerHand
+    })
+export const usePlayerData = (id: string): PlayerUseData => {
   const { players } = useGameState()
   const data = useEventListener()
   const setState = useGameUpdate()
@@ -49,5 +55,9 @@ export const usePlayerData = (id: string) => {
       }
     }
   }, [data])
-  return { ...players[id], isActive, cards }
+  const player = players[id]
+  if (player === null) {
+    return null
+  }
+  return { ...player, isActive, cards }
 }

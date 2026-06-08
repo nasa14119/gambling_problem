@@ -1,8 +1,8 @@
 import type { Card, Player, PlayerHand, TurnOptions } from "@repo/types";
 import { Bank } from "../BankBot.ts";
-import type { Players } from "../index.ts";
-import { DEFAULTS, type PlayerConstructor } from "../types.ts";
-import { GameEventPayloads } from "@repo/types/server";
+import { DEFAUTS_BOTS, type PlayerConstructor } from "../types.ts";
+import { GameEventPayloads, PlayerData } from "@repo/types/server";
+import { generateBotName } from "./genName.ts";
 
 type BotDifficulty = "easy" | "medium" | "hard";
 type BotConstructor = PlayerConstructor & { difficulty: BotDifficulty };
@@ -93,12 +93,15 @@ type BotOptions = {
   currentBet?: number;
   min_bet?: number;
 };
+const restoreChips = (level = 0) => {
+  return DEFAUTS_BOTS.chips;
+};
 export class PokerBot implements Player {
   min_bet: number;
   difficulty: BotDifficulty;
   playerId: string;
   table: Card[] = [];
-  bank: Bank = new Bank(DEFAULTS.chips);
+  bank: Bank = new Bank(DEFAUTS_BOTS.chips);
   cards: PlayerHand = null;
   isFold = false;
   private manager: BotConstructor["manager"];
@@ -153,12 +156,32 @@ export class PokerBot implements Player {
         this.currentBet = Math.max(this.currentBet, playerBet);
       },
     });
+    this.manager.on({
+      eventId: "round:end",
+      listener: () => {
+        if (this.isBroke()) {
+          this.restoreBot();
+        }
+      },
+    });
   }
 
   isBroke() {
-    return this.bank.getChipsValue() <= 0;
+    return this.bank.getChipsValue() <= DEFAUTS_BOTS.minMoney;
   }
-
+  restoreBot() {
+    const prevPlayer = this.getData();
+    const newPlayer: PlayerData = {
+      cards: null,
+      chips: restoreChips(),
+      isFold: false,
+      playerId: generateBotName(),
+      money: 0,
+    };
+    this.bank.setChips(newPlayer.chips);
+    this.playerId = newPlayer.playerId;
+    this.manager.emit("bot:reset", { newPlayer, prevPlayer });
+  }
   turn: Player["turn"] = async () => {
     const action = this.getAction();
     const chips =
@@ -339,18 +362,3 @@ export class PokerBot implements Player {
     }
   }
 }
-
-// export function replaceBrokeBots(
-//   players: Players,
-//   addBot: (playerId: string) => void,
-// ) {
-//   const brokeBots = players.session().filter((player): player is PokerBot => {
-//     return player instanceof PokerBot && player.isBroke();
-//   });
-
-//   brokeBots.forEach((bot) => {
-//     bot.dispose();
-//     players.detachPlayer(bot);
-//     addBot(bot.playerId);
-//   });
-// }

@@ -39,4 +39,8 @@ export class Players {
     }
     return players as GameState["players"];
   }
+  rename(prev: string, newName: string) {
+    this.players.set(newName, this.players.get(prev)!);
+    this.players.delete(prev);
+  }
 }

@@ -1,7 +1,7 @@
 import { Card, ExploitId, Player, PlayerHand, TurnOptions } from "./app.ts";
 import { GameEventsExploit } from "./const.ts";
 import { ExploitData, NextRank, TypeEnd } from "./db.ts";
-import { BackBettting, GameWinnerPayload } from "./server.ts";
+import { BackBettting, GameWinnerPayload, PlayerData } from "./server.ts";
 
 export type GameEventPayloads = {
   "round:start": Player[];
@@ -39,6 +39,7 @@ export type GameEventPayloads = {
   levelup: { level: number; playerId: Player["playerId"] };
   pause: undefined;
   resume: undefined;
+  "bot:reset": { prevPlayer: PlayerData; newPlayer: PlayerData };
 };
 export type GameEvents = keyof GameEventPayloads;
 

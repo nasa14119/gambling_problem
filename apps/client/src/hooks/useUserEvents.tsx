@@ -7,7 +7,7 @@ type Props = {
 }
 export const useUserEvents = ({ playerId }: Props) => {
   const data = useEventListener()
-  const { user } = useGameState()
+  const { user, players } = useGameState()
   const setState = useGameUpdate()
   useEffect(() => {
     if (!data) return
@@ -33,6 +33,21 @@ export const useUserEvents = ({ playerId }: Props) => {
           user: { ...user, currentBet: null, chips: winners[0].chips },
         })
       }
+    }
+    if (eventId === 'round:start') {
+      setState({
+        user: { ...user, isFold: false },
+      })
+    }
+    if (eventId === 'bot:reset') {
+      const { newPlayer, prevPlayer } = payload
+      const { [prevPlayer.playerId]: _, ...rest } = players
+      setTimeout(() => {
+        setState({ players: { ...players, [prevPlayer.playerId]: null } })
+      }, 2_000)
+      setTimeout(() => {
+        setState({ players: { ...rest, [newPlayer.playerId]: newPlayer } })
+      }, 3_000)
     }
   }, [data])
 }
