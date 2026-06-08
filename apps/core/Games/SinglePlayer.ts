@@ -198,7 +198,8 @@ export class GameSinglePlayer extends Game {
     this.exploitsManager.eventManger.on({
       eventId: "exploit:unlocked",
       listener: ({ exploit: { exploitId } }) => {
-        this.exploits_whitelist.push(exploitId);
+        const items = new Set([...this.exploits_whitelist, exploitId]);
+        this.exploits_whitelist = [...items];
       },
     });
     this.exploitsManager.eventManger.on({
