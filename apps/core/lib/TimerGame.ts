@@ -1,9 +1,7 @@
-import type {
-  GameEventManager,
-  GameEvents,
-} from "../Events/GameEventManager.ts";
-import { Player } from "../types.ts";
+import { Player } from "@repo/types";
+import type { GameEventManager } from "../Events/GameEventManager.ts";
 import { sleep } from "./utils.ts";
+import { GameEvents } from "@repo/types/server";
 type Constructor = {
   /**@type {number} seconds of the timer */
   time: number;

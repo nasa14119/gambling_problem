@@ -1,4 +1,4 @@
-import { Card } from "../Card";
+import { Card } from "@repo/types";
 import pokersolver from "./pokersolver.cjs";
 export type Hand = {
   name: string;

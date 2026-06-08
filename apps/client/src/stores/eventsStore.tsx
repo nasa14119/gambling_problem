@@ -2,12 +2,12 @@ import { create } from 'zustand'
 import { useSocketStore } from '#/hooks/useSocketStore'
 import { useEffect, useMemo } from 'react'
 import type {
-  ClientEvents,
-  EventData,
-  EventPayload,
-  EventSender,
   GameEventsClient,
-} from '#/types'
+  ClientEvents,
+  EventSender,
+  EventPayload,
+  EventData,
+} from '@repo/types/client'
 
 type Store = {
   eventId?: GameEventsClient

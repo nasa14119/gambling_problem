@@ -26,7 +26,7 @@ export function PlayerCard({
   return (
     <div
       className={cn(
-        'flex flex-col justify-center items-center gap-y-2 relative py-1',
+        'flex flex-col justify-center items-center relative py-1',
         hasFold && 'opacity-50',
       )}
     >
@@ -76,7 +76,7 @@ export function PlayerCard({
           </>
         )}
       </div>
-      {children}
+      <div className="absolute -bottom-10">{children}</div>
     </div>
   )
 }

@@ -2,8 +2,7 @@ import { running, runs, users, metadata, exploitsUsed } from "#schemas";
 import { desc, eq, sql } from "drizzle-orm";
 import { db } from "../connection.ts";
 import { RunDataGame } from "@repo/types/db";
-import { SavedGame } from "core/types";
-
+import type { SavedGame } from "@repo/types/server";
 export const startNewRun = async (userUuid: string) => {
   const [res] = await db
     .insert(runs)

@@ -37,3 +37,4 @@ export type ExploitUsedStats = {
   price: number;
   totalUsed: number;
 };
+export type NextRank = ExploitData & { rank: number; level: number };

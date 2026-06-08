@@ -1,4 +1,4 @@
-import { SavedGame, SiglePlayerOptions, User } from "../types.ts";
+import { User } from "../types.ts";
 import { Game } from "../Game.ts";
 import { GameFacade } from "../GameFacade.ts";
 import {
@@ -12,10 +12,11 @@ import { Inventory } from "../Players/Inventory.ts";
 import { Player } from "../Players/Player.ts";
 import { Mafia } from "../Players/Mafia.ts";
 import { PlayerOptions } from "../Players/types.ts";
-import { PokerBot } from "../Players/Bot.ts";
+import { PokerBot } from "../Players/Bots/Bot.ts";
 import { GameState } from "@repo/types";
-import { BankData } from "@repo/types/server";
+import { BankData, SavedGame, SiglePlayerOptions } from "@repo/types/server";
 import { Rank } from "../Players/Rank.ts";
+import { generateBotName } from "../Players/Bots/genName.ts";
 
 export class GameSinglePlayer extends Game {
   level = 0;
@@ -36,6 +37,8 @@ export class GameSinglePlayer extends Game {
     savedGame.players.forEach((p) => {
       this.addBot(p.playerId, {
         saved: p,
+        min_bet: savedGame.turn?.minBet,
+        currentBet: savedGame.turn?.playersPots[p.playerId],
       });
     });
     this.id = savedGame.runId;
@@ -199,7 +202,7 @@ export class GameSinglePlayer extends Game {
     });
     this.exploitsManager.eventManger.on({
       eventId: "exploit:wastrigger",
-      listener: async ({ exploitId, playerId }) => {
+      listener: async ({ exploitId }) => {
         const id = Number(this.id);
         if (!Number.isFinite(id)) throw new Error("Id is not a run id");
         await useExploit(id, exploitId);
@@ -309,12 +312,26 @@ export class GameSinglePlayer extends Game {
     this.addAutoSave(id);
     this.players.attachPlayer(player);
   }
-  addBot(id: string, options?: { saved?: SavedGame["players"][number] }) {
-    const bot = new PokerBot({
-      difficulty: "easy",
-      playerId: id,
-      manager: this.eventManager.createManage(),
-    });
+  addBot(
+    id?: string,
+    options?: {
+      saved?: SavedGame["players"][number];
+      min_bet?: number;
+      currentBet?: number;
+    },
+  ) {
+    const name = id ?? generateBotName();
+    const bot = new PokerBot(
+      {
+        difficulty: "easy",
+        playerId: name,
+        manager: this.eventManager.createManage(),
+      },
+      {
+        min_bet: options?.min_bet,
+        currentBet: options?.currentBet,
+      },
+    );
     if (options?.saved) {
       bot.bank.setChips(options.saved.chips);
       bot.cards = options.saved.cards;

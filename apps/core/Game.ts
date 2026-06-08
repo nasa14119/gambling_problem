@@ -7,9 +7,8 @@ import { TurnSystem } from "./Deck/TurnSystem.ts";
 import type { Card, ExploitId, GameState } from "@repo/types";
 import { ExploitManager } from "./Exploits/ExploitManager.ts";
 import { ExploitFacade } from "./Exploits/ExploitFacade.ts";
-import { GameOptions } from "./types.ts";
 import type { TypeEnd } from "@repo/types/db";
-import { SessionGameInterface } from "@repo/types/server";
+import { GameOptions, SessionGameInterface } from "@repo/types/server";
 
 // This class the basic pocker and exploits functionality
 export abstract class Game implements SessionGameInterface {

@@ -1,7 +1,7 @@
-import { BankData, SavedGame, User } from "@repo/types/server";
+import { BackBettting, BankData, SavedGame } from "@repo/types/server";
 import { getMafiaCredits, getQuerryRank } from "db";
 import type { GameSinglePlayer } from "../Games/SinglePlayer.ts";
-import { BackBettting } from "./types.ts";
+import type { User } from "../types.ts";
 
 type MafiaData = Pick<BankData, "round_to_end" | "pay" | "credit">;
 export class Mafia {

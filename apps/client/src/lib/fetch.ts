@@ -1,7 +1,7 @@
 import { SERVER_PATH } from '#/env'
-import type { BestRunsQuery } from '#/types'
 import type { GameState } from '@repo/types'
-import type { ExploitUsedStats, RunStats } from '@repo/types/db'
+import type { BestRunsQuery } from '@repo/types/client'
+import type { ExploitUsedStats } from '@repo/types/db'
 
 const CREATE_OPTIONS = {
   method: 'GET',

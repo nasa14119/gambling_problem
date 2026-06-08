@@ -1,5 +1,4 @@
-import type { GameState } from "@repo/types";
-import { type Player } from "../types.ts";
+import type { GameState, Player } from "@repo/types";
 
 export class Players {
   players: Map<string, Player> = new Map();
