@@ -164,14 +164,14 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS killSession;
 DELIMITER //
-CREATE PROCEDURE killSession(IN sessionId VARCHAR(36))
+CREATE PROCEDURE killSession(IN p_sessionID VARCHAR(36))
 BEGIN
     DECLARE v_runId INT;
     DECLARE new_time BIGINT; 
 
-    IF sessionId IS NOT NULL THEN
+    IF p_sessionID IS NOT NULL THEN
         SELECT ru.runId INTO v_runId FROM Running as ru 
-        WHERE ru.sessionID = sessionId ;
+        WHERE ru.sessionID = p_sessionID ;
 
 
         SELECT TIMESTAMPDIFF(MINUTE, m.lastSavedAt, NOW()) 
@@ -187,15 +187,15 @@ BEGIN
             WHERE r.runId = v_runId; 
 
         UPDATE Running as ru 
-        SET sessionId = NULL 
-        WHERE ru.sessionID = sessionId;
+        SET sessionID = NULL 
+        WHERE ru.sessionID = p_sessionID;
     END IF; 
 END //
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS endGame;
 DELIMITER //
-CREATE PROCEDURE endGame(IN runId INT, IN typeEnd ENUM("WIN", "BANKRUPT", "TERMINATED", "DEATH"))
+CREATE PROCEDURE endGame(IN runId INT, IN typeEnd varchar(20))
 BEGIN
     UPDATE Metadata as m SET m.typeEnd = typeEnd WHERE m.metadataID = (SELECT metadataID FROM Runs AS r WHERE r.runId = runId);
 END //
