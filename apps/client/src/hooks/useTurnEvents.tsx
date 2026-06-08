@@ -1,6 +1,6 @@
 import { useTablePot } from '#/hooks/useTablePot'
 import { useGameState, useGameUpdate } from '#/stores/gameStore'
-import type { EventData } from '#/types'
+import type { EventData } from '@repo/types/client'
 import { useEffect } from 'react'
 
 type Props = {

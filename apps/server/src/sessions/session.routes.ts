@@ -1,7 +1,7 @@
+import type { SavedGame } from "@repo/types/server";
 import type { UserAuth } from "db";
 
 import { GameSinglePlayer } from "core";
-import { SavedGame } from "core/types";
 import {
   clearSession,
   getCurrentRun,

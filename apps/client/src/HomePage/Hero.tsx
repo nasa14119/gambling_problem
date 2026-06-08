@@ -5,13 +5,15 @@ import styles from './styles.module.css'
 import { useEffect, useRef, useState } from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '#/shadcn/ui/tooltip'
 import { useSound } from '#/hooks/useSound'
-import { Link } from '@tanstack/react-router'
+import { Link, useRouter } from '@tanstack/react-router'
 import { NavBar } from '#/components/Nav/NavBar'
+import { fetchStatus } from '#/lib/fetch'
 
 export function Hero() {
   const [isKeydown, setIsKeydown] = useState(false)
   const havePlay = useRef(false)
   const [ref, isReady] = useSound(soundEffect, { volume: 0.8 })
+  const { navigate } = useRouter()
   useEffect(() => {
     if (!isReady) return
     const handleClick = () => {
@@ -23,6 +25,15 @@ export function Hero() {
     window.addEventListener('keydown', handleClick, { once: true })
     window.addEventListener('click', handleClick, { once: true })
   }, [isReady])
+  const handleStart = async () => {
+    const data = await fetchStatus()
+    localStorage.setItem('gameState', JSON.stringify(data))
+    if (data === null) {
+      navigate({ to: '/login' })
+      return
+    }
+    navigate({ to: '/game' })
+  }
   return (
     <header
       className={cn('w-screen h-screen relative z-0', styles['hero'])}
@@ -56,15 +67,15 @@ export function Hero() {
           </p>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link
-                to="/game"
+              <button
+                onClick={handleStart}
                 className="bg-slate-300 aspect-12/9 border border-slate-800 grid place-content-center"
               >
                 <ArrowRight className="size-5" />
-              </Link>
+              </button>
             </TooltipTrigger>
             <TooltipContent className="text-current">
-              <span className="text-white">Start game as guest</span>
+              <span className="text-white">Start game</span>
             </TooltipContent>
           </Tooltip>
         </div>

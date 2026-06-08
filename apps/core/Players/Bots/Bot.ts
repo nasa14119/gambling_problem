@@ -340,17 +340,17 @@ export class PokerBot implements Player {
   }
 }
 
-export function replaceBrokeBots(
-  players: Players,
-  addBot: (playerId: string) => void,
-) {
-  const brokeBots = players.session().filter((player): player is PokerBot => {
-    return player instanceof PokerBot && player.isBroke();
-  });
+// export function replaceBrokeBots(
+//   players: Players,
+//   addBot: (playerId: string) => void,
+// ) {
+//   const brokeBots = players.session().filter((player): player is PokerBot => {
+//     return player instanceof PokerBot && player.isBroke();
+//   });
 
-  brokeBots.forEach((bot) => {
-    bot.dispose();
-    players.detachPlayer(bot);
-    addBot(bot.playerId);
-  });
-}
+//   brokeBots.forEach((bot) => {
+//     bot.dispose();
+//     players.detachPlayer(bot);
+//     addBot(bot.playerId);
+//   });
+// }

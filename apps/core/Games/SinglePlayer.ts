@@ -17,6 +17,7 @@ import { GameState } from "@repo/types";
 import { BankData, SavedGame, SiglePlayerOptions } from "@repo/types/server";
 import { Rank } from "../Players/Rank.ts";
 import { generateBotName } from "../Players/Bots/genName.ts";
+import { ExploitData } from "@repo/types/db";
 
 export class GameSinglePlayer extends Game {
   level = 0;
@@ -241,7 +242,7 @@ export class GameSinglePlayer extends Game {
     const store = await Promise.all(
       this.exploits_whitelist.map((e) => getExploitData(e)),
     );
-    return store.map((e) => ({
+    return store.map((e: ExploitData) => ({
       ...e,
       isAvailable:
         !exploitsActive.has(e.exploitId) &&

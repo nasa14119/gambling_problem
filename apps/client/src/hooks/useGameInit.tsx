@@ -18,7 +18,7 @@ export const useGameInit = () => {
       try {
         const data = await fetchStatus()
         if (!data) {
-          navigate({ to: auth.isLogged ? '/user' : '/' })
+          navigate({ to: auth.isLogged ? '/user' : '/login' })
           return
         }
         setState({ gameState: data })

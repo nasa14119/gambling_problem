@@ -18,6 +18,7 @@ export function PauseScreen() {
         <div
           className="w-4/5 h-20 bg-slate-400 text-slate-950 rounded-md text-5xl font-bold flex items-center pl-10 transition-all duration-200 ease hover:scale-101 hover:bg-slate-300"
           onClick={() => {
+            localStorage.removeItem('gameState')
             fetchSaveQuit()
             resume()
           }}

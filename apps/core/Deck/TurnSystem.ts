@@ -1,10 +1,12 @@
-import { GameState } from "@repo/types";
+import { GameState, Player } from "@repo/types";
+import { GameEventManager } from "../Events/GameEventManager.ts";
 import {
-  GameEventManager,
   GameEventPayloads,
   GameEvents,
-} from "../Events/GameEventManager.ts";
-import type { Player, PlayerData, SavedGame, TurnSave } from "../types.ts";
+  PlayerData,
+  SavedGame,
+  TurnSave,
+} from "@repo/types/server";
 
 type TurnSystemOptions = {
   blind?: number;

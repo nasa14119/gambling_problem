@@ -62,6 +62,8 @@ export const fetchLoadGame = async () => {
   if (res.status !== 200) {
     throw new Error(`Error loading game: ${res.status}`)
   }
+  const data = res.json()
+  localStorage.setItem('gameState', JSON.stringify(data))
 }
 
 export const fetchStats = async (url: string): Promise<BestRunsQuery> => {

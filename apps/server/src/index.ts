@@ -23,6 +23,7 @@ app.use(
     origin: env.SERVER_PATH,
   }),
 );
+
 // web socket server
 wsSever(app);
 
@@ -32,9 +33,16 @@ app.use("/api", authRouter);
 app.use("/api/stats", statsRouter);
 
 // Health check
-app.get("/", (_, res) => {
+app.get("/health", (_, res) => {
   res.sendStatus(200);
 });
+
+if (env.MODE === "production") {
+  app.use(express.static("./dist"));
+  app.get("/{*splat}", (_, res) =>
+    res.sendFile("index.html", { dotfiles: "allow", root: "dist" }),
+  );
+}
 
 app.listen(PORT, () => {
   console.log(`express server started in port: http://localhost:${PORT}`);
