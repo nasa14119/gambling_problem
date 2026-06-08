@@ -56,6 +56,7 @@ export class Deck {
     this.position = 0;
     this.cards = getRandomDeck();
   }
+
   private getCards(count: number): Card[] {
     if (count < 1) throw new Error("Count must be greater than 0");
     const cards = this.cards.slice(this.position, this.position + count);
