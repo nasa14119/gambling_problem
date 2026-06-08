@@ -1,7 +1,13 @@
 import { SavedGame, SiglePlayerOptions, User } from "../types.ts";
 import { Game } from "../Game.ts";
 import { GameFacade } from "../GameFacade.ts";
-import { getExploitData, saveAndTerminateRun, updateRun, useExploit } from "db";
+import {
+  getExploitData,
+  saveAndTerminateRun,
+  updateRun,
+  useExploit,
+  softSafe as softSaveDB,
+} from "db";
 import { Inventory } from "../Players/Inventory.ts";
 import { Player } from "../Players/Player.ts";
 import { Mafia } from "../Players/Mafia.ts";
@@ -123,6 +129,18 @@ export class GameSinglePlayer extends Game {
       exploitStore: this.exploitsManager.exploitsStore,
     };
   }
+  async softSave(playerId: string) {
+    const save = this.save(playerId);
+    const user = this.getUser(playerId);
+    await softSaveDB({
+      runId: this.id,
+      level: this.level,
+      moneySpend: user.bank.moneySpend,
+      moneyTotal: user.bank.moneyTotal,
+      data: save,
+    });
+    return save;
+  }
   async quit(playerId: string) {
     const save = this.save(playerId);
     const user = this.getUser(playerId);
@@ -184,7 +202,7 @@ export class GameSinglePlayer extends Game {
       listener: async ({ exploitId, playerId }) => {
         const id = Number(this.id);
         if (!Number.isFinite(id)) throw new Error("Id is not a run id");
-        await useExploit(id, exploitId, playerId);
+        await useExploit(id, exploitId);
       },
     });
     if (this._isStarted) {
@@ -227,6 +245,41 @@ export class GameSinglePlayer extends Game {
         !user.invetory.includes(e.exploitId),
     }));
   }
+  addAutoSave(playerId: string) {
+    const listener = () => this.softSave(playerId);
+    this.eventManager.on({
+      eventId: "round:start_turn",
+      listener,
+    });
+    this.eventManager.on({
+      eventId: "turn:end",
+      listener,
+    });
+    this.eventManager.on({
+      eventId: "round:end",
+      listener,
+    });
+    this.eventManager.on({
+      eventId: "reset:soft",
+      listener,
+    });
+    this.exploitsManager.eventManger.on({
+      eventId: "exploit:unlocked",
+      listener,
+    });
+    this.exploitsManager.eventManger.on({
+      eventId: "exploit:wastrigger",
+      listener,
+    });
+    this.exploitsManager.eventManger.on({
+      eventId: "levelup",
+      listener,
+    });
+    this.exploitsManager.eventManger.on({
+      eventId: "buy:success",
+      listener,
+    });
+  }
   addPlayer(id: string, options: PlayerOptions = {}) {
     const invetory = new Inventory(this.exploitsManager.eventManger, id);
     const player = new Player(
@@ -253,6 +306,7 @@ export class GameSinglePlayer extends Game {
     if (options?.stored?.mafia) {
       mafia.loadMafia(options.stored.mafia);
     }
+    this.addAutoSave(id);
     this.players.attachPlayer(player);
   }
   addBot(id: string, options?: { saved?: SavedGame["players"][number] }) {
