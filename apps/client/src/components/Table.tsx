@@ -1,6 +1,6 @@
 import { Card } from '#/components/Card'
 import { CardCover } from '#/components/CardCover'
-import { NextCards } from '#/components/NextCards'
+import { NextCards } from '#/components/NextCard/NextCards'
 import { cn } from '#/lib/utils'
 import type { Card as CardType } from '@repo/types'
 import type { ComponentProps } from 'react'
