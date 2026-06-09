@@ -50,33 +50,6 @@ INNER JOIN Users u
 LEFT JOIN Metadata m
     ON m.metadataID = r.metadataID;
 
-DROP VIEW IF EXISTS RunDurationsView;
-CREATE VIEW RunDurationsView AS
-SELECT
-    r.runId,
-    r.userUuid,
-    u.username,
-    r.isRunning,
-    m.typeEnd,
-    m.startedAt,
-    m.endedAt,
-    m.lastSavedAt,
-    COALESCE(m.durationMinutes, 0) AS storedDurationMinutes,
-    CASE
-        WHEN r.isRunning = TRUE AND m.lastSavedAt IS NOT NULL THEN
-            COALESCE(m.durationMinutes, 0) + TIMESTAMPDIFF(MINUTE, m.lastSavedAt, CURRENT_TIMESTAMP)
-        WHEN m.endedAt IS NOT NULL AND m.startedAt IS NOT NULL THEN
-            TIMESTAMPDIFF(MINUTE, m.startedAt, m.endedAt)
-        ELSE
-            COALESCE(m.durationMinutes, 0)
-    END AS calculatedDurationMinutes
-FROM Runs r
-INNER JOIN Users u
-    ON u.userUuid = r.userUuid
-LEFT JOIN Metadata m
-    ON m.metadataID = r.metadataID
-ORDER BY calculatedDurationMinutes DESC, r.runId DESC;
-
 DROP VIEW IF EXISTS ExploitsUsedInRunView;
 CREATE VIEW ExploitsUsedInRunView AS
 SELECT 
@@ -193,3 +166,31 @@ ON eu.exploitID = e.exploitID
 LEFT JOIN TopPlayersView r
 ON eu.runId = r.runId
 GROUP BY e.exploitID, e.name, e.type, e.price, e.description;
+
+DROP VIEW IF EXISTS ExploitCountPlayer; 
+CREATE VIEW ExploitCountPlayer AS 
+SELECT 
+    r.runId, 
+    CAST(SUM(quantity_used) AS UNSIGNED) as quantity_used
+FROM Runs r 
+LEFT JOIN ExploitsUsedInRunView eu 
+ON r.runId = eu.runId 
+GROUP BY r.runId;
+
+DROP VIEW IF EXISTS PlayersAllTimeSumary; 
+CREATE VIEW PlayersAllTimeSumary AS 
+SELECT 
+    u.username,
+    COUNT(r.userUuid) as totalRuns,
+    CAST(SUM(m.durationMinutes) AS UNSIGNED) as totalTimePlaingMinutes,
+    CAST(SUM(COALESCE(ec.quantity_used, 0)) AS UNSIGNED) AS totalExploitsUsed
+FROM Runs r
+INNER JOIN Users u
+    ON r.userUuid = u.userUuid
+INNER JOIN Metadata m
+    ON r.metadataID = m.metadataID
+LEFT JOIN ExploitCountPlayer ec
+    ON ec.runId = r.runId
+GROUP BY u.username, r.userUuid
+ORDER BY totalTimePlaingMinutes DESC;
+
