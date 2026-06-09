@@ -1,3 +1,8 @@
+## General view
+
+![Diagram](Final_db_schema.png)
+![Schema Related Views, Triggers and Stored Proceduredures](Views_SP_&_Triggers.png)
+
 ## Views
 1. TopExploitsUsedView: ranks exploits by total times used.
 2. UserUnlockedExploitsView: shows which exploits each user has unlocked.
@@ -55,10 +60,10 @@ runs generate metadata and stats, exploits can be unlocked or used, and views/pr
 The schema satisfies **Third Normal Form (3NF)**. It is in 1NF because all attributes are atomic, in 2NF because all non-key attributes depend on the full primary key, and in 3NF because non-key attributes do not depend on other non-key attributes. Entity data is separated into tables such as Users, Runs, Metadata, and ExploitsData, while many-to-many relationships are handled through Whitelist and ExploitsUsed. This reduces redundancy and prevents insertion, update, and deletion anomalies.
 
 ## Related sources paths
-[Store Procedures](apps/db/migration/storeprocedures.sql)
-[Triggers](apps/db/migration/triggers.sql)
-[Views](apps/db/migration/views.sql)
-[Schema](apps/db/migration/schema.sql)
-[Schema ERD](apps/db/migration/Final_db_schema.png)
-
+[Store Procedures](apps/db/migration/storeprocedures.sql),
+[Triggers](apps/db/migration/triggers.sql),
+[Views](apps/db/migration/views.sql),
+[Schema](apps/db/migration/schema.sql),
+[Schema ERD](apps/db/migration/Final_db_schema.png),
+[Schema Related Views, Triggers and Stored Proceduredures](apps/db/migration/Views_SP_&_Triggers.png)
 
