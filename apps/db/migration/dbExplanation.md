@@ -52,13 +52,13 @@ This keeps important database behavior centralized and reusable.
 Overall, the schema is normalized because entity data, relationship data, runtime session data, and statistical/leaderboard logic are separated. The model supports the core game flow: users start runs, 
 runs generate metadata and stats, exploits can be unlocked or used, and views/procedures expose clean data for gameplay, summaries, and leaderboards.
 
-The schema satisfies **Third Normal Form (3NF)**. It is in 1NF because all attributes are atomic, in 2NF because all non-key attributes depend on the full primary key, and in 3NF because non-key attributes do not depend on other non-key attributes. Entity data is separated into tables such as `Users`, `Runs`, `Metadata`, and `ExploitsData`, while many-to-many relationships are handled through `Whitelist` and `ExploitsUsed`. This reduces redundancy and prevents insertion, update, and deletion anomalies.
+The schema satisfies **Third Normal Form (3NF)**. It is in 1NF because all attributes are atomic, in 2NF because all non-key attributes depend on the full primary key, and in 3NF because non-key attributes do not depend on other non-key attributes. Entity data is separated into tables such as Users, Runs, Metadata, and ExploitsData, while many-to-many relationships are handled through Whitelist and ExploitsUsed. This reduces redundancy and prevents insertion, update, and deletion anomalies.
 
 ## Related sources paths
-apps/db/migration/storeprocedures.sql
-apps/db/migration/triggers.sql
-apps/db/migration/views.sql
-apps/db/migration/schema.sql
-apps/db/migration/Final_db_schema.png
+[Store Procedures](apps/db/migration/storeprocedures.sql)
+[Triggers](apps/db/migration/triggers.sql)
+[Views](apps/db/migration/views.sql)
+[Schema](apps/db/migration/schema.sql)
+[Schema ERD](apps/db/migration/Final_db_schema.png)
 
 
