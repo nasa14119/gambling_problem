@@ -43,10 +43,14 @@ export const exploitsUsed = mysqlTable(
     exploitId: varchar({ length: 30 })
       .notNull()
       .references(() => exploitsData.exploitId, { onDelete: "cascade" }),
+    username: varchar({ length: 50 }).references(() => users.username, {
+      onDelete: "set null",
+    }),
   },
   (table) => [
     index("runId").on(table.runId),
     index("exploitID").on(table.exploitId),
+    index("username").on(table.username),
   ],
 );
 
@@ -81,7 +85,7 @@ export const metadata = mysqlTable(
 export const ranks = mysqlTable(
   "Ranks",
   {
-    rankUnlock: int().notNull().primaryKey(),
+    rankUnlock: int().notNull(),
     exploitId: varchar({ length: 30 })
       .notNull()
       .references(() => exploitsData.exploitId, { onDelete: "cascade" }),
@@ -152,6 +156,16 @@ export const whitelist = mysqlTable(
     }),
   ],
 );
+export const exploitcountplayer = mysqlView("exploitcountplayer", {
+  runId: int().default(0).notNull(),
+  quantityUsed: bigint("quantity_used", { mode: "number", unsigned: true }),
+})
+  .algorithm("undefined")
+  .sqlSecurity("definer")
+  .as(
+    sql`select \`r\`.\`runId\` AS \`runId\`,cast(sum(\`gambling-problem\`.\`eu\`.\`quantity_used\`) as unsigned) AS \`quantity_used\` from (\`gambling-problem\`.\`runs\` \`r\` left join \`gambling-problem\`.\`exploitsusedinrunview\` \`eu\` on((\`r\`.\`runId\` = \`gambling-problem\`.\`eu\`.\`runId\`))) group by \`r\`.\`runId\``,
+  );
+
 export const exploitsusedinrunview = mysqlView("exploitsusedinrunview", {
   runId: int().default(0),
   exploitId: varchar({ length: 30 }).notNull(),
@@ -162,6 +176,18 @@ export const exploitsusedinrunview = mysqlView("exploitsusedinrunview", {
   .sqlSecurity("definer")
   .as(
     sql`select \`r\`.\`runId\` AS \`runId\`,\`e\`.\`exploitID\` AS \`exploitID\`,\`e\`.\`name\` AS \`exploit_name\`,count(\`eu\`.\`exploitID\`) AS \`quantity_used\` from ((\`gambling-problem\`.\`exploitsdata\` \`e\` left join \`gambling-problem\`.\`exploitsused\` \`eu\` on((\`e\`.\`exploitID\` = \`eu\`.\`exploitID\`))) left join \`gambling-problem\`.\`runs\` \`r\` on((\`eu\`.\`runId\` = \`r\`.\`runId\`))) group by \`e\`.\`exploitID\`,\`e\`.\`name\`,\`r\`.\`runId\` order by \`r\`.\`runId\`,\`quantity_used\` desc`,
+  );
+
+export const playersalltimesumary = mysqlView("playersalltimesumary", {
+  username: varchar({ length: 50 }).notNull(),
+  totalRuns: bigint({ mode: "number" }).notNull(),
+  totalTimePlaingMinutes: bigint({ mode: "number", unsigned: true }),
+  totalExploitsUsed: bigint({ mode: "number", unsigned: true }),
+})
+  .algorithm("undefined")
+  .sqlSecurity("definer")
+  .as(
+    sql`select \`u\`.\`username\` AS \`username\`,count(\`r\`.\`userUuid\`) AS \`totalRuns\`,cast(sum(\`m\`.\`durationMinutes\`) as unsigned) AS \`totalTimePlaingMinutes\`,cast(sum(coalesce(\`gambling-problem\`.\`ec\`.\`quantity_used\`,0)) as unsigned) AS \`totalExploitsUsed\` from (((\`gambling-problem\`.\`runs\` \`r\` join \`gambling-problem\`.\`users\` \`u\` on((\`r\`.\`userUuid\` = \`u\`.\`userUuid\`))) join \`gambling-problem\`.\`metadata\` \`m\` on((\`r\`.\`metadataID\` = \`m\`.\`metadataID\`))) left join \`gambling-problem\`.\`exploitcountplayer\` \`ec\` on((\`gambling-problem\`.\`ec\`.\`runId\` = \`r\`.\`runId\`))) group by \`u\`.\`username\`,\`r\`.\`userUuid\` order by \`totalTimePlaingMinutes\` desc`,
   );
 
 export const topactiverunsview = mysqlView("topactiverunsview", {
@@ -194,7 +220,7 @@ export const topexploitsusedplayerrank = mysqlView(
   .algorithm("undefined")
   .sqlSecurity("definer")
   .as(
-    sql`select \`e\`.\`exploitID\` AS \`exploitID\`,\`e\`.\`name\` AS \`name\`,\`e\`.\`price\` AS \`price\`,\`e\`.\`type\` AS \`type\`,\`e\`.\`description\` AS \`description\`,count(\`gambling-problem\`.\`r\`.\`runId\`) AS \`totalUsed\` from ((\`gambling-problem\`.\`exploitsdata\` \`e\` left join \`gambling-problem\`.\`exploitsusedinrunview\` \`eu\` on((\`gambling-problem\`.\`eu\`.\`exploitID\` = \`e\`.\`exploitID\`))) join \`gambling-problem\`.\`topplayersview\` \`r\` on((\`gambling-problem\`.\`eu\`.\`runId\` = \`gambling-problem\`.\`r\`.\`runId\`))) group by \`e\`.\`exploitID\`,\`e\`.\`name\`,\`e\`.\`type\`,\`e\`.\`price\`,\`e\`.\`description\``,
+    sql`select \`e\`.\`exploitID\` AS \`exploitID\`,\`e\`.\`name\` AS \`name\`,\`e\`.\`price\` AS \`price\`,\`e\`.\`type\` AS \`type\`,\`e\`.\`description\` AS \`description\`,count(\`gambling-problem\`.\`r\`.\`runId\`) AS \`totalUsed\` from ((\`gambling-problem\`.\`exploitsdata\` \`e\` left join \`gambling-problem\`.\`exploitsusedinrunview\` \`eu\` on((\`gambling-problem\`.\`eu\`.\`exploitID\` = \`e\`.\`exploitID\`))) left join \`gambling-problem\`.\`topplayersview\` \`r\` on((\`gambling-problem\`.\`eu\`.\`runId\` = \`gambling-problem\`.\`r\`.\`runId\`))) group by \`e\`.\`exploitID\`,\`e\`.\`name\`,\`e\`.\`type\`,\`e\`.\`price\`,\`e\`.\`description\``,
   );
 
 export const topexploitsusedrank = mysqlView("topexploitsusedrank", {
@@ -208,7 +234,7 @@ export const topexploitsusedrank = mysqlView("topexploitsusedrank", {
   .algorithm("undefined")
   .sqlSecurity("definer")
   .as(
-    sql`select \`e\`.\`exploitID\` AS \`exploitID\`,\`e\`.\`name\` AS \`name\`,\`e\`.\`price\` AS \`price\`,\`e\`.\`type\` AS \`type\`,\`e\`.\`description\` AS \`description\`,count(\`gambling-problem\`.\`r\`.\`runId\`) AS \`totalUsed\` from ((\`gambling-problem\`.\`exploitsdata\` \`e\` left join \`gambling-problem\`.\`exploitsusedinrunview\` \`eu\` on((\`gambling-problem\`.\`eu\`.\`exploitID\` = \`e\`.\`exploitID\`))) join \`gambling-problem\`.\`toprunsview\` \`r\` on((\`gambling-problem\`.\`eu\`.\`runId\` = \`gambling-problem\`.\`r\`.\`runId\`))) group by \`e\`.\`exploitID\`,\`e\`.\`name\`,\`e\`.\`type\`,\`e\`.\`price\`,\`e\`.\`description\``,
+    sql`select \`e\`.\`exploitID\` AS \`exploitID\`,\`e\`.\`name\` AS \`name\`,\`e\`.\`price\` AS \`price\`,\`e\`.\`type\` AS \`type\`,\`e\`.\`description\` AS \`description\`,count(\`gambling-problem\`.\`r\`.\`runId\`) AS \`totalUsed\` from ((\`gambling-problem\`.\`exploitsdata\` \`e\` left join \`gambling-problem\`.\`exploitsusedinrunview\` \`eu\` on((\`gambling-problem\`.\`eu\`.\`exploitID\` = \`e\`.\`exploitID\`))) left join \`gambling-problem\`.\`toprunsview\` \`r\` on((\`gambling-problem\`.\`eu\`.\`runId\` = \`gambling-problem\`.\`r\`.\`runId\`))) group by \`e\`.\`exploitID\`,\`e\`.\`name\`,\`e\`.\`type\`,\`e\`.\`price\`,\`e\`.\`description\``,
   );
 
 export const topexploitsusedview = mysqlView("topexploitsusedview", {

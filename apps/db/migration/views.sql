@@ -166,3 +166,31 @@ ON eu.exploitID = e.exploitID
 LEFT JOIN TopPlayersView r
 ON eu.runId = r.runId
 GROUP BY e.exploitID, e.name, e.type, e.price, e.description;
+
+DROP VIEW IF EXISTS ExploitCountPlayer; 
+CREATE VIEW ExploitCountPlayer AS 
+SELECT 
+    r.runId, 
+    CAST(SUM(quantity_used) AS UNSIGNED) as quantity_used
+FROM Runs r 
+LEFT JOIN ExploitsUsedInRunView eu 
+ON r.runId = eu.runId 
+GROUP BY r.runId;
+
+DROP VIEW IF EXISTS PlayersAllTimeSumary; 
+CREATE VIEW PlayersAllTimeSumary AS 
+SELECT 
+    u.username,
+    COUNT(r.userUuid) as totalRuns,
+    CAST(SUM(m.durationMinutes) AS UNSIGNED) as totalTimePlaingMinutes,
+    CAST(SUM(COALESCE(ec.quantity_used, 0)) AS UNSIGNED) AS totalExploitsUsed
+FROM Runs r
+INNER JOIN Users u
+    ON r.userUuid = u.userUuid
+INNER JOIN Metadata m
+    ON r.metadataID = m.metadataID
+LEFT JOIN ExploitCountPlayer ec
+    ON ec.runId = r.runId
+GROUP BY u.username, r.userUuid
+ORDER BY totalTimePlaingMinutes DESC;
+
