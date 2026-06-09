@@ -279,6 +279,28 @@ export const userrunsmetadataview = mysqlView("userrunsmetadataview", {
     sql`select \`r\`.\`runId\` AS \`runId\`,\`r\`.\`userUuid\` AS \`userUuid\`,\`u\`.\`username\` AS \`username\`,\`r\`.\`moneyTotal\` AS \`moneyTotal\`,\`r\`.\`moneySpend\` AS \`moneySpend\`,\`r\`.\`earnings\` AS \`earnings\`,\`r\`.\`isRunning\` AS \`isRunning\`,\`m\`.\`typeEnd\` AS \`typeEnd\`,\`m\`.\`level\` AS \`level\`,\`m\`.\`durationMinutes\` AS \`durationMinutes\`,\`m\`.\`startedAt\` AS \`startedAt\`,\`m\`.\`endedAt\` AS \`endedAt\`,\`m\`.\`lastSavedAt\` AS \`lastSavedAt\` from ((\`gambling-problem\`.\`runs\` \`r\` join \`gambling-problem\`.\`users\` \`u\` on((\`u\`.\`userUuid\` = \`r\`.\`userUuid\`))) left join \`gambling-problem\`.\`metadata\` \`m\` on((\`m\`.\`metadataID\` = \`r\`.\`metadataID\`)))`,
   );
 
+export const rundurationsview = mysqlView("rundurationsview", {
+  runId: int().default(0).notNull(),
+  userUuid: char({ length: 36 }).notNull(),
+  username: varchar({ length: 50 }).notNull(),
+  isRunning: tinyint().default(1),
+  typeEnd: mysqlEnum(["WIN", "BANKRUPT", "TERMINATED", "DEATH"]),
+  startedAt: timestamp({ mode: "string" }).defaultNow(),
+  endedAt: timestamp({ mode: "string" }),
+  lastSavedAt: timestamp({ mode: "string" }),
+  storedDurationMinutes: bigint("storedDurationMinutes", {
+    mode: "number",
+  }).notNull(),
+  calculatedDurationMinutes: bigint("calculatedDurationMinutes", {
+    mode: "number",
+  }).notNull(),
+})
+  .algorithm("undefined")
+  .sqlSecurity("definer")
+  .as(
+    sql`select \`r\`.\`runId\` AS \`runId\`,\`r\`.\`userUuid\` AS \`userUuid\`,\`u\`.\`username\` AS \`username\`,\`r\`.\`isRunning\` AS \`isRunning\`,\`m\`.\`typeEnd\` AS \`typeEnd\`,\`m\`.\`startedAt\` AS \`startedAt\`,\`m\`.\`endedAt\` AS \`endedAt\`,\`m\`.\`lastSavedAt\` AS \`lastSavedAt\`,coalesce(\`m\`.\`durationMinutes\`,0) AS \`storedDurationMinutes\`,case when ((\`r\`.\`isRunning\` = true) and (\`m\`.\`lastSavedAt\` is not null)) then (coalesce(\`m\`.\`durationMinutes\`,0) + timestampdiff(MINUTE,\`m\`.\`lastSavedAt\`,current_timestamp())) when ((\`m\`.\`endedAt\` is not null) and (\`m\`.\`startedAt\` is not null)) then timestampdiff(MINUTE,\`m\`.\`startedAt\`,\`m\`.\`endedAt\`) else coalesce(\`m\`.\`durationMinutes\`,0) end AS \`calculatedDurationMinutes\` from ((\`gambling-problem\`.\`runs\` \`r\` join \`gambling-problem\`.\`users\` \`u\` on((\`u\`.\`userUuid\` = \`r\`.\`userUuid\`))) left join \`gambling-problem\`.\`metadata\` \`m\` on((\`m\`.\`metadataID\` = \`r\`.\`metadataID\`))) order by \`calculatedDurationMinutes\` desc,\`r\`.\`runId\` desc`,
+  );
+
 export const userunlockedexploitsview = mysqlView("userunlockedexploitsview", {
   userUuid: char({ length: 36 }).notNull(),
   username: varchar({ length: 50 }).notNull(),

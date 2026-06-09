@@ -50,6 +50,33 @@ INNER JOIN Users u
 LEFT JOIN Metadata m
     ON m.metadataID = r.metadataID;
 
+DROP VIEW IF EXISTS RunDurationsView;
+CREATE VIEW RunDurationsView AS
+SELECT
+    r.runId,
+    r.userUuid,
+    u.username,
+    r.isRunning,
+    m.typeEnd,
+    m.startedAt,
+    m.endedAt,
+    m.lastSavedAt,
+    COALESCE(m.durationMinutes, 0) AS storedDurationMinutes,
+    CASE
+        WHEN r.isRunning = TRUE AND m.lastSavedAt IS NOT NULL THEN
+            COALESCE(m.durationMinutes, 0) + TIMESTAMPDIFF(MINUTE, m.lastSavedAt, CURRENT_TIMESTAMP)
+        WHEN m.endedAt IS NOT NULL AND m.startedAt IS NOT NULL THEN
+            TIMESTAMPDIFF(MINUTE, m.startedAt, m.endedAt)
+        ELSE
+            COALESCE(m.durationMinutes, 0)
+    END AS calculatedDurationMinutes
+FROM Runs r
+INNER JOIN Users u
+    ON u.userUuid = r.userUuid
+LEFT JOIN Metadata m
+    ON m.metadataID = r.metadataID
+ORDER BY calculatedDurationMinutes DESC, r.runId DESC;
+
 DROP VIEW IF EXISTS ExploitsUsedInRunView;
 CREATE VIEW ExploitsUsedInRunView AS
 SELECT 
