@@ -9,6 +9,8 @@ import { ExploitManager } from "./Exploits/ExploitManager.ts";
 import { ExploitFacade } from "./Exploits/ExploitFacade.ts";
 import type { TypeEnd } from "@repo/types/db";
 import { GameOptions, SessionGameInterface } from "@repo/types/server";
+import { User } from "./types.ts";
+import { PokerBot } from "./Players/Bots/Bot.ts";
 
 // This class the basic pocker and exploits functionality
 export abstract class Game implements SessionGameInterface {
@@ -26,7 +28,7 @@ export abstract class Game implements SessionGameInterface {
   constructor({ runId, exploits_whitelist = [] }: GameOptions = {}) {
     this.id = runId?.toString() ?? uuid();
     this.round = 0;
-    this.exploits_whitelist = exploits_whitelist;
+    this.exploits_whitelist = ["change_to_random", ...exploits_whitelist];
   }
   abstract getState(id: string): unknown;
   abstract init(): void;
@@ -113,5 +115,11 @@ export abstract class Game implements SessionGameInterface {
     this.deck.river();
     await this.turnSystem.startTurn(this.players.getPlaingPlayers());
     this.roundEnd();
+  }
+  getUser(id: string): User {
+    const user = this.players.getPlayer(id) as User;
+    if (!user || user instanceof PokerBot)
+      throw new Error("Error trying to get state");
+    return user;
   }
 }

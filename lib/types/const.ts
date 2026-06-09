@@ -4,6 +4,7 @@ export const EXPLOITS = {
   SEE_FLOP: "see_flop",
   PICK_PLAYER: "pick_other_player",
   NO_SHUFFLE: "no_shuffle",
+  CHANGE_RANDOM: "change_to_random",
 } as const;
 
 const GAME_EVENTS = ["round:end"] as const;

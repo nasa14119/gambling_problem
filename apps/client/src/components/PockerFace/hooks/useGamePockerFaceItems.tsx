@@ -35,7 +35,7 @@ export const usePockerFaceItems = (): [Items[], (param: ExploitId) => void] => {
     })
   }
   useExploitEventListener(({ eventId, payload }) => {
-    if (eventId === 'buy:success') {
+    if (eventId === 'exploit:invetory:add') {
       setItems((prev) =>
         prev
           ? prev.filter((item) => item.exploitId !== payload.exploit.exploitId)

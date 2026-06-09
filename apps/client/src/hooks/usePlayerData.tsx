@@ -1,3 +1,4 @@
+import { useCardValue } from '#/components/PlayersCardsStore'
 import { useEventListener } from '#/stores/eventsStore'
 import { useGameState, useGameUpdate } from '#/stores/gameStore'
 import type { GameState, PlayerHand } from '@repo/types'
@@ -14,7 +15,7 @@ export const usePlayerData = (id: string): PlayerUseData => {
   const data = useEventListener()
   const setState = useGameUpdate()
   const [isActive, setIsActive] = useState(false)
-  const [cards, setCards] = useState<PlayerHand>(null)
+  const [cards, setCards] = useCardValue(id)
   useEffect(() => {
     if (!data) return
     const { eventId, payload } = data

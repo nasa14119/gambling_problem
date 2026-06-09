@@ -34,7 +34,12 @@ export class Inventory {
   async addItem(item: ExploitId) {
     if (this.includes(item)) throw new Error("Item already exists");
     this.exploitsManager.addTrigger({ exploitId: item, playerId: this.player });
-    this.items.set(item, await getExploitData(item));
+    const data = await getExploitData(item);
+    this.items.set(item, data);
+    this.exploitsManager.emit("exploit:invetory:add", {
+      exploit: data,
+      playerId: this.player,
+    });
   }
   getItems(): GameState["user"]["invetory"] {
     return Array.from(this.items, ([_, val]) => val);

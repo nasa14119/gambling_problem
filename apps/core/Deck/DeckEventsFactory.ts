@@ -12,9 +12,7 @@ export class DeckEventsManager extends Deck {
   }
   startRound(players: Player[]) {
     if (players.length <= 0) return;
-    const shouldShuffle = !this.isShuffleDisabled();
-    this.resetForNewRound();
-    if (shouldShuffle) {
+    if (this.shuffle()) {
       this.manager.emit("deck:shuffle", undefined);
     }
     players.forEach((player) => {

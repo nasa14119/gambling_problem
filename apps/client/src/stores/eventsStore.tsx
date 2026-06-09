@@ -59,6 +59,14 @@ export const useEventListener = (): EventData | undefined => {
   if (!eventId) return
   return memo
 }
+
+export const useEventListenerFun = (fun: (payload: EventData) => void) => {
+  const data = useEventListener()
+  useEffect(() => {
+    if (!data) return
+    fun(data)
+  }, [data])
+}
 export const useEventSender = () => {
   const sendEvent = useEventStore((s) => s.sendEvent)
   return (param: EventPayload<GameEventsClient>) => {

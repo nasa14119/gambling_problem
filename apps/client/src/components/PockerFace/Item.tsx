@@ -23,7 +23,7 @@ export function Item({
 }: Props) {
   const [isLoading, setLoading] = useState(false)
   useExploitEventListener(({ eventId, payload }) => {
-    if (eventId === 'buy:success' && isLoading) {
+    if (eventId === 'exploit:invetory:add' && isLoading) {
       if (payload.exploit.exploitId !== exploitId) return
       setLoading(false)
     }

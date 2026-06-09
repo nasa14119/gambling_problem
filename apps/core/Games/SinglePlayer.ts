@@ -192,7 +192,6 @@ export class GameSinglePlayer extends Game {
       eventId: "bot:reset",
       listener: ({ prevPlayer, newPlayer }) => {
         this.players.rename(prevPlayer.playerId, newPlayer.playerId);
-        console.log(this.players.session());
       },
     });
     this.exploitsManager.eventManger.on({
@@ -351,12 +350,6 @@ export class GameSinglePlayer extends Game {
       bot.isFold = options.saved.isFold;
     }
     this.players.attachPlayer(bot);
-  }
-  protected getUser(id: string): User {
-    const user = this.players.getPlayer(id) as User;
-    if (!user || user instanceof PokerBot)
-      throw new Error("Error trying to get state");
-    return user;
   }
   getState(id: string): GameState {
     const user = this.getUser(id);
