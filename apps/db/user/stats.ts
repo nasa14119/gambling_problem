@@ -12,6 +12,7 @@ import {
 import { ExploitUsedStats, RunStats } from "@repo/types/db";
 import { db } from "../connection.ts";
 import { and, desc, eq } from "drizzle-orm";
+import { LastRun } from "@repo/types/server";
 
 export const getMostUsedExploits = async (): Promise<
   ExploitUsedStats[] | null
@@ -123,4 +124,29 @@ export const getBestRunUser = async (userUUID: string, isRunning = false) => {
     console.error(e);
     return null;
   }
+};
+
+export const getLastStat = async (user: string): Promise<LastRun> => {
+  const [res] = await db
+    .select({
+      exploitsUsed: exploitsusedinrunview.quantityUsed,
+      finalScore: runs.earnings,
+      moneySpend: runs.moneySpend,
+      moneyTotal: runs.moneyTotal,
+      typeEnd: metadata.typeEnd,
+    })
+    .from(runs)
+    .innerJoin(metadata, eq(runs.metadataId, metadata.metadataId))
+    .leftJoin(
+      exploitsusedinrunview,
+      eq(exploitsusedinrunview.runId, runs.runId),
+    )
+    .where(and(eq(runs.userUuid, user), eq(runs.isRunning, 0)))
+    .orderBy(desc(runs.runId));
+  if (res === null) return null;
+  res["exploitsUsed"] = res["exploitsUsed"] ?? 0;
+  if (Object.values(res).some((v) => v === null)) {
+    return null;
+  }
+  return res as LastRun;
 };

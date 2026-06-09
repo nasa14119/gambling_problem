@@ -39,3 +39,11 @@ export type BackBettting = {
   round: number;
   factor: number;
 } | null;
+
+export type LastRun = {
+  typeEnd: TypeEnd;
+  moneyTotal: number;
+  moneySpend: number;
+  exploitsUsed: number;
+  finalScore: number;
+} | null;

@@ -4,6 +4,7 @@ import {
   getBestRuns,
   getBestRunUser,
   getExploitsUsedRank,
+  getLastStat,
   getMostUsedExploits,
   getPlayersBestRuns,
   UserAuth,
@@ -56,5 +57,16 @@ app.get("/exploits-player", async (req, res) => {
   const exploits = await getBestExploitsUsedPlayerRank();
   if (!exploits) return res.sendStatus(204);
   res.json(exploits);
+});
+
+app.get("/user-summary", getUserFromToken, async (req, res) => {
+  const user = res.locals.user as UserAuth;
+  if (!user) return res.sendStatus(204);
+  const data = await getLastStat(user.userUUID);
+  if (data === null) {
+    res.sendStatus(204);
+    return;
+  }
+  return res.send(data);
 });
 export default app;
