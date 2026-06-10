@@ -17,7 +17,8 @@ export const DEFAULTS = {
 } as const;
 
 export const DEFAUTS_BOTS = {
-  chips: DEFAULTS.money + DEFAULTS.chips,
+  // chips: DEFAULTS.money + DEFAULTS.chips,
+  chips: 1000,
   minMoney: 300,
 } as const;
 export type PlayerOptions = Partial<typeof DEFAULTS> & {

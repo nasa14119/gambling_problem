@@ -14,7 +14,8 @@ export function UserPage() {
   const logout = useLogout()
   const { navigate } = useRouter()
   const handleNewGame = async () => {
-    await fetchNewGame()
+    const data = await fetchNewGame()
+    localStorage.setItem('gameState', JSON.stringify(data))
     navigate({ to: '/game' })
   }
   useAuthValidate()

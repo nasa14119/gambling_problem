@@ -5,15 +5,23 @@ import { TableWithStore } from '#/components/TableWithStore'
 import { UserCards } from '#/components/UserCards'
 import { ExploitsSuit } from '#/exploits/ExploitsSuit'
 import { useGameEvents } from '#/hooks/useGameEvents'
+import { cn } from '#/lib/utils'
 import { useGameState } from '#/stores/gameStore'
 
 export function MainGame() {
   const game = useGameState()
   useGameEvents()
   const user = game.user
+  const level = game.level
   const keys = Object.keys(game.players).filter((k) => k !== user.playerId)
   return (
-    <div className="bg-green-950 rounded-4xl size-full p-2 text-white relative">
+    <div
+      className={cn(
+        'bg-green-950 rounded-4xl size-full p-2 text-white relative',
+        level === 0 && 'bg-green-950',
+        level === 1 && 'bg-red-950',
+      )}
+    >
       <ExploitsSuit />
       <div className="absolute inset-x-0 flex justify-center top-0 pt-2">
         <TableWithStore />

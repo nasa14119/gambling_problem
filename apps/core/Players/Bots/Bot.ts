@@ -93,8 +93,10 @@ type BotOptions = {
   currentBet?: number;
   min_bet?: number;
 };
-const restoreChips = (level = 0) => {
-  return DEFAUTS_BOTS.chips;
+const restoreChips = (bot: BotDifficulty) => {
+  if (bot === "easy") return DEFAUTS_BOTS.chips;
+  if (bot === "medium") return 2500;
+  return 3000;
 };
 export class PokerBot implements Player {
   min_bet: number;
@@ -157,6 +159,17 @@ export class PokerBot implements Player {
       },
     });
     this.manager.on({
+      eventId: "levelup",
+      listener: ({ level }) => {
+        if (level === 1) {
+          this.resolveDifficulty("medium");
+        } else if (level > 1) {
+          this.resolveDifficulty("hard");
+        }
+        this.levelUp();
+      },
+    });
+    this.manager.on({
       eventId: "round:end",
       listener: () => {
         if (this.isBroke()) {
@@ -173,14 +186,28 @@ export class PokerBot implements Player {
     const prevPlayer = this.getData();
     const newPlayer: PlayerData = {
       cards: null,
-      chips: restoreChips(),
+      chips: restoreChips(this.difficulty),
       isFold: false,
       playerId: generateBotName(),
       money: 0,
     };
     this.bank.setChips(newPlayer.chips);
     this.playerId = newPlayer.playerId;
+
     this.manager.emit("bot:reset", { newPlayer, prevPlayer });
+  }
+  levelUp() {
+    const prevPlayer = this.getData();
+    const newPlayer: PlayerData = {
+      cards: null,
+      chips: restoreChips(this.difficulty),
+      isFold: false,
+      playerId: generateBotName(),
+      money: 0,
+    };
+    this.bank.setChips(newPlayer.chips);
+    this.playerId = newPlayer.playerId;
+    this.manager.emit("player:rename", { newPlayer, prevPlayer });
   }
   turn: Player["turn"] = async () => {
     const action = this.getAction();

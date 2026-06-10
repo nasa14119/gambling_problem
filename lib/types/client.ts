@@ -11,6 +11,7 @@ type Overwrites = keyof Pick<
   | "player:turn"
   | "player:deposit"
   | "player:withdraw"
+  | "levelup"
 >;
 export type ClientEvents = Omit<GameEventPayloads, Overwrites> & {
   "user:turn": PlayerData;
@@ -25,6 +26,7 @@ export type ClientEvents = Omit<GameEventPayloads, Overwrites> & {
   "player:turn": GameState["turn"];
   "player:deposit": { chips: number };
   "player:withdraw": { chips: number };
+  levelup: { level: number; players: GameState["players"] };
 };
 
 export type GameEventsClient = keyof ClientEvents;

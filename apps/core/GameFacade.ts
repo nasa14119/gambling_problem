@@ -1,7 +1,11 @@
-import { GameEventPayloads, GameEvents } from "@repo/types/server";
+import {
+  GameEventPayloads,
+  GameEvents,
+  GameEventValue,
+} from "@repo/types/server";
 import { Game } from "./Game.ts";
 import { z } from "zod";
-import { Player } from "@repo/types";
+import { GameState, Player } from "@repo/types";
 export type GameEventPayload<T extends GameEvents> = {
   eventId: T;
   payload: GameEventPayloads[T];
@@ -191,6 +195,23 @@ export class GameFacade {
       eventId === "reset:quit"
     ) {
       this.send(JSON.stringify({ eventId, payload: undefined }));
+    }
+    if (eventId === "levelup") {
+      console.log(this.game.players.session());
+      setTimeout(() => {
+        const players: GameState["players"] = this.game.players
+          .session()
+          .filter((v) => v.playerId !== this.player.playerId)
+          .reduce((p, c) => {
+            const { money, cards, ...rest } = c.getData();
+            return { ...p, [c.playerId]: rest };
+          }, {});
+        console.log(players);
+        const { level } = payload as GameEventValue<"levelup">["payload"];
+        this.send(
+          JSON.stringify({ eventId, payload: { level: level, players } }),
+        );
+      }, 500);
     }
     if (eventId === "bot:reset") {
       this.send(JSON.stringify({ eventId, payload }));

@@ -9,8 +9,15 @@ export type TriggerPockerFace = PockerFaceComponentProps['trigger']
 type Props = {
   state: PockerFaceState
   trigger: PockerFaceComponentProps['trigger']
+  isActive: boolean
+  onClick: () => void
 }
-export function PockerFaceTutorial({ state, trigger }: Props) {
+export function PockerFaceTutorial({
+  state,
+  trigger,
+  isActive,
+  onClick,
+}: Props) {
   const exploitExample: ItemsPockerFace = {
     description: 'Here you will click to use the exploit you whant',
     exploitId: 'example' as ExploitId,
@@ -27,11 +34,21 @@ export function PockerFaceTutorial({ state, trigger }: Props) {
     price: 0,
     type: 'common',
   }
+  const see_flop: ItemsPockerFace = {
+    description: 'See the next 3 cards',
+    exploitId: 'see_flop',
+    isAvailable: true,
+    name: 'See Flop',
+    price: 0,
+    type: 'common',
+  }
   return (
     <PockerFaceComponent
       trigger={trigger}
-      handleSend={() => {}}
-      items={[exploitExample, disabled]}
+      handleSend={() => {
+        isActive && onClick()
+      }}
+      items={[exploitExample, !isActive ? disabled : see_flop]}
       state={state}
     />
   )

@@ -25,6 +25,7 @@ export type GameEventPayloads = {
   "player:withdraw": { chips: number; player: Player };
   "player:deposit": { chips: number; player: Player };
   "player:placedbet": { chips: number; player: Player["playerId"] };
+  "player:rename": { prevPlayer: PlayerData; newPlayer: PlayerData };
   "round:winners": GameWinnerPayload;
   "mafia:pay": { money: number; player: Player["playerId"] };
   "mafia:backbet_activation": {
