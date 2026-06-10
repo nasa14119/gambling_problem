@@ -49,6 +49,7 @@ export type LastRun = {
 } | null;
 
 export type UserSummary = {
+  username: string;
   totalRuns: number;
   totalTimePlayingMinutes: number;
   totalExploitsUsed: number;

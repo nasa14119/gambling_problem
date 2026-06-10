@@ -8,6 +8,7 @@ import {
   topexploitsusedview,
   topplayersview,
   toprunsview,
+  users,
 } from "#schemas";
 import { ExploitUsedStats, RunStats } from "@repo/types/db";
 import { db } from "../connection.ts";
@@ -157,6 +158,7 @@ export const getUserSummary = async (
   try {
     const [summary] = await db
       .select({
+        username: sql<string>`MAX(${users.username})`,
         totalRuns: sql<number>`CAST(COUNT(${runs.runId}) AS UNSIGNED)`,
         totalTimePlayingMinutes: sql<number>`CAST(COALESCE(SUM(${metadata.durationMinutes}), 0) AS UNSIGNED)`,
         totalMoneySpend: sql<number>`COALESCE(SUM(${runs.moneySpend}), 0)`,
@@ -165,6 +167,7 @@ export const getUserSummary = async (
       })
       .from(runs)
       .innerJoin(metadata, eq(runs.metadataId, metadata.metadataId))
+      .innerJoin(users, eq(runs.userUuid, users.userUuid))
       .where(and(eq(runs.userUuid, userUUID), eq(runs.isRunning, 0)));
 
     if (!summary || Number(summary.totalRuns) === 0) return null;
@@ -181,6 +184,7 @@ export const getUserSummary = async (
       .where(and(eq(runs.userUuid, userUUID), eq(runs.isRunning, 0)));
 
     return {
+      username: String(summary.username),
       totalRuns: Number(summary.totalRuns),
       totalTimePlayingMinutes: Number(summary.totalTimePlayingMinutes),
       totalExploitsUsed: Number(exploitSummary?.totalExploitsUsed ?? 0),

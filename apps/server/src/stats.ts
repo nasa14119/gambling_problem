@@ -68,7 +68,7 @@ app.get("/user-summary", getUserFromToken, async (req, res) => {
     res.sendStatus(204);
     return;
   }
-  return res.json(data);
+  return res.json({ ...data, username: user.username });
 });
 
 app.get("/user-last-run-summary", getUserFromToken, async (req, res) => {
