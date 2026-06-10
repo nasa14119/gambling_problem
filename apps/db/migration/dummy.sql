@@ -1,5 +1,8 @@
 USE gambling_problem;
 
+-- Password for every dummy user: Dummy123!
+SET @dummy_password_hash = '$argon2id$v=19$m=65536,t=3,p=4$cTQwF5uHH3L+yRI5JQHnLQ$HmiZPrG39xBodh5n5Muu2f4c5/uw1DNjQC33GACh/2o';
+
 SET FOREIGN_KEY_CHECKS = 0;
 
 DELETE FROM ExploitsUsed;
@@ -56,7 +59,7 @@ WITH RECURSIVE seq AS (
 SELECT
   CONCAT('00000000-0000-0000-0000-', LPAD(n, 12, '0')) AS userUUID,
   CONCAT('dummy_user_', LPAD(n, 2, '0')) AS username,
-  CONCAT('hash_dummy_user_', LPAD(n, 2, '0')) AS password
+  @dummy_password_hash AS password
 FROM seq;
 
 INSERT IGNORE INTO Whitelist (userUuid, exploitID)

@@ -15,8 +15,8 @@ export function LoadGameBtn() {
     const timer = setTimeout(() => setLoading(true), 200)
     try {
       await fetchLoadGame()
-      setError(false)
-      navigate({ to: '/game' })
+        .then(() => setError(false))
+        .then(() => navigate({ to: '/game' }))
     } catch (e) {
       console.error(e)
       setError(true)

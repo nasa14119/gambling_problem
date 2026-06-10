@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "NODE_ENV=development tsx --env-file=.env.local --watch src/index.ts",
     "build": "NODE_ENV=production npx tsc",
-    "start": "cp -rf ../client/dist ./dist && NODE_ENV=production npx tsx --env-file=.env.production src/index.ts",
+    "start": "rm -rf ./dist && cp -r ../client/dist ./dist && NODE_ENV=production npx tsx --env-file=.env.production src/index.ts",
     "lint": "eslint ."
   },
   "devDependencies": {

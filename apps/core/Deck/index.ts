@@ -1,10 +1,10 @@
 import { getRandomDeck } from "./lib/index.cjs";
-import { getCardName } from "./Card.ts";
+import { getCardHash, getCardName } from "./Card.ts";
 import { Player, type Card } from "@repo/types";
 import pokersolver, { type Hand } from "./lib/pokersolver.cjs";
 type PlayerCards = [Card, Card];
 const pokersolverWinners = pokersolver.Hand.winners;
-const SHUFFLE_THRESHOLD = 0.75;
+const SHUFFLE_THRESHOLD = 0.7;
 export class Deck {
   cards: number[];
   position: number;
@@ -18,6 +18,9 @@ export class Deck {
     this.gameState = [];
     this.history = new Set();
     this.playersHistory = new Set();
+  }
+  get mustShuffle() {
+    return this.position / this.cards.length >= SHUFFLE_THRESHOLD;
   }
   private addHistory(card: Card | Card[]) {
     if (Array.isArray(card)) {
@@ -44,22 +47,41 @@ export class Deck {
   resetHistory() {
     this.history = new Set();
   }
+  swap(card: Card) {
+    const pos = this.position,
+      cards = this.cards;
+    const cardCode = getCardHash(card);
+    const looking = cards.indexOf(cardCode);
+    [cards[pos], cards[looking]] = [cards[looking], cards[pos]];
+    this.position++;
+    return this.position;
+  }
+  /**
+   * Clear table history and player history
+   */
   resetForNewRound() {
-    this.shuffle();
     this.gameState = [];
     this.history = new Set();
     this.playersHistory = new Set();
   }
+  /**
+   * @returns Whether the deck was actually shuffled.
+   */
   shuffle() {
-    const canNoShuffle = this.position / this.cards.length < SHUFFLE_THRESHOLD;
-    if (this.disableShuffle && canNoShuffle) return;
+    const willNoShuffle = this.disableShuffle && !this.mustShuffle;
+    if (willNoShuffle) return false;
     this.position = 0;
     this.cards = getRandomDeck();
+    this.resetForNewRound();
+    return true;
   }
-  private getCards(count: number): Card[] {
+
+  getCards(count: number): Card[] {
     if (count < 1) throw new Error("Count must be greater than 0");
+    if (this.mustShuffle) {
+      this.shuffle();
+    }
     const cards = this.cards.slice(this.position, this.position + count);
-    if (cards.length !== count) throw new Error("Not enough cards in deck");
     this.position += count;
     return cards.map<Card>(getCardName);
   }
@@ -96,6 +118,12 @@ export class Deck {
     const cardsSolved = pokersolver.Hand.solve(cards) as Hand;
     cardsSolved.id = player.playerId;
     return cardsSolved;
+  }
+  remove(cards: Card[]) {
+    const codes = cards.map(getCardHash);
+    codes.forEach((c) => {
+      this.cards = this.cards.filter((v) => v === c);
+    });
   }
   determineWinner(
     players: Player[],

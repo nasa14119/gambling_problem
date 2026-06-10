@@ -1,0 +1,231 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 917.6168743913722 538.5776300480688" width="2752.8506231741167" height="1615.7328901442065">
+  <!-- svg-source:excalidraw -->
+  <metadata></metadata>
+  <defs>
+    <style class="style-fonts">
+      @font-face {
+        font-family: Excalifont;
+        src: url(data:font/woff2;base64,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);
+      }
+
+      @font-face {
+        font-family: Virgil;
+        src: url(data:font/woff2;base64,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);
+      }
+    </style>
+  </defs>
+  <g stroke-linecap="round" transform="translate(490.73583082771256 215.31022574732606) rotate(0 106.0319996215785 40.60166785830302)">
+    <path d="M20.3 0 C84.19 0, 148.08 0, 191.76 0 M20.3 0 C82.3 0, 144.3 0, 191.76 0 M191.76 0 C205.3 0, 212.06 6.77, 212.06 20.3 M191.76 0 C205.3 0, 212.06 6.77, 212.06 20.3 M212.06 20.3 C212.06 35.09, 212.06 49.89, 212.06 60.9 M212.06 20.3 C212.06 32.8, 212.06 45.3, 212.06 60.9 M212.06 60.9 C212.06 74.44, 205.3 81.2, 191.76 81.2 M212.06 60.9 C212.06 74.44, 205.3 81.2, 191.76 81.2 M191.76 81.2 C129.01 81.2, 66.25 81.2, 20.3 81.2 M191.76 81.2 C143.43 81.2, 95.11 81.2, 20.3 81.2 M20.3 81.2 C6.77 81.2, 0 74.44, 0 60.9 M20.3 81.2 C6.77 81.2, 0 74.44, 0 60.9 M0 60.9 C0 50.74, 0 40.58, 0 20.3 M0 60.9 C0 46.97, 0 33.05, 0 20.3 M0 20.3 C0 6.77, 6.77 0, 20.3 0 M0 20.3 C0 6.77, 6.77 0, 20.3 0" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+  </g>
+  <g transform="translate(524.107887822338 243.41189360562885) rotate(0 72.65994262695312 12.5)"><text x="72.65994262695312" y="17.619999999999997" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="middle" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">Game Instance</text></g>
+  <g stroke-linecap="round" transform="translate(113.23690529953001 214.66848541429044) rotate(0 106.0319996215785 40.60166785830302)">
+    <path d="M20.3 0 C81.12 0, 141.93 0, 191.76 0 M20.3 0 C78.18 0, 136.06 0, 191.76 0 M191.76 0 C205.3 0, 212.06 6.77, 212.06 20.3 M191.76 0 C205.3 0, 212.06 6.77, 212.06 20.3 M212.06 20.3 C212.06 30.4, 212.06 40.5, 212.06 60.9 M212.06 20.3 C212.06 32.88, 212.06 45.45, 212.06 60.9 M212.06 60.9 C212.06 74.44, 205.3 81.2, 191.76 81.2 M212.06 60.9 C212.06 74.44, 205.3 81.2, 191.76 81.2 M191.76 81.2 C130.31 81.2, 68.85 81.2, 20.3 81.2 M191.76 81.2 C138.1 81.2, 84.43 81.2, 20.3 81.2 M20.3 81.2 C6.77 81.2, 0 74.44, 0 60.9 M20.3 81.2 C6.77 81.2, 0 74.44, 0 60.9 M0 60.9 C0 51.45, 0 42.01, 0 20.3 M0 60.9 C0 46.59, 0 32.28, 0 20.3 M0 20.3 C0 6.77, 6.77 0, 20.3 0 M0 20.3 C0 6.77, 6.77 0, 20.3 0" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+  </g>
+  <g transform="translate(139.9989769425929 242.7701532725937) rotate(0 79.26992797851562 12.5)"><text x="79.26992797851562" y="17.619999999999997" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="middle" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">Sessions system</text></g>
+  <g stroke-linecap="round">
+    <g transform="translate(494.2400118910027 297.3148676613491) rotate(0 -177.04503884508404 86.77018843664086)">
+      <path d="M0 0 C-100.32 49.17, -200.63 98.33, -354.09 173.54" stroke="#1e1e1e" stroke-width="1.5" fill="none" stroke-dasharray="1.5 7"></path>
+    </g>
+    <g transform="translate(494.2400118910027 297.3148676613491) rotate(0 -177.04503884508404 86.77018843664086)">
+      <path d="M-17.33 18.02 C-12.42 12.91, -7.51 7.81, 0 0" stroke="#1e1e1e" stroke-width="1.5" fill="none" stroke-dasharray="1.5 5"></path>
+    </g>
+    <g transform="translate(494.2400118910027 297.3148676613491) rotate(0 -177.04503884508404 86.77018843664086)">
+      <path d="M-24.86 2.66 C-17.82 1.91, -10.77 1.15, 0 0" stroke="#1e1e1e" stroke-width="1.5" fill="none" stroke-dasharray="1.5 5"></path>
+    </g>
+    <g transform="translate(494.2400118910027 297.3148676613491) rotate(0 -177.04503884508404 86.77018843664086)">
+      <path d="M-336.76 155.52 C-341.67 160.63, -346.58 165.73, -354.09 173.54" stroke="#1e1e1e" stroke-width="1.5" fill="none" stroke-dasharray="1.5 5"></path>
+    </g>
+    <g transform="translate(494.2400118910027 297.3148676613491) rotate(0 -177.04503884508404 86.77018843664086)">
+      <path d="M-329.23 170.88 C-336.27 171.63, -343.32 172.39, -354.09 173.54" stroke="#1e1e1e" stroke-width="1.5" fill="none" stroke-dasharray="1.5 5"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g transform="translate(287.69543412166786 375.7937753816145) rotate(336.244040148333 81.73994445800781 12.5)"><text x="0" y="17.619999999999997" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">Virtual conection</text></g>
+  <g stroke-linecap="round">
+    <g transform="translate(68.89890283341538 417.2916906682235) rotate(0 19.419001233057315 -81.06076869781532)">
+      <path d="M0 0 C0 -55.82, 0 -111.65, 0 -146.12 M0 0 C0 -55.99, 0 -111.97, 0 -146.12 M0 -146.12 C0 -156.79, 5.33 -162.12, 16 -162.12 M0 -146.12 C0 -156.79, 5.33 -162.12, 16 -162.12 M16 -162.12 C20.9 -162.12, 25.81 -162.12, 38.84 -162.12 M16 -162.12 C23.03 -162.12, 30.07 -162.12, 38.84 -162.12" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(68.89890283341538 417.2916906682235) rotate(0 19.419001233057315 -81.06076869781532)">
+      <path d="M20.59 -155.48 C27.56 -158.02, 34.53 -160.55, 38.84 -162.12 M20.59 -155.48 C27.58 -158.02, 34.57 -160.57, 38.84 -162.12" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(68.89890283341538 417.2916906682235) rotate(0 19.419001233057315 -81.06076869781532)">
+      <path d="M20.59 -168.76 C27.56 -166.23, 34.53 -163.69, 38.84 -162.12 M20.59 -168.76 C27.58 -166.22, 34.57 -163.67, 38.84 -162.12" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g transform="translate(73.51069389595523 353.0594322115953) rotate(0 12.3599853515625 12.5)"><text x="0" y="17.619999999999997" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">ws</text></g>
+  <g stroke-linecap="round" transform="translate(747.7982234426709 333.0485091649921) rotate(0 75.46548413126993 17.5)">
+    <path d="M8.75 0 C40.6 0, 72.45 0, 142.18 0 M8.75 0 C58.29 0, 107.83 0, 142.18 0 M142.18 0 C148.01 0, 150.93 2.92, 150.93 8.75 M142.18 0 C148.01 0, 150.93 2.92, 150.93 8.75 M150.93 8.75 C150.93 13.04, 150.93 17.32, 150.93 26.25 M150.93 8.75 C150.93 13.38, 150.93 18.01, 150.93 26.25 M150.93 26.25 C150.93 32.08, 148.01 35, 142.18 35 M150.93 26.25 C150.93 32.08, 148.01 35, 142.18 35 M142.18 35 C102.68 35, 63.17 35, 8.75 35 M142.18 35 C114.14 35, 86.09 35, 8.75 35 M8.75 35 C2.92 35, 0 32.08, 0 26.25 M8.75 35 C2.92 35, 0 32.08, 0 26.25 M0 26.25 C0 20.83, 0 15.41, 0 8.75 M0 26.25 C0 21.5, 0 16.76, 0 8.75 M0 8.75 C0 2.92, 2.92 0, 8.75 0 M0 8.75 C0 2.92, 2.92 0, 8.75 0" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+  </g>
+  <g transform="translate(797.0737280207177 338.0485091649921) rotate(0 26.189979553222656 12.5)"><text x="26.189979553222656" y="17.619999999999997" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="middle" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">poker</text></g>
+  <g stroke-linecap="round" transform="translate(748.4524039935877 276.17798728950856) rotate(0 77.49650635588887 17.5)">
+    <path d="M8.75 0 C40.08 0, 71.41 0, 146.24 0 M8.75 0 C52.85 0, 96.94 0, 146.24 0 M146.24 0 C152.08 0, 154.99 2.92, 154.99 8.75 M146.24 0 C152.08 0, 154.99 2.92, 154.99 8.75 M154.99 8.75 C154.99 12.71, 154.99 16.68, 154.99 26.25 M154.99 8.75 C154.99 13.22, 154.99 17.69, 154.99 26.25 M154.99 26.25 C154.99 32.08, 152.08 35, 146.24 35 M154.99 26.25 C154.99 32.08, 152.08 35, 146.24 35 M146.24 35 C98.13 35, 50.03 35, 8.75 35 M146.24 35 C105.17 35, 64.1 35, 8.75 35 M8.75 35 C2.92 35, 0 32.08, 0 26.25 M8.75 35 C2.92 35, 0 32.08, 0 26.25 M0 26.25 C0 22.24, 0 18.24, 0 8.75 M0 26.25 C0 20.74, 0 15.23, 0 8.75 M0 8.75 C0 2.92, 2.92 0, 8.75 0 M0 8.75 C0 2.92, 2.92 0, 8.75 0" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+  </g>
+  <g transform="translate(787.6489378152964 281.17798728950856) rotate(0 38.29997253417969 12.5)"><text x="38.29997253417969" y="17.619999999999997" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="middle" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">exploits</text></g>
+  <g stroke-linecap="round" transform="translate(748.2884078973975 218.03407795986095) rotate(0 78.05503746765908 17.5)">
+    <path d="M8.75 0 C38.34 0, 67.93 0, 147.36 0 M8.75 0 C53.22 0, 97.7 0, 147.36 0 M147.36 0 C153.19 0, 156.11 2.92, 156.11 8.75 M147.36 0 C153.19 0, 156.11 2.92, 156.11 8.75 M156.11 8.75 C156.11 14.42, 156.11 20.08, 156.11 26.25 M156.11 8.75 C156.11 12.6, 156.11 16.46, 156.11 26.25 M156.11 26.25 C156.11 32.08, 153.19 35, 147.36 35 M156.11 26.25 C156.11 32.08, 153.19 35, 147.36 35 M147.36 35 C104.78 35, 62.19 35, 8.75 35 M147.36 35 C109.79 35, 72.22 35, 8.75 35 M8.75 35 C2.92 35, 0 32.08, 0 26.25 M8.75 35 C2.92 35, 0 32.08, 0 26.25 M0 26.25 C0 20, 0 13.74, 0 8.75 M0 26.25 C0 20.98, 0 15.7, 0 8.75 M0 8.75 C0 2.92, 2.92 0, 8.75 0 M0 8.75 C0 2.92, 2.92 0, 8.75 0" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+  </g>
+  <g transform="translate(792.7434774085141 223.03407795986095) rotate(0 33.59996795654297 12.5)"><text x="33.59996795654297" y="17.619999999999997" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="middle" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">players</text></g>
+  <g stroke-linecap="round" transform="translate(747.3735689437226 156.89616545482932) rotate(0 80.12165272382481 17.547210112608354)">
+    <path d="M8.77 0 C44.3 0, 79.82 0, 151.47 0 M8.77 0 C47.32 0, 85.88 0, 151.47 0 M151.47 0 C157.32 0, 160.24 2.92, 160.24 8.77 M151.47 0 C157.32 0, 160.24 2.92, 160.24 8.77 M160.24 8.77 C160.24 12.62, 160.24 16.46, 160.24 26.32 M160.24 8.77 C160.24 12.95, 160.24 17.13, 160.24 26.32 M160.24 26.32 C160.24 32.17, 157.32 35.09, 151.47 35.09 M160.24 26.32 C160.24 32.17, 157.32 35.09, 151.47 35.09 M151.47 35.09 C94.4 35.09, 37.33 35.09, 8.77 35.09 M151.47 35.09 C111.12 35.09, 70.76 35.09, 8.77 35.09 M8.77 35.09 C2.92 35.09, 0 32.17, 0 26.32 M8.77 35.09 C2.92 35.09, 0 32.17, 0 26.32 M0 26.32 C0 22.75, 0 19.18, 0 8.77 M0 26.32 C0 21.52, 0 16.72, 0 8.77 M0 8.77 C0 2.92, 2.92 0, 8.77 0 M0 8.77 C0 2.92, 2.92 0, 8.77 0" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+  </g>
+  <g transform="translate(757.5952659180357 161.94337556743812) rotate(0 69.89995574951172 12.5)"><text x="69.89995574951172" y="17.619999999999997" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="middle" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">state of game</text></g>
+  <g stroke-opacity="0" fill-opacity="0" stroke-linecap="round" transform="translate(348.66799003588767 58.1521396504927) rotate(0 58.378661581835786 58.37866158183556)">
+    <path d="M71.68 0.34 C80.14 1.17, 88.92 7.25, 95.64 13.15 C102.37 19.05, 108.56 27.31, 112.05 35.76 C115.54 44.21, 117.42 54.92, 116.61 63.84 C115.79 72.75, 112.04 81.78, 107.18 89.23 C102.32 96.67, 95.17 103.96, 87.43 108.49 C79.69 113.02, 69.89 116.15, 60.74 116.4 C51.58 116.66, 40.77 113.89, 32.51 110.01 C24.26 106.14, 16.59 100.29, 11.22 93.16 C5.86 86.03, 1.61 76.38, 0.34 67.24 C-0.92 58.11, 0.69 47.06, 3.63 38.37 C6.58 29.68, 11.61 20.98, 18.02 15.1 C24.43 9.22, 32.89 5.33, 42.1 3.08 C51.31 0.83, 67.77 1.49, 73.3 1.62 C78.83 1.75, 75.48 2.71, 75.27 3.87 M72.65 1.79 C81.23 3.45, 92.28 9.73, 99.01 15.76 C105.74 21.79, 110.41 29.43, 113.04 37.97 C115.67 46.5, 115.78 57.67, 114.8 66.97 C113.81 76.28, 112.27 86.38, 107.13 93.78 C101.99 101.19, 92.08 107.56, 83.95 111.4 C75.82 115.24, 67.07 117.38, 58.34 116.82 C49.61 116.27, 39.91 112.36, 31.57 108.08 C23.23 103.81, 13.34 98.56, 8.3 91.18 C3.26 83.8, 1.85 73.01, 1.32 63.8 C0.78 54.59, 2.07 44.46, 5.09 35.93 C8.1 27.4, 12.71 18.26, 19.42 12.61 C26.12 6.97, 36.21 3.89, 45.29 2.05 C54.37 0.21, 69.15 1.38, 73.9 1.57 C78.66 1.75, 74.13 2.01, 73.82 3.14" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+  </g>
+  <g transform="translate(357.606710211473 134.88862684843434) rotate(0 49.43994140625 12.5)"><text x="49.43994140625" y="17.619999999999997" font-family="Virgil, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="middle" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">Database</text></g>
+  <g stroke-linecap="round">
+    <g transform="translate(382.13383609086395 91.2281313641306) rotate(0 21.476943316680263 10.678143279945743)">
+      <path d="M0.54 1.07 C0.26 5.65, -1.28 22.69, -1.19 28.03 C-1.11 33.36, -0.29 31.37, 1.06 33.06 C2.42 34.75, 4.5 36.92, 6.93 38.16 C9.37 39.4, 12.66 40.03, 15.67 40.5 C18.68 40.96, 21.9 41.43, 24.98 40.95 C28.06 40.47, 31.55 39.08, 34.16 37.63 C36.77 36.18, 39.44 33.98, 40.65 32.26 C41.85 30.53, 41 30.94, 41.42 27.27 C41.84 23.59, 42.87 15.65, 43.17 10.21 C43.46 4.77, 43.45 -1.64, 43.19 -5.38 C42.92 -9.11, 42.65 -10.35, 41.6 -12.2 C40.54 -14.05, 39.14 -15.35, 36.86 -16.49 C34.57 -17.63, 31.61 -18.52, 27.88 -19.04 C24.15 -19.56, 18.17 -20.09, 14.47 -19.6 C10.78 -19.11, 7.77 -17.49, 5.72 -16.1 C3.68 -14.7, 3.06 -12.65, 2.2 -11.23 C1.34 -9.82, 1.06 -9.47, 0.56 -7.63 C0.06 -5.78, -0.82 -1.48, -0.79 -0.19 M-0.63 0.59 C-0.61 5.29, 0.79 23.82, 0.89 29.42 C0.99 35.02, -1.01 32.52, -0.01 34.17 C0.99 35.82, 4.54 38.23, 6.91 39.33 C9.28 40.44, 11.07 40.65, 14.21 40.8 C17.36 40.95, 22.43 40.91, 25.78 40.23 C29.12 39.56, 32.02 38.16, 34.29 36.76 C36.57 35.35, 37.97 33.63, 39.41 31.81 C40.85 29.99, 42.12 29.56, 42.91 25.86 C43.7 22.15, 44.01 14.57, 44.13 9.57 C44.25 4.57, 43.79 -0.4, 43.66 -4.15 C43.52 -7.9, 44.49 -11.25, 43.33 -12.91 C42.16 -14.57, 39.26 -13.03, 36.67 -14.13 C34.08 -15.23, 31.48 -19, 27.79 -19.5 C24.1 -19.99, 18.05 -17.87, 14.53 -17.11 C11.01 -16.35, 8.83 -16.1, 6.66 -14.94 C4.49 -13.78, 2.71 -11.34, 1.52 -10.15 C0.33 -8.96, -0.42 -9.48, -0.49 -7.79 C-0.57 -6.1, 0.72 -1.07, 1.07 -0.03" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g stroke-linecap="round">
+    <g transform="translate(382.4621776184349 81.44004497735295) rotate(0 21.107400511458764 4.484917662726502)">
+      <path d="M-0.55 -0.13 C0.13 0.62, 1.74 3.51, 4.33 4.97 C6.92 6.42, 11.29 7.96, 14.98 8.59 C18.67 9.23, 23.01 9.19, 26.5 8.79 C29.98 8.39, 33.26 7.4, 35.91 6.19 C38.55 4.98, 41.23 2.37, 42.35 1.51 M0.17 -0.67 C1.01 0.39, 3.04 3.93, 5.43 5.58 C7.82 7.22, 10.98 8.61, 14.51 9.22 C18.04 9.83, 22.93 9.7, 26.61 9.25 C30.3 8.8, 33.93 7.85, 36.63 6.51 C39.32 5.18, 41.73 2.28, 42.76 1.25" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g stroke-linecap="round">
+    <g transform="translate(382.11077716952695 90.70332512588539) rotate(0 21.447356685169325 4.2691245153553155)">
+      <path d="M-0.27 -0.18 C0.55 0.71, 1.78 3.76, 4.36 5.2 C6.94 6.64, 11.63 7.8, 15.22 8.46 C18.82 9.12, 22.48 9.5, 25.95 9.15 C29.41 8.79, 33.22 7.68, 36 6.32 C38.78 4.97, 41.55 1.88, 42.61 1 M0.6 -0.74 C1.37 0.25, 1.43 4.3, 3.81 5.93 C6.19 7.56, 11.22 8.65, 14.88 9.02 C18.54 9.39, 22.13 8.51, 25.78 8.13 C29.43 7.74, 33.87 7.99, 36.77 6.71 C39.66 5.44, 42.22 1.53, 43.16 0.48" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g stroke-linecap="round">
+    <g transform="translate(381.8099570289778 97.41457023347266) rotate(0 21.275512861788684 4.573536601558089)">
+      <path d="M-0.23 0.06 C0.58 0.93, 2.12 3.61, 4.61 5.07 C7.09 6.53, 11.1 8.12, 14.67 8.82 C18.25 9.52, 22.44 9.78, 26.04 9.28 C29.64 8.78, 33.54 7.19, 36.26 5.82 C38.98 4.45, 41.25 1.89, 42.36 1.07 M0.65 -0.39 C1.41 0.58, 1.67 4.35, 4.18 5.73 C6.69 7.11, 12.09 7.46, 15.71 7.9 C19.34 8.33, 22.35 8.65, 25.92 8.33 C29.5 8, 34.36 7.24, 37.17 5.95 C39.98 4.66, 41.75 1.26, 42.78 0.59" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g stroke-linecap="round">
+    <g transform="translate(596.6678304492916 209.81022574732606) rotate(0 -62.871297761590085 -46.68971225749874)">
+      <path d="M0 0 C0 -17.55, 0 -35.1, 0 -77.38 M0 0 C0 -26.58, 0 -53.17, 0 -77.38 M0 -77.38 C0 -88.05, -5.33 -93.38, -16 -93.38 M0 -77.38 C0 -88.05, -5.33 -93.38, -16 -93.38 M-16 -93.38 C-58.73 -93.38, -101.46 -93.38, -125.74 -93.38 M-16 -93.38 C-58.42 -93.38, -100.84 -93.38, -125.74 -93.38" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(596.6678304492916 209.81022574732606) rotate(0 -62.871297761590085 -46.68971225749874)">
+      <path d="M-102.25 -101.93 C-107.58 -99.99, -112.91 -98.05, -125.74 -93.38 M-102.25 -101.93 C-110.32 -98.99, -118.39 -96.05, -125.74 -93.38" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(596.6678304492916 209.81022574732606) rotate(0 -62.871297761590085 -46.68971225749874)">
+      <path d="M-102.25 -84.83 C-107.58 -86.77, -112.91 -88.71, -125.74 -93.38 M-102.25 -84.83 C-110.32 -87.77, -118.39 -90.7, -125.74 -93.38" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g stroke-linecap="round">
+    <g transform="translate(219.16890492110815 209.16848541429044) rotate(0 61.9995816941132 -46.368842090980934)">
+      <path d="M0 0 C0 -15.45, 0 -30.9, 0 -76.74 M0 0 C0 -20.69, 0 -41.38, 0 -76.74 M0 -76.74 C0 -87.4, 5.33 -92.74, 16 -92.74 M0 -76.74 C0 -87.4, 5.33 -92.74, 16 -92.74 M16 -92.74 C52.55 -92.74, 89.11 -92.74, 124 -92.74 M16 -92.74 C49.63 -92.74, 83.25 -92.74, 124 -92.74" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(219.16890492110815 209.16848541429044) rotate(0 61.9995816941132 -46.368842090980934)">
+      <path d="M100.51 -84.19 C105.24 -85.91, 109.97 -87.63, 124 -92.74 M100.51 -84.19 C106.84 -86.49, 113.18 -88.8, 124 -92.74" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(219.16890492110815 209.16848541429044) rotate(0 61.9995816941132 -46.368842090980934)">
+      <path d="M100.51 -101.29 C105.24 -99.57, 109.97 -97.85, 124 -92.74 M100.51 -101.29 C106.84 -98.98, 113.18 -96.68, 124 -92.74" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g stroke-linecap="round">
+    <g transform="translate(708.2998300708687 244.43732699939392) rotate(0 16.78686943642697 -35.04697571597785)">
+      <path d="M0 0 C7.19 -15.01, 14.38 -30.01, 33.57 -70.09 M0 0 C8.34 -17.41, 16.68 -34.82, 33.57 -70.09" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(708.2998300708687 244.43732699939392) rotate(0 16.78686943642697 -35.04697571597785)">
+      <path d="M31.14 -45.21 C31.66 -50.54, 32.18 -55.87, 33.57 -70.09 M31.14 -45.21 C31.74 -51.39, 32.35 -57.57, 33.57 -70.09" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(708.2998300708687 244.43732699939392) rotate(0 16.78686943642697 -35.04697571597785)">
+      <path d="M15.71 -52.6 C19.54 -56.35, 23.36 -60.09, 33.57 -70.09 M15.71 -52.6 C20.15 -56.95, 24.59 -61.29, 33.57 -70.09" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g stroke-linecap="round">
+    <g transform="translate(708.2998300708705 253.4555843341709) rotate(0 17.244288913263517 -7.726788384640486)">
+      <path d="M0 0 C9.6 -4.3, 19.19 -8.6, 34.49 -15.45 M0 0 C9.81 -4.39, 19.61 -8.79, 34.49 -15.45" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(708.2998300708705 253.4555843341709) rotate(0 17.244288913263517 -7.726788384640486)">
+      <path d="M20.93 -2.29 C24.7 -5.96, 28.47 -9.62, 34.49 -15.45 M20.93 -2.29 C24.78 -6.04, 28.64 -9.78, 34.49 -15.45" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(708.2998300708705 253.4555843341709) rotate(0 17.244288913263517 -7.726788384640486)">
+      <path d="M15.64 -14.09 C20.89 -14.47, 26.13 -14.85, 34.49 -15.45 M15.64 -14.09 C21 -14.48, 26.36 -14.87, 34.49 -15.45" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g stroke-linecap="round">
+    <g transform="translate(708.2998300708696 260.46933253355337) rotate(0 17.32628696135953 14.331418080801313)">
+      <path d="M0 0 C13.59 11.24, 27.18 22.48, 34.65 28.66 M0 0 C11.39 9.42, 22.78 18.84, 34.65 28.66" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(708.2998300708696 260.46933253355337) rotate(0 17.32628696135953 14.331418080801313)">
+      <path d="M13.47 21.12 C21.78 24.08, 30.08 27.04, 34.65 28.66 M13.47 21.12 C20.43 23.6, 27.4 26.08, 34.65 28.66" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(708.2998300708696 260.46933253355337) rotate(0 17.32628696135953 14.331418080801313)">
+      <path d="M23.27 9.27 C27.74 16.88, 32.2 24.48, 34.65 28.66 M23.27 9.27 C27.01 15.64, 30.75 22.02, 34.65 28.66" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g stroke-linecap="round">
+    <g transform="translate(708.2998300708696 267.48655964765294) rotate(0 17.07335620006961 35.90540855172435)">
+      <path d="M0 0 C11.69 24.58, 23.37 49.16, 34.15 71.81 M0 0 C10.52 22.12, 21.03 44.23, 34.15 71.81" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(708.2998300708696 267.48655964765294) rotate(0 17.07335620006961 35.90540855172435)">
+      <path d="M16.34 54.27 C22.43 60.27, 28.53 66.28, 34.15 71.81 M16.34 54.27 C21.82 59.67, 27.31 65.07, 34.15 71.81" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(708.2998300708696 267.48655964765294) rotate(0 17.07335620006961 35.90540855172435)">
+      <path d="M31.78 46.92 C32.59 55.44, 33.4 63.96, 34.15 71.81 M31.78 46.92 C32.51 54.59, 33.24 62.25, 34.15 71.81" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g transform="translate(519.1170932756195 87.64146626444472) rotate(0 48.57997131347656 12.5)"><text x="0" y="17.619999999999997" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">auto save</text></g>
+  <g transform="translate(233.001550488455 126.76497215422842) rotate(0 47.369972229003906 12.5)"><text x="0" y="17.619999999999997" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">game load</text></g>
+  <g transform="translate(347.6950563655355 223.6221653549319) rotate(0 51.359954833984375 12.5)"><text x="0" y="17.619999999999997" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">(connects)</text></g>
+  <g stroke-linecap="round">
+    <g transform="translate(330.80090454268793 255.29960871303138) rotate(0 77.21746314251277 0.2995350596515891)">
+      <path d="M0 0 C50.94 0.2, 101.89 0.4, 154.43 0.6 M0 0 C49.24 0.19, 98.49 0.38, 154.43 0.6" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(330.80090454268793 255.29960871303138) rotate(0 77.21746314251277 0.2995350596515891)">
+      <path d="M130.91 9.06 C138.67 6.27, 146.43 3.48, 154.43 0.6 M130.91 9.06 C138.41 6.36, 145.91 3.66, 154.43 0.6" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(330.80090454268793 255.29960871303138) rotate(0 77.21746314251277 0.2995350596515891)">
+      <path d="M130.98 -8.04 C138.71 -5.19, 146.45 -2.34, 154.43 0.6 M130.98 -8.04 C138.46 -5.29, 145.94 -2.53, 154.43 0.6" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g transform="translate(323.91444655419764 398.19513156045605) rotate(336.244040148333 57.501625061035156 7.187118500137785)"><text x="0" y="10.130962237794218" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="11.499389600220452px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">(event comunication)</text></g>
+  <g stroke-linecap="round" transform="translate(65.71770969537192 38.108781911421374) rotate(0 75.82106856682913 20.992871382794647)">
+    <path d="M10.5 0 C58.93 0, 107.36 0, 141.15 0 M10.5 0 C42.21 0, 73.92 0, 141.15 0 M141.15 0 C148.14 0, 151.64 3.5, 151.64 10.5 M141.15 0 C148.14 0, 151.64 3.5, 151.64 10.5 M151.64 10.5 C151.64 17.06, 151.64 23.63, 151.64 31.49 M151.64 10.5 C151.64 17.66, 151.64 24.82, 151.64 31.49 M151.64 31.49 C151.64 38.49, 148.14 41.99, 141.15 41.99 M151.64 31.49 C151.64 38.49, 148.14 41.99, 141.15 41.99 M141.15 41.99 C114.54 41.99, 87.93 41.99, 10.5 41.99 M141.15 41.99 C106.7 41.99, 72.26 41.99, 10.5 41.99 M10.5 41.99 C3.5 41.99, 0 38.49, 0 31.49 M10.5 41.99 C3.5 41.99, 0 38.49, 0 31.49 M0 31.49 C0 25.45, 0 19.41, 0 10.5 M0 31.49 C0 26.84, 0 22.19, 0 10.5 M0 10.5 C0 3.5, 3.5 0, 10.5 0 M0 10.5 C0 3.5, 3.5 0, 10.5 0" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+  </g>
+  <g transform="translate(111.8788051176698 46.60165329421625) rotate(0 29.65997314453125 12.5)"><text x="29.65997314453125" y="17.619999999999997" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="middle" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">server</text></g>
+  <g stroke-linecap="round">
+    <g transform="translate(222.85984682903018 59.00165329421634) rotate(0 64.31210861230238 12.964005031950137)">
+      <path d="M0 0 C13.53 0.46, 59.72 -1.57, 81.15 2.76 C102.59 7.1, 120.71 22.14, 128.62 26.01 M0 0 C13.53 0.46, 59.72 -1.57, 81.15 2.76 C102.59 7.1, 120.71 22.14, 128.62 26.01" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(222.85984682903018 59.00165329421634) rotate(0 64.31210861230238 12.964005031950137)">
+      <path d="M23.54 -8.41 C14.95 -5.34, 6.35 -2.27, 0 0 M23.54 -8.41 C14.36 -5.13, 5.19 -1.85, 0 0" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(222.85984682903018 59.00165329421634) rotate(0 64.31210861230238 12.964005031950137)">
+      <path d="M23.44 8.69 C14.88 5.52, 6.32 2.34, 0 0 M23.44 8.69 C14.3 5.3, 5.16 1.91, 0 0" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g stroke-linecap="round">
+    <g transform="translate(67.68529408407448 424.5786910556776) rotate(0 -28.842647042037242 -182.78851888073063)">
+      <path d="M0 0 C0 -40.59, 0 -81.18, 0 -171.14 M0 0 C0 -62.38, 0 -124.77, 0 -171.14 M0 -171.14 C0 -181.8, -5.33 -187.14, -16 -187.14 M0 -171.14 C0 -181.8, -5.33 -187.14, -16 -187.14 M-16 -187.14 C-21.14 -187.14, -26.28 -187.14, -41.69 -187.14 M-16 -187.14 C-22.05 -187.14, -28.1 -187.14, -41.69 -187.14 M-41.69 -187.14 C-52.35 -187.14, -57.69 -192.47, -57.69 -203.14 M-41.69 -187.14 C-52.35 -187.14, -57.69 -192.47, -57.69 -203.14 M-57.69 -203.14 C-57.69 -241.22, -57.69 -279.3, -57.69 -349.58 M-57.69 -203.14 C-57.69 -259.16, -57.69 -315.18, -57.69 -349.58 M-57.69 -349.58 C-57.69 -360.24, -52.35 -365.58, -41.69 -365.58 M-57.69 -349.58 C-57.69 -360.24, -52.35 -365.58, -41.69 -365.58 M-41.69 -365.58 C-29.66 -365.58, -17.63 -365.58, -7.47 -365.58 M-41.69 -365.58 C-34.51 -365.58, -27.32 -365.58, -7.47 -365.58" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(67.68529408407448 424.5786910556776) rotate(0 -28.842647042037242 -182.78851888073063)">
+      <path d="M-30.96 -357.03 C-25.39 -359.05, -19.82 -361.08, -7.47 -365.58 M-30.96 -357.03 C-22.4 -360.14, -13.83 -363.26, -7.47 -365.58" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+    <g transform="translate(67.68529408407448 424.5786910556776) rotate(0 -28.842647042037242 -182.78851888073063)">
+      <path d="M-30.96 -374.13 C-25.39 -372.1, -19.82 -370.07, -7.47 -365.58 M-30.96 -374.13 C-22.4 -371.01, -13.83 -367.89, -7.47 -365.58" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g transform="translate(106.387049167226 10) rotate(0 39.90995788574219 12.5)"><text x="0" y="17.619999999999997" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">analitics</text></g>
+  <g transform="translate(17.849524782924163 137.450405747089) rotate(0 46.3399658203125 12.5)"><text x="0" y="17.619999999999997" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">client get</text></g>
+  <g stroke-linecap="round">
+    <g transform="translate(53.53579077116228 495.6278690023487) rotate(0 25.216334272943186 -20.924163168091127)">
+      <path d="M0.18 -0.71 C1.19 -5.64, 2.81 -22.68, 6.56 -29.88 C10.32 -37.08, 16.9 -43.48, 22.71 -43.89 C28.52 -44.31, 37 -39.32, 41.43 -32.37 C45.85 -25.41, 56.26 -7.43, 49.26 -2.16 C42.26 3.11, 7.67 -1.23, -0.56 -0.74 M-1.18 1.54 C-0.28 -3.26, 1.79 -21.49, 6.19 -28.87 C10.58 -36.25, 19.3 -42.32, 25.21 -42.75 C31.11 -43.18, 37.85 -38.35, 41.64 -31.45 C45.43 -24.54, 54.81 -6.82, 47.96 -1.33 C41.12 4.16, 8.48 1.3, 0.56 1.49" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+    </g>
+  </g>
+  <mask></mask>
+  <g stroke-linecap="round" transform="translate(65.90969965320619 429.34300406791453) rotate(0 12.52449355357976 10.958931859382574)">
+    <path d="M10.38 0.28 C12.95 -0.25, 17.01 0.14, 19.29 1.31 C21.57 2.48, 23.17 4.97, 24.04 7.3 C24.92 9.63, 25.48 13.02, 24.54 15.31 C23.6 17.59, 20.75 19.97, 18.42 21 C16.08 22.04, 13.13 22.13, 10.55 21.53 C7.96 20.93, 4.61 19.16, 2.88 17.41 C1.14 15.66, 0.08 13.35, 0.13 11.05 C0.19 8.74, 1.5 5.34, 3.22 3.57 C4.95 1.8, 9.16 0.95, 10.48 0.45 C11.79 -0.05, 11.03 0.42, 11.12 0.59 M12.69 0.65 C15.1 0.81, 18.44 1.94, 20.49 3.57 C22.55 5.19, 24.64 8.21, 25.01 10.4 C25.38 12.59, 24.24 14.91, 22.72 16.73 C21.2 18.54, 18.48 20.59, 15.88 21.3 C13.29 22.01, 9.57 21.83, 7.15 20.99 C4.73 20.16, 2.52 18.28, 1.37 16.3 C0.21 14.31, -0.51 11.54, 0.22 9.06 C0.95 6.58, 3.51 3.02, 5.73 1.42 C7.96 -0.18, 12.44 -0.32, 13.59 -0.53 C14.74 -0.74, 12.6 -0.2, 12.65 0.15" stroke="#1e1e1e" stroke-width="1" fill="none"></path>
+  </g>
+  <g transform="translate(52.55598878623459 503.57763004806884) rotate(0 25.889976501464844 12.5)"><text x="0" y="17.619999999999997" font-family="Excalifont, Xiaolai, sans-serif, Segoe UI Emoji" font-size="20px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">client</text></g>
+</svg>

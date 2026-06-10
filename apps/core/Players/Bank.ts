@@ -95,7 +95,7 @@ export class Bank implements BankInterface {
     await this.playerInvetory.addItem(exploitId);
     emit("buy:success", {
       playerId: this.player.playerId,
-      exploit: this.playerInvetory.getItemInfo(exploitId),
+      exploit: exploitId,
       newBalance: this.getMoneyValue(),
     });
   }

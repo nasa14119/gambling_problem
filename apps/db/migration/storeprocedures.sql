@@ -88,7 +88,6 @@ BEGIN
 
     SELECT
         runId,
-        userUuid,
         username,
         moneyTotal,
         moneySpend,

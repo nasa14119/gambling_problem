@@ -2,12 +2,12 @@ import {
   mysqlTable,
   mysqlSchema,
   AnyMySqlColumn,
-  primaryKey,
+  foreignKey,
   varchar,
+  primaryKey,
   float,
   text,
   index,
-  foreignKey,
   int,
   mysqlEnum,
   timestamp,
@@ -19,6 +19,12 @@ import {
   mysqlView,
 } from "drizzle-orm/mysql-core";
 import { sql } from "drizzle-orm";
+
+export const autorizedUsers = mysqlTable("autorizedUsers", {
+  userUuid: varchar({ length: 36 })
+    .notNull()
+    .references(() => users.userUuid, { onDelete: "cascade" }),
+});
 
 export const exploitsData = mysqlTable(
   "ExploitsData",
@@ -286,7 +292,6 @@ export const toprunsview = mysqlView("toprunsview", {
 
 export const userrunsmetadataview = mysqlView("userrunsmetadataview", {
   runId: int().default(0).notNull(),
-  userUuid: char({ length: 36 }).notNull(),
   username: varchar({ length: 50 }).notNull(),
   moneyTotal: float(),
   moneySpend: float(),
@@ -302,7 +307,7 @@ export const userrunsmetadataview = mysqlView("userrunsmetadataview", {
   .algorithm("undefined")
   .sqlSecurity("definer")
   .as(
-    sql`select \`r\`.\`runId\` AS \`runId\`,\`r\`.\`userUuid\` AS \`userUuid\`,\`u\`.\`username\` AS \`username\`,\`r\`.\`moneyTotal\` AS \`moneyTotal\`,\`r\`.\`moneySpend\` AS \`moneySpend\`,\`r\`.\`earnings\` AS \`earnings\`,\`r\`.\`isRunning\` AS \`isRunning\`,\`m\`.\`typeEnd\` AS \`typeEnd\`,\`m\`.\`level\` AS \`level\`,\`m\`.\`durationMinutes\` AS \`durationMinutes\`,\`m\`.\`startedAt\` AS \`startedAt\`,\`m\`.\`endedAt\` AS \`endedAt\`,\`m\`.\`lastSavedAt\` AS \`lastSavedAt\` from ((\`gambling-problem\`.\`runs\` \`r\` join \`gambling-problem\`.\`users\` \`u\` on((\`u\`.\`userUuid\` = \`r\`.\`userUuid\`))) left join \`gambling-problem\`.\`metadata\` \`m\` on((\`m\`.\`metadataID\` = \`r\`.\`metadataID\`)))`,
+    sql`select \`r\`.\`runId\` AS \`runId\`,\`u\`.\`username\` AS \`username\`,\`r\`.\`moneyTotal\` AS \`moneyTotal\`,\`r\`.\`moneySpend\` AS \`moneySpend\`,\`r\`.\`earnings\` AS \`earnings\`,\`r\`.\`isRunning\` AS \`isRunning\`,\`m\`.\`typeEnd\` AS \`typeEnd\`,\`m\`.\`level\` AS \`level\`,\`m\`.\`durationMinutes\` AS \`durationMinutes\`,\`m\`.\`startedAt\` AS \`startedAt\`,\`m\`.\`endedAt\` AS \`endedAt\`,\`m\`.\`lastSavedAt\` AS \`lastSavedAt\` from ((\`gambling-problem\`.\`runs\` \`r\` join \`gambling-problem\`.\`users\` \`u\` on((\`u\`.\`userUuid\` = \`r\`.\`userUuid\`))) left join \`gambling-problem\`.\`metadata\` \`m\` on((\`m\`.\`metadataID\` = \`r\`.\`metadataID\`)))`,
   );
 
 export const userunlockedexploitsview = mysqlView("userunlockedexploitsview", {

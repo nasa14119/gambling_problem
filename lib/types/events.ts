@@ -16,7 +16,7 @@ export type GameEventPayloads = {
   "deck:turn": Card[];
   "deck:river": Card[];
   "deck:update_player_hand": PlayerHand;
-  "player:validbet": UserInput;
+  "player:validbet": ValidBet;
   "player:turn": Player["playerId"];
   "player:input": UserInput;
   "player:insuficientfunds": { min: number; player: Player };
@@ -49,6 +49,11 @@ export type UserInput = {
   chips: number;
 };
 
+export type ValidBet = {
+  type: TurnOptions | "skip";
+  player: Player;
+  chips: number;
+};
 export type ExploitsPayloads = {
   "exploit:buy": Omit<ExploitBuyPayload, "price">;
   "exploit:trigger": ExploitTriggerPayload;
@@ -60,8 +65,12 @@ export type ExploitsPayloads = {
   };
   "buy:success": {
     playerId: Player["playerId"];
-    exploit: ExploitData;
+    exploit: ExploitId;
     newBalance: number;
+  };
+  "exploit:invetory:add": {
+    playerId: Player["playerId"];
+    exploit: ExploitData;
   };
   "player:trigger": ExploitTriggerPayload;
   "trigger:error": {

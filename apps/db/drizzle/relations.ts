@@ -1,14 +1,22 @@
 import { relations } from "drizzle-orm/relations";
 import {
+  users,
+  autorizedUsers,
   runs,
   exploitsUsed,
   exploitsData,
-  users,
   ranks,
   running,
   metadata,
   whitelist,
 } from "./schema.ts";
+
+export const autorizedUsersRelations = relations(autorizedUsers, ({ one }) => ({
+  user: one(users, {
+    fields: [autorizedUsers.userUuid],
+    references: [users.userUuid],
+  }),
+}));
 
 export const exploitsUsedRelations = relations(exploitsUsed, ({ one }) => ({
   run: one(runs, {
@@ -45,6 +53,7 @@ export const exploitsDataRelations = relations(exploitsData, ({ many }) => ({
 }));
 
 export const usersRelations = relations(users, ({ many }) => ({
+  autorizedUsers: many(autorizedUsers),
   exploitsUseds: many(exploitsUsed),
   runs: many(runs),
   whitelists: many(whitelist),

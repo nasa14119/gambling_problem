@@ -7,7 +7,7 @@ import {
 import { sleepClient } from '#/lib/utils'
 import { useGameState, useGameUpdate } from '#/stores/gameStore'
 import type { ExploitId } from '@repo/types'
-import type { ExploitData } from '@repo/types/db'
+import type { ItemsPockerFace } from '@repo/types/client'
 import { useEffect, useState } from 'react'
 
 const fetchStore = async (rtry: number = 1000) => {
@@ -21,10 +21,13 @@ const fetchStore = async (rtry: number = 1000) => {
   const data = await res.json()
   return data
 }
-type Items = ExploitData & { isAvailable: boolean }
-export const usePockerFaceItems = (): [Items[], (param: ExploitId) => void] => {
+
+export const usePockerFaceItems = (): [
+  ItemsPockerFace[],
+  (param: ExploitId) => void,
+] => {
   const state = usePockerFace((s) => s.state)
-  const [items, setItems] = useState<Items[] | null>(null)
+  const [items, setItems] = useState<ItemsPockerFace[] | null>(null)
   const { user } = useGameState()
   const setState = useGameUpdate()
   const send = useExploitEventSender()
@@ -35,7 +38,7 @@ export const usePockerFaceItems = (): [Items[], (param: ExploitId) => void] => {
     })
   }
   useExploitEventListener(({ eventId, payload }) => {
-    if (eventId === 'buy:success') {
+    if (eventId === 'exploit:invetory:add') {
       setItems((prev) =>
         prev
           ? prev.filter((item) => item.exploitId !== payload.exploit.exploitId)

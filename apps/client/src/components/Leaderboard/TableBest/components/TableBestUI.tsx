@@ -5,19 +5,21 @@ import { Empty } from '#/components/Leaderboard/Empty'
 
 type Props = {
   data: RunStats[] | null
+  className?: string
 }
-export function TableBestUI({ data }: Props) {
+export function TableBestUI({ data, className }: Props) {
   if (!data) return <Empty />
   return (
     <div
       className={cn(
-        'pr-5  max-h-full overflow-y-scroll relative scrollbar-thumb-accent scrollbar-track-transparent',
+        'pr-5 max-h-full overflow-y-scroll relative scrollbar-thumb-accent scrollbar-track-transparent',
       )}
     >
       <header
         className={cn(
-          'font-sans  font-bold text-accent/90 text-xs sticky top-0 bg-background',
+          'font-sans font-bold text-accent/90 text-xs sticky top-0 bg-background',
           styles['row'],
+          className,
         )}
       >
         <div>#</div>
@@ -28,7 +30,7 @@ export function TableBestUI({ data }: Props) {
         <div>Money Spend</div>
         <div>Score</div>
       </header>
-      <main className={cn('text-md h-full', styles['table-best'])}>
+      <main className={cn('text-md h-full', styles['table-best'], className)}>
         {data.map((iterarion, i) => (
           <div className={styles['row']} key={i}>
             <span>{i + 1}</span>

@@ -17,6 +17,7 @@ export class Rank {
   private exploits_unlocked: Set<ExploitId>;
   private user_whitelist!: ExploitData[];
   private rank: number;
+  private minRank: number = 0;
   private eventManager: ExpoitEventManager;
   private level: number = 0;
   private nextRank: NextRank | null = null;
@@ -91,9 +92,10 @@ export class Rank {
     }
   }
   updateRank(money: number) {
-    this.rank = money;
+    this.rank = Math.max(this.minRank, money);
     if (this.nextRank === null) return;
     if (this.rank >= this.nextRank.rank) {
+      this.minRank = this.nextRank.rank;
       this.eventManager.emit("exploit:unlocked", {
         exploit: this.nextRank,
         playerId: this.player.playerId,

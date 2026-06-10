@@ -4,7 +4,8 @@
   "globalDependencies": [".env"],
   "tasks": {
     "build": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "cache": false
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -34,7 +35,7 @@
       "persistent": true
     },
     "start": {
-      "dependsOn": ["^client#build", "^server#build"],
+      "dependsOn": ["^client#build"],
       "cache": false
     }
   }

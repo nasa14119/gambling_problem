@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 
-import { terminateGame } from "db";
+import { terminateGame, UserAuth } from "db";
 
 import session from "../sessions/Singleton.ts";
 
@@ -25,6 +25,7 @@ export const clearPrevSession: RequestHandler = async (req, res, next) => {
     next();
     return;
   }
-  await terminateGame(res.locals.user.userUUID);
+  const { userUUID } = res.locals.user as UserAuth;
+  await terminateGame(userUUID);
   next();
 };

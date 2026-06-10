@@ -1,9 +1,10 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '#/shadcn/ui/tooltip'
-import { useGameState } from '#/stores/gameStore'
+import { useGameStore } from '#/stores/gameStore'
 
 export function UsertTag() {
-  const { user } = useGameState()
-  if (user.playerId === 'player:guest') return <DemeMessage />
+  const value = useGameStore((s) => s.gameState)
+  if (!value || value.user.playerId === 'player:guest') return <DemeMessage />
+  const { user } = value
   return (
     <div className="px-2 font-bold text-white/20 bg-gray-900/20 rounded-4xl">
       {user.playerId}

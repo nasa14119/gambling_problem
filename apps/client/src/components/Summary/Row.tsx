@@ -19,7 +19,7 @@ export function Row({ text, className, duration = 1, onEnd, ...rest }: Props) {
   return (
     <div className="flex justify-start" {...rest}>
       <span
-        className={cn('typewriter-text text-4xl', className)}
+        className={cn('typewriter-text text-4xl tracking-[2px]', className)}
         style={{ '--duration': `${duration}s` } as any}
         ref={ref}
         onAnimationEnd={handleAnimation}

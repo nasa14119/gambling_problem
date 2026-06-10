@@ -1,5 +1,11 @@
 import { cn } from '#/lib/utils'
-import { ArrowRight, DoorOpen, Power, User2 } from 'lucide-react'
+import {
+  ArrowRight,
+  ChartNoAxesCombined,
+  DoorOpen,
+  Power,
+  User2,
+} from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '#/shadcn/ui/tooltip'
 import { Link, useRouter } from '@tanstack/react-router'
 import { useAuth, useAuthValidate } from '#/components/Login/store'
@@ -84,6 +90,19 @@ export function UserPage() {
             </TooltipTrigger>
             <TooltipContent className="text-slate-950">
               <span className="text-white">Logout</span>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger
+              className="flex items-center justify-center hover:bg-slate-950/10 py-2 transition-all duration-250 ease rounded-sm h-full aspect-square "
+              asChild
+            >
+              <Link to="/user-stads">
+                <ChartNoAxesCombined className="size-10" />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent className="text-slate-950">
+              <span className="text-white">See your stads</span>
             </TooltipContent>
           </Tooltip>
         </div>

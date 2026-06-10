@@ -9,17 +9,31 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UserStadsRouteImport } from './routes/user-stads'
 import { Route as UserRouteImport } from './routes/user'
+import { Route as TutorialRouteImport } from './routes/tutorial'
 import { Route as TestRouteImport } from './routes/test'
 import { Route as SummaryRouteImport } from './routes/summary'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
+import { Route as LandingRouteImport } from './routes/landing'
 import { Route as GameRouteImport } from './routes/game'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 
+const UserStadsRoute = UserStadsRouteImport.update({
+  id: '/user-stads',
+  path: '/user-stads',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UserRoute = UserRouteImport.update({
   id: '/user',
   path: '/user',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TutorialRoute = TutorialRouteImport.update({
+  id: '/tutorial',
+  path: '/tutorial',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TestRoute = TestRouteImport.update({
@@ -42,9 +56,19 @@ const LeaderboardRoute = LeaderboardRouteImport.update({
   path: '/leaderboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LandingRoute = LandingRouteImport.update({
+  id: '/landing',
+  path: '/landing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GameRoute = GameRouteImport.update({
   id: '/game',
   path: '/game',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -55,72 +79,121 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/game': typeof GameRoute
+  '/landing': typeof LandingRoute
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/summary': typeof SummaryRoute
   '/test': typeof TestRoute
+  '/tutorial': typeof TutorialRoute
   '/user': typeof UserRoute
+  '/user-stads': typeof UserStadsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/game': typeof GameRoute
+  '/landing': typeof LandingRoute
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/summary': typeof SummaryRoute
   '/test': typeof TestRoute
+  '/tutorial': typeof TutorialRoute
   '/user': typeof UserRoute
+  '/user-stads': typeof UserStadsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/game': typeof GameRoute
+  '/landing': typeof LandingRoute
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/summary': typeof SummaryRoute
   '/test': typeof TestRoute
+  '/tutorial': typeof TutorialRoute
   '/user': typeof UserRoute
+  '/user-stads': typeof UserStadsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/game'
+    | '/landing'
     | '/leaderboard'
     | '/login'
     | '/summary'
     | '/test'
+    | '/tutorial'
     | '/user'
+    | '/user-stads'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/game' | '/leaderboard' | '/login' | '/summary' | '/test' | '/user'
+  to:
+    | '/'
+    | '/admin'
+    | '/game'
+    | '/landing'
+    | '/leaderboard'
+    | '/login'
+    | '/summary'
+    | '/test'
+    | '/tutorial'
+    | '/user'
+    | '/user-stads'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/game'
+    | '/landing'
     | '/leaderboard'
     | '/login'
     | '/summary'
     | '/test'
+    | '/tutorial'
     | '/user'
+    | '/user-stads'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   GameRoute: typeof GameRoute
+  LandingRoute: typeof LandingRoute
   LeaderboardRoute: typeof LeaderboardRoute
   LoginRoute: typeof LoginRoute
   SummaryRoute: typeof SummaryRoute
   TestRoute: typeof TestRoute
+  TutorialRoute: typeof TutorialRoute
   UserRoute: typeof UserRoute
+  UserStadsRoute: typeof UserStadsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/user-stads': {
+      id: '/user-stads'
+      path: '/user-stads'
+      fullPath: '/user-stads'
+      preLoaderRoute: typeof UserStadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/user': {
       id: '/user'
       path: '/user'
       fullPath: '/user'
       preLoaderRoute: typeof UserRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tutorial': {
+      id: '/tutorial'
+      path: '/tutorial'
+      fullPath: '/tutorial'
+      preLoaderRoute: typeof TutorialRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/test': {
@@ -151,11 +224,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LeaderboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/landing': {
+      id: '/landing'
+      path: '/landing'
+      fullPath: '/landing'
+      preLoaderRoute: typeof LandingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/game': {
       id: '/game'
       path: '/game'
       fullPath: '/game'
       preLoaderRoute: typeof GameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -170,12 +257,16 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   GameRoute: GameRoute,
+  LandingRoute: LandingRoute,
   LeaderboardRoute: LeaderboardRoute,
   LoginRoute: LoginRoute,
   SummaryRoute: SummaryRoute,
   TestRoute: TestRoute,
+  TutorialRoute: TutorialRoute,
   UserRoute: UserRoute,
+  UserStadsRoute: UserStadsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

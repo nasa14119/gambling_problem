@@ -1,0 +1,26 @@
+@keyframes location-title-animation {
+  from {
+    transform: translateY(10vh);
+    opacity: 0;
+  }
+  70% {
+    opacity: 1;
+  }
+  to {
+    transform: translateY(0vh);
+  }
+}
+.title-animation {
+  view-timeline-name: --title-adopt-image;
+  view-timeline-axis: block;
+  animation-name: location-title-animation;
+  animation-fill-mode: both;
+  animation-timeline: --title-adopt-image;
+  animation-range: entry 20% cover 50%;
+}
+
+.p-styles :global(p) {
+  width: 60ch;
+  padding-bottom: 1rem;
+  word-wrap: pretty;
+}

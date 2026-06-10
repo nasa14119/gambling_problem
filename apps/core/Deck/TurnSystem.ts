@@ -113,6 +113,9 @@ export class TurnSystem {
       this.changeTurn(current.playerId);
       this._playerPlaing = current;
       let { type, chips } = await this.waitForEvent("player:validbet");
+      if (type === "skip") {
+        continue;
+      }
       if (type === "check" && canCheck) {
         this.waiting_queue = [current, ...this.waiting_queue];
         continue;
