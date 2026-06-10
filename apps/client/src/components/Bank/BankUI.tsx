@@ -8,12 +8,21 @@ import { useEffect } from 'react'
 import { useBankLoading } from './store.ts'
 import { fetchData } from './store'
 
+const text = String.raw`
+      :::::::::     :::    ::::::::: :::    ::::::::::::     :::    ::::    ::::::    ::: 
+     :+:    :+:  :+: :+:  :+:    :+::+:   :+: :+:    :+:  :+: :+:  :+:+:   :+::+:   :+:   
+    +:+    +:+ +:+   +:+ +:+    +:++:+  +:+  +:+    +:+ +:+   +:+ :+:+:+  +:++:+  +:+     
+   +#+    +:++#++:++#++:+#++:++#: +#++:++   +#++:++#+ +#++:++#++:+#+ +:+ +#++#++:++       
+  +#+    +#++#+     +#++#+    +#++#+  +#+  +#+    +#++#+     +#++#+  +#+#+#+#+  +#+       
+ #+#    #+##+#     #+##+#    #+##+#   #+# #+#    #+##+#     #+##+#   #+#+##+#   #+#       
+######### ###     ######    ######    ############ ###     ######    #######    ###       
+`
 export function BankUI() {
   return (
-    <div className="bg-neutral-950 rounded-4xl size-full p-2  text-green-500 flex flex-col justify-between py-[10vh] px-10">
-      <div className="h-[10vh] flex ">
-        <span className="rounded-sm border-2 border-dashed border-green-500 h-full w-[20%] grid place-content-center">
-          LOGO
+    <div className="bg-neutral-950 rounded-4xl size-full p-2  text-green-500 flex flex-col justify-between py-[5vh] px-10">
+      <div className="flex text-cyan-300">
+        <span className="h-full w-full grid place-content-center">
+          <pre>{text}</pre>
         </span>
       </div>
       <Pay />
