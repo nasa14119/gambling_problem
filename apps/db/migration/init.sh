@@ -25,6 +25,7 @@ for file in $files; do
     echo "success migration file "$file
   else
     echo "error running" $file
+    exit 1
   fi
 done
 
