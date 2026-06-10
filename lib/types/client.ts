@@ -1,5 +1,5 @@
 import type { Card, GameState, PlayerHand, TurnOptions } from "./app.ts";
-import type { RunStats } from "./db.ts";
+import type { ExploitData, RunStats } from "./db.ts";
 import type { GameEventPayloads, PlayerData } from "./server.ts";
 
 type Overwrites = keyof Pick<
@@ -45,3 +45,6 @@ export type BestRunsQuery = {
   runs: RunStats[] | null;
   user: RunStats | null;
 };
+
+export type ItemsPockerFace = ExploitData & { isAvailable: boolean };
+export type PockerFaceState = "idle" | "open" | "close";

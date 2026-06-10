@@ -47,6 +47,15 @@ export class Deck {
   resetHistory() {
     this.history = new Set();
   }
+  swap(card: Card) {
+    const pos = this.position,
+      cards = this.cards;
+    const cardCode = getCardHash(card);
+    const looking = cards.indexOf(cardCode);
+    [cards[pos], cards[looking]] = [cards[looking], cards[pos]];
+    this.position++;
+    return this.position;
+  }
   /**
    * Clear table history and player history
    */

@@ -9,7 +9,7 @@ export function LandingNav() {
         <NavItem
           type="fill"
           className="px-2 font-semibold tracking-wide text-2xl aspect-square flex items-center justify-center rounded-full"
-          to="/about"
+          to="/landing"
         >
           <Spade className="size-5" />
         </NavItem>

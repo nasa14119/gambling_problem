@@ -59,25 +59,40 @@ export function Hero() {
           <User2 className="size-[25vh] text-current p-5 bg-current/20 rounded-full" />
         </div>
         <div>
-          <h1 className="text-center text-6xl font-bold">Gambling Problem</h1>
+          <h1 className="text-center text-8xl font-bold leading-20">
+            Gambling Problem
+          </h1>
         </div>
-        <div className="h-[5vh] w-[20vw] grid grid-cols-[1fr_min-content] mx-auto">
-          <p className="text-xl pl-2 border border-slate-800 border-r-0 flex items-center size-full bg-slate-100">
-            5tart_new_game#$
-          </p>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                onClick={handleStart}
-                className="bg-slate-300 aspect-12/9 border border-slate-800 grid place-content-center"
-              >
-                <ArrowRight className="size-5" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent className="text-current">
-              <span className="text-white">Start game</span>
-            </TooltipContent>
-          </Tooltip>
+        <div>
+          <Link
+            to="/landing"
+            className="h-[5vh] w-[20vw] flex justify-between mx-auto mb-2 border border-slate-800 bg-slate-100 transition-colors duration-700 hover:bg-blue-100 relative group overflow-hidden"
+          >
+            <span className="text-xl pl-2 flex items-center h-full absolute transition-all duration-500 left-1/2 -translate-x-1/2 group-hover:left-0 group-hover:translate-x-0 text-blue-900 group-hover:opacity-80 group-hover:*:opacity-100 font-medium">
+              Landing
+            </span>
+            <div className="aspect-square h-full flex items-center text-blue-900 absolute right-0 top-0">
+              <ArrowRight className="size-5 translate-x-[200%] transition-transform duration-500 group-hover:translate-x-0" />
+            </div>
+          </Link>
+          <div className="h-[5vh] w-[20vw] grid grid-cols-[1fr_min-content] mx-auto">
+            <p className="text-xl pl-2 border border-slate-800 border-r-0 flex items-center size-full bg-slate-100">
+              5tart_new_game#$
+            </p>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={handleStart}
+                  className="bg-slate-300 aspect-12/9 border border-slate-800 grid place-content-center"
+                >
+                  <ArrowRight className="size-5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent className="text-current">
+                <span className="text-white">Start game</span>
+              </TooltipContent>
+            </Tooltip>
+          </div>
         </div>
       </div>
       <div className="absolute bottom-0 left-0 inset-x-0 flex justify-between pb-2 px-5">
