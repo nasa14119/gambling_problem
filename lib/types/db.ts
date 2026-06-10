@@ -38,3 +38,18 @@ export type ExploitUsedStats = {
   totalUsed: number;
 };
 export type NextRank = ExploitData & { rank: number; level: number };
+
+export type RunsMetadataAdmin = {
+  runId: number;
+  username: string;
+  moneyTotal: number;
+  moneySpend: number;
+  earnings: number;
+  isRunning: boolean;
+  typeEnd: TypeEnd | null;
+  level: number;
+  durationMinutes: number;
+  startedAt: string | null;
+  endedAt: string | null;
+  lastSavedAt: string | null;
+};

@@ -18,12 +18,15 @@ import { PauseScreen } from '#/components/PauseScreen/PauseScreen'
 import { useExploitEventSetup } from '#/exploits/store'
 import { NewExploit } from '#/components/NewExploit/NewExploit'
 
-export const Route = createFileRoute('/game')({ component: CreateGame })
+export const Route = createFileRoute('/game')({
+  component: CreateGame,
+})
 
 function CreateGame() {
   useGameInit()
   const router = useRouter()
   const isLoading = useGameStore((s) => s.isLoading)
+  const isEmpty = localStorage.getItem('gameState') === null
   const data = useEventListener()
   const clear = useEventClear()
   useEffect(() => {
@@ -40,7 +43,7 @@ function CreateGame() {
     router.navigate({ to: '/user' })
   }, [data])
   const error = useGameStore((s) => s.error)
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading || isEmpty) return <div>Loading...</div>
   if (error) return <ErrorPage error={error} />
   return <SetUpGame />
 }

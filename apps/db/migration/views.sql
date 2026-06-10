@@ -1,5 +1,5 @@
-DROP VIEW IF EXISTS TopExploitsUsedView;
-CREATE VIEW TopExploitsUsedView AS
+DROP VIEW IF EXISTS topexploitsusedview;
+CREATE VIEW topexploitsusedview AS
 SELECT
     e.exploitID,
     e.name,
@@ -12,8 +12,8 @@ LEFT JOIN ExploitsUsed eu
 GROUP BY e.exploitID, e.name, e.type, e.price
 ORDER BY totalUsed DESC;
 
-DROP VIEW IF EXISTS UserUnlockedExploitsView;
-CREATE VIEW UserUnlockedExploitsView AS
+DROP VIEW IF EXISTS userunlockedexploitsview;
+CREATE VIEW userunlockedexploitsview AS
 SELECT
     w.userUuid,
     u.username,
@@ -28,11 +28,10 @@ INNER JOIN Users u
 INNER JOIN ExploitsData e
     ON e.exploitID = w.exploitID;
 
-DROP VIEW IF EXISTS UserRunsMetadataView;
-CREATE VIEW UserRunsMetadataView AS
+DROP VIEW IF EXISTS userrunsmetadataview;
+CREATE VIEW userrunsmetadataview AS
 SELECT
     r.runId,
-    r.userUuid,
     u.username,
     r.moneyTotal,
     r.moneySpend,
@@ -50,8 +49,8 @@ INNER JOIN Users u
 LEFT JOIN Metadata m
     ON m.metadataID = r.metadataID;
 
-DROP VIEW IF EXISTS ExploitsUsedInRunView;
-CREATE VIEW ExploitsUsedInRunView AS
+DROP VIEW IF EXISTS exploitsusedinrunview;
+CREATE VIEW exploitsusedinrunview AS
 SELECT 
     r.runId,
     e.exploitID,
@@ -63,8 +62,8 @@ LEFT JOIN Runs r ON eu.runId = r.runId
 GROUP BY e.exploitID, e.name, r.runId
 ORDER BY r.runId, quantity_used DESC;
 
-DROP VIEW IF EXISTS TopPlayersView;
-CREATE VIEW TopPlayersView AS
+DROP VIEW IF EXISTS topplayersview;
+CREATE VIEW topplayersview AS
 SELECT
     r.runId,
     u.username,
@@ -74,7 +73,7 @@ SELECT
     r.earnings,
     (
         SELECT ev.exploit_name 
-        FROM exploitsUsedInRunView ev
+        FROM exploitsusedinrunview ev
         WHERE ev.runId = r.runId AND ev.quantity_used > 0
         ORDER BY ev.quantity_used DESC, ev.exploit_name ASC
         LIMIT 1
@@ -92,8 +91,8 @@ INNER JOIN (
 ) BestRuns ON r.userUuid = BestRuns.userUuid AND r.earnings = BestRuns.max_earning
 ORDER BY r.earnings DESC; 
 
-DROP VIEW IF EXISTS TopActiveRunsView;
-CREATE VIEW TopActiveRunsView AS
+DROP VIEW IF EXISTS topactiverunsview;
+CREATE VIEW topactiverunsview AS
 SELECT
     r.runId,
     u.username,
@@ -103,7 +102,7 @@ SELECT
     r.earnings,
     (
         SELECT ev.exploit_name 
-        FROM exploitsUsedInRunView ev
+        FROM exploitsusedinrunview ev
         WHERE ev.runId = r.runId AND ev.quantity_used > 0
         ORDER BY ev.quantity_used DESC, ev.exploit_name ASC
         LIMIT 1
@@ -117,8 +116,8 @@ LEFT JOIN Metadata m
 WHERE r.isRunning = TRUE
 ORDER BY r.earnings DESC; 
 
-DROP VIEW IF EXISTS TopRunsView; 
-CREATE VIEW TopRunsView AS
+DROP VIEW IF EXISTS toprunsview; 
+CREATE VIEW toprunsview AS
 SELECT
     r.runId,
     u.username,
@@ -128,7 +127,7 @@ SELECT
     r.earnings,
     (
         SELECT ev.exploit_name 
-        FROM exploitsUsedInRunView ev
+        FROM exploitsusedinrunview ev
         WHERE ev.runId = r.runId AND ev.quantity_used > 0
         ORDER BY ev.quantity_used DESC, ev.exploit_name ASC
         LIMIT 1
@@ -143,42 +142,42 @@ LEFT JOIN Metadata m
 WHERE r.isRunning = FALSE
 ORDER BY r.earnings DESC;
 
-DROP VIEW IF EXISTS TopExploitsUsedRank;
-CREATE VIEW TopExploitsUsedRank AS
+DROP VIEW IF EXISTS topexploitsusedrank;
+CREATE VIEW topexploitsusedrank AS
 SELECT
 e.*,
 COUNT(r.runId)  AS totalUsed
 FROM ExploitsData e
-LEFT JOIN ExploitsUsedInRunView eu
+LEFT JOIN exploitsusedinrunview eu
 ON eu.exploitID = e.exploitID
-LEFT JOIN TopRunsView r
+LEFT JOIN toprunsview r
 ON eu.runId = r.runId
 GROUP BY e.exploitID, e.name, e.type, e.price, e.description;
 
-DROP VIEW IF EXISTS TopExploitsUsedPlayerRank; 
-CREATE VIEW TopExploitsUsedPlayerRank AS
+DROP VIEW IF EXISTS topexploitsusedplayerrank; 
+CREATE VIEW topexploitsusedplayerrank AS
 SELECT
 e.*,
 COUNT(r.runId) AS totalUsed
 FROM ExploitsData e
-LEFT JOIN ExploitsUsedInRunView eu
+LEFT JOIN exploitsusedinrunview eu
 ON eu.exploitID = e.exploitID
 LEFT JOIN TopPlayersView r
 ON eu.runId = r.runId
 GROUP BY e.exploitID, e.name, e.type, e.price, e.description;
 
-DROP VIEW IF EXISTS ExploitCountPlayer; 
-CREATE VIEW ExploitCountPlayer AS 
+DROP VIEW IF EXISTS exploitcountplayer; 
+CREATE VIEW exploitcountplayer AS 
 SELECT 
     r.runId, 
     CAST(SUM(quantity_used) AS UNSIGNED) as quantity_used
 FROM Runs r 
-LEFT JOIN ExploitsUsedInRunView eu 
+LEFT JOIN exploitsusedinrunview eu 
 ON r.runId = eu.runId 
 GROUP BY r.runId;
 
-DROP VIEW IF EXISTS PlayersAllTimeSumary; 
-CREATE VIEW PlayersAllTimeSumary AS 
+DROP VIEW IF EXISTS playersalltimesumary; 
+CREATE VIEW playersalltimesumary AS 
 SELECT 
     u.username,
     COUNT(r.userUuid) as totalRuns,
@@ -189,7 +188,7 @@ INNER JOIN Users u
     ON r.userUuid = u.userUuid
 INNER JOIN Metadata m
     ON r.metadataID = m.metadataID
-LEFT JOIN ExploitCountPlayer ec
+LEFT JOIN exploitcountplayer ec
     ON ec.runId = r.runId
 GROUP BY u.username, r.userUuid
 ORDER BY totalTimePlaingMinutes DESC;

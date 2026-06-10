@@ -1,14 +1,14 @@
 import { cn, formatCurrency, formatMinutes } from '#/lib/utils'
-import type { RunStats } from '@repo/types/db'
-import styles from '../../styles.module.css'
+import type { RunsMetadataAdmin } from '@repo/types/db'
+import styles from './adminView.module.css'
 import { Empty } from '#/components/Leaderboard/Empty'
 
 type Props = {
-  data: RunStats[] | null
+  data: RunsMetadataAdmin[] | null
   className?: string
 }
-export function TableBestUI({ data, className }: Props) {
-  if (!data) return <Empty />
+export function TableRuns({ data, className }: Props) {
+  if (!data || data.length <= 0) return <Empty />
   return (
     <div
       className={cn(
@@ -23,23 +23,33 @@ export function TableBestUI({ data, className }: Props) {
         )}
       >
         <div>#</div>
+        <div>Level</div>
         <div>Player</div>
         <div>Time</div>
-        <div>Favorite Exploit</div>
         <div>Money Win</div>
         <div>Money Spend</div>
         <div>Score</div>
+        <div>Type End</div>
+        <div>Still Running</div>
+        <div>Started</div>
+        <div>Ended</div>
+        <div>Last Safe</div>
       </header>
       <main className={cn('text-md h-full', styles['table-best'], className)}>
         {data.map((iterarion, i) => (
           <div className={styles['row']} key={i}>
-            <span>{i + 1}</span>
+            <span>{iterarion.runId}</span>
+            <span>{iterarion.level}</span>
             <span>{iterarion.username}</span>
-            <span>{formatMinutes(iterarion.timePlayed)}</span>
-            <span>{iterarion.mostUsedExploit ?? 'No exploit used'}</span>
+            <span>{formatMinutes(iterarion.durationMinutes)}</span>
             <span>${formatCurrency(iterarion.moneyTotal)}</span>
             <span>${formatCurrency(iterarion.moneySpend)}</span>
             <span>${formatCurrency(iterarion.earnings)}</span>
+            <span>{iterarion.typeEnd ?? 'N/A'}</span>
+            <span>{iterarion.isRunning ? 'YES' : 'NO'}</span>
+            <span className="text-xs">{iterarion.startedAt}</span>
+            <span className="text-xs">{iterarion.endedAt ?? 'N/A'}</span>
+            <span className="text-xs">{iterarion.lastSavedAt ?? 'N/A'}</span>
           </div>
         ))}
       </main>

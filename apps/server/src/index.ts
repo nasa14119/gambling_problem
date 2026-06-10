@@ -4,6 +4,7 @@ import express from "express";
 
 import authRouter from "./auth.ts";
 import env from "./env.ts";
+import portectedRouter from "./protected.ts";
 import sessionRouter from "./sessions/session.routes.ts";
 import statsRouter from "./stats.ts";
 
@@ -11,6 +12,7 @@ if (env.MODE === "production" && !env.SERVER_PATH) {
   throw new Error("SERVER_PATH is required in production mode");
 }
 import { wsSever } from "./sessions/index.ts";
+
 const PORT = process.env.SERVER_PORT ?? 3000;
 const app = express();
 
@@ -37,6 +39,7 @@ app.get("/health", (_, res) => {
   res.sendStatus(200);
 });
 
+app.use("/admin", portectedRouter);
 if (env.MODE === "production") {
   app.use(express.static("./dist"));
   app.get("/{*splat}", (_, res) =>

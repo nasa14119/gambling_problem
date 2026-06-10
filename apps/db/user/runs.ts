@@ -1,7 +1,14 @@
-import { running, runs, users, metadata, exploitsUsed } from "#schemas";
+import {
+  running,
+  runs,
+  users,
+  metadata,
+  exploitsUsed,
+  userrunsmetadataview,
+} from "#schemas";
 import { desc, eq, sql } from "drizzle-orm";
 import { db } from "../connection.ts";
-import { RunDataGame } from "@repo/types/db";
+import { RunDataGame, RunsMetadataAdmin } from "@repo/types/db";
 import type { SavedGame } from "@repo/types/server";
 export const startNewRun = async (userUuid: string) => {
   const [res] = await db
@@ -35,13 +42,13 @@ export const terminateGame = async (userUuid: string) => {
     await db.execute(sql`
       UPDATE Runs r
       INNER JOIN Metadata m
-        USING (metadataId)
+        USING (metadataID)
       SET
         m.typeEnd = 'TERMINATED',
         m.endedAt = CURRENT_TIMESTAMP,
         r.isRunning = FALSE
       WHERE r.userUuid = ${userUuid}
-        AND r.isRunning = TRUE
+        AND r.isRunning = 1
   `);
   } catch (e) {
     console.log(e);
@@ -220,4 +227,21 @@ export const softSafe = async ({
     console.log(e);
     throw new Error("Error killing saved game");
   }
+};
+
+export const getRunsMetadata = async (): Promise<
+  RunsMetadataAdmin[] | null
+> => {
+  const res = await db.select().from(userrunsmetadataview);
+  if (!res || res.length <= 0) return null;
+  const parsed = res.map((v) => ({
+    ...v,
+    moneyTotal: v.moneyTotal ?? 0,
+    moneySpend: v.moneySpend ?? 0,
+    earnings: v.earnings ?? 0,
+    isRunning: v.isRunning === 1,
+    level: v.level ?? 0,
+    durationMinutes: v.durationMinutes ?? 0,
+  }));
+  return parsed;
 };

@@ -3,7 +3,7 @@ import {
   UserCreationInput,
 } from "@repo/validator/user-validator";
 import { db } from "../connection.ts";
-import { users } from "#schemas";
+import { autorizedUsers, users } from "#schemas";
 import { eq } from "drizzle-orm";
 import crp from "argon2";
 import { randomUUID } from "node:crypto";
@@ -68,6 +68,17 @@ export const createUser = async (user: UserCreationInput) => {
   }
 };
 
+type ChangePass = { username: string; password: string };
+export const changePass = async ({ username, password }: ChangePass) => {
+  const encripted = await crp.hash(password).catch(() => {
+    throw new UserCreation({ password: "Error hashing password" }, 500);
+  });
+  await db
+    .update(users)
+    .set({ password: encripted })
+    .where(eq(users.username, username));
+};
+
 export const loginUser = async (user: UserCreationInput) => {
   validateInput(user);
   const results = await db
@@ -82,12 +93,18 @@ export const loginUser = async (user: UserCreationInput) => {
   if (!isOk) {
     throw new PasswordError();
   }
-  return { userUUID: userDB.userUuid, username: userDB.username };
+  const permition = (await isAdmin(userDB.userUuid)) ? "admin" : "user";
+  return {
+    userUUID: userDB.userUuid,
+    username: userDB.username,
+    permition: permition,
+  } as UserAuth;
 };
 
 export type UserAuth = {
   userUUID: `${string}-${string}-${string}-${string}-${string}`;
   username: string;
+  permition: string;
 };
 
 export const UserExists = async (user: UserAuth["userUUID"]) => {
@@ -97,4 +114,22 @@ export const UserExists = async (user: UserAuth["userUUID"]) => {
     .where(eq(users.userUuid, user))
     .limit(1);
   return results.length > 0;
+};
+
+export const isAdmin = async (user: string) => {
+  const items = await db
+    .select()
+    .from(autorizedUsers)
+    .where(eq(autorizedUsers.userUuid, user));
+  return items.length > 0;
+};
+
+export const deleteUser = async (user: string) => {
+  if (typeof user !== "string")
+    throw new Error(`Recibed ${user} of type ${typeof user} expected string`);
+  await db.delete(users).where(eq(users.username, user));
+};
+
+export const getUsersTable = async () => {
+  return await db.select().from(users);
 };
