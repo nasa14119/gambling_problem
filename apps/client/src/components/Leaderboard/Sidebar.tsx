@@ -1,10 +1,13 @@
 import { StateBtnExplioitsUsed } from '#/components/Leaderboard/ExploitsChart/ChangeView'
 import { ChangeViewTable } from '#/components/Leaderboard/ExploitsChart/ChangeViewTable'
 import { StateBtn } from '#/components/Leaderboard/TableBest/components/StateBtn'
+<<<<<<< Updated upstream
 import { useAuth } from '#/components/Login/store'
 import { Link } from '@tanstack/react-router'
 import { ChartNoAxesCombined } from 'lucide-react'
 
+=======
+>>>>>>> Stashed changes
 export function Sidebar() {
   const { isLogged } = useAuth()
   return (

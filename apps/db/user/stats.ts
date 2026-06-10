@@ -11,8 +11,8 @@ import {
 } from "#schemas";
 import { ExploitUsedStats, RunStats } from "@repo/types/db";
 import { db } from "../connection.ts";
-import { and, desc, eq } from "drizzle-orm";
-import { LastRun } from "@repo/types/server";
+import { and, desc, eq, sql } from "drizzle-orm";
+import { LastRun, UserSummary } from "@repo/types/server";
 
 export const getMostUsedExploits = async (): Promise<
   ExploitUsedStats[] | null
@@ -149,4 +149,47 @@ export const getLastStat = async (user: string): Promise<LastRun> => {
     return null;
   }
   return res as LastRun;
+};
+
+export const getUserSummary = async (
+  userUUID: string,
+): Promise<UserSummary> => {
+  try {
+    const [summary] = await db
+      .select({
+        totalRuns: sql<number>`CAST(COUNT(${runs.runId}) AS UNSIGNED)`,
+        totalTimePlayingMinutes: sql<number>`CAST(COALESCE(SUM(${metadata.durationMinutes}), 0) AS UNSIGNED)`,
+        totalMoneySpend: sql<number>`COALESCE(SUM(${runs.moneySpend}), 0)`,
+        totalMoneyWon: sql<number>`COALESCE(SUM(${runs.moneyTotal}), 0)`,
+        totalScore: sql<number>`COALESCE(SUM(${runs.earnings}), 0)`,
+      })
+      .from(runs)
+      .innerJoin(metadata, eq(runs.metadataId, metadata.metadataId))
+      .where(and(eq(runs.userUuid, userUUID), eq(runs.isRunning, 0)));
+
+    if (!summary || Number(summary.totalRuns) === 0) return null;
+
+    const [exploitSummary] = await db
+      .select({
+        totalExploitsUsed: sql<number>`CAST(COALESCE(SUM(${exploitsusedinrunview.quantityUsed}), 0) AS UNSIGNED)`,
+      })
+      .from(runs)
+      .innerJoin(
+        exploitsusedinrunview,
+        eq(exploitsusedinrunview.runId, runs.runId),
+      )
+      .where(and(eq(runs.userUuid, userUUID), eq(runs.isRunning, 0)));
+
+    return {
+      totalRuns: Number(summary.totalRuns),
+      totalTimePlayingMinutes: Number(summary.totalTimePlayingMinutes),
+      totalExploitsUsed: Number(exploitSummary?.totalExploitsUsed ?? 0),
+      totalMoneySpend: Number(summary.totalMoneySpend),
+      totalMoneyWon: Number(summary.totalMoneyWon),
+      totalScore: Number(summary.totalScore),
+    };
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 };
