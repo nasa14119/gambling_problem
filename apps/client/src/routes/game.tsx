@@ -17,6 +17,8 @@ import { ErrorPage } from '#/components/ErrorPage'
 import { PauseScreen } from '#/components/PauseScreen/PauseScreen'
 import { useExploitEventSetup } from '#/exploits/store'
 import { NewExploit } from '#/components/NewExploit/NewExploit'
+import { useSoundOnLoad } from '#/hooks/useSound/useSoundOnLoad'
+import music from '#/assets/soundEffects/Nivel_1_lobby.mp3'
 
 export const Route = createFileRoute('/game')({
   component: CreateGame,
@@ -60,6 +62,7 @@ function Game() {
     setPockerFace('idle')
     setCurrent(path)
   }
+  useSoundOnLoad(music, { loop: true, volume: 0.3 })
   return (
     <>
       <PauseScreen />

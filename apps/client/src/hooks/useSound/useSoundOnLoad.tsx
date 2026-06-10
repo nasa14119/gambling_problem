@@ -10,7 +10,6 @@ export const useSoundOnLoad = (path: string, options?: AudioOptions) => {
     const handePlay = () => {
       if (havePlayed) return
       setHavePlayed(true)
-      ref.play()
     }
     const waitEvent = () => {
       window.addEventListener('click', handePlay, { once: true })
@@ -22,6 +21,7 @@ export const useSoundOnLoad = (path: string, options?: AudioOptions) => {
       window.removeEventListener('click', handePlay)
       window.removeEventListener('pointerdown', handePlay)
       window.removeEventListener('keydown', handePlay)
+      ref.pause()
     }
   }, [ref, isReady])
   return havePlayed
