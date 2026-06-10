@@ -7,6 +7,7 @@ import {
   getLastStat,
   getMostUsedExploits,
   getPlayersBestRuns,
+  getUserSummary,
   UserAuth,
 } from "db";
 import { Router } from "express";
@@ -62,11 +63,22 @@ app.get("/exploits-player", async (req, res) => {
 app.get("/user-summary", getUserFromToken, async (req, res) => {
   const user = res.locals.user as UserAuth;
   if (!user) return res.sendStatus(204);
+  const data = await getUserSummary(user.userUUID);
+  if (data === null) {
+    res.sendStatus(204);
+    return;
+  }
+  return res.json(data);
+});
+
+app.get("/user-last-run-summary", getUserFromToken, async (req, res) => {
+  const user = res.locals.user as UserAuth;
+  if (!user) return res.sendStatus(204);
   const data = await getLastStat(user.userUUID);
   if (data === null) {
     res.sendStatus(204);
     return;
   }
-  return res.send(data);
+  return res.json(data);
 });
 export default app;

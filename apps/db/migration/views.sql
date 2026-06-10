@@ -6,8 +6,8 @@ SELECT
     e.type,
     e.price,
     COUNT(eu.exploitID) AS totalUsed
-FROM exploitsdata e
-LEFT JOIN exploitsused eu
+FROM ExploitsData e
+LEFT JOIN ExploitsUsed eu
     ON eu.exploitID = e.exploitID
 GROUP BY e.exploitID, e.name, e.type, e.price
 ORDER BY totalUsed DESC;
@@ -22,10 +22,10 @@ SELECT
     e.type,
     e.price,
     e.description
-FROM whitelist w
-INNER JOIN users u
+FROM Whitelist w
+INNER JOIN Users u
     ON u.userUuid = w.userUuid
-INNER JOIN exploitsdata e
+INNER JOIN ExploitsData e
     ON e.exploitID = w.exploitID;
 
 DROP VIEW IF EXISTS userrunsmetadataview;
@@ -44,10 +44,10 @@ SELECT
     m.startedAt,
     m.endedAt,
     m.lastSavedAt
-FROM runs r
-INNER JOIN users u
+FROM Runs r
+INNER JOIN Users u
     ON u.userUuid = r.userUuid
-LEFT JOIN metadata m
+LEFT JOIN Metadata m
     ON m.metadataID = r.metadataID;
 
 DROP VIEW IF EXISTS exploitsusedinrunview;
@@ -57,9 +57,9 @@ SELECT
     e.exploitID,
     e.name AS exploit_name,
     COUNT(eu.exploitID) AS quantity_used
-FROM exploitsdata e
-LEFT JOIN exploitsused eu ON e.exploitID = eu.exploitID
-LEFT JOIN runs r ON eu.runId = r.runId
+FROM ExploitsData e
+LEFT JOIN ExploitsUsed eu ON e.exploitID = eu.exploitID
+LEFT JOIN Runs r ON eu.runId = r.runId
 GROUP BY e.exploitID, e.name, r.runId
 ORDER BY r.runId, quantity_used DESC;
 
@@ -78,7 +78,7 @@ SELECT
         WHERE ev.runId = r.runId AND ev.quantity_used > 0
         ORDER BY ev.quantity_used DESC, ev.exploit_name ASC
         LIMIT 1
-    ) AS mostusedexploit, 
+    ) AS mostUsedExploit, 
     r.isRunning,
     r.metadataID
 FROM Runs r

@@ -47,3 +47,12 @@ export type LastRun = {
   exploitsUsed: number;
   finalScore: number;
 } | null;
+
+export type UserSummary = {
+  totalRuns: number;
+  totalTimePlayingMinutes: number;
+  totalExploitsUsed: number;
+  totalMoneySpend: number;
+  totalMoneyWon: number;
+  totalScore: number;
+} | null;
