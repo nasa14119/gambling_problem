@@ -51,7 +51,7 @@ LEFT JOIN Metadata m
 
 DROP VIEW IF EXISTS exploitsusedinrunview;
 CREATE VIEW exploitsusedinrunview AS
-SELECT
+SELECT 
     r.runId,
     e.exploitID,
     e.name AS exploit_name,
@@ -72,7 +72,7 @@ SELECT
     r.moneySpend,
     r.earnings,
     (
-        SELECT ev.exploit_name
+        SELECT ev.exploit_name 
         FROM exploitsusedinrunview ev
         WHERE ev.runId = r.runId AND ev.quantity_used > 0
         ORDER BY ev.quantity_used DESC, ev.exploit_name ASC
@@ -101,7 +101,7 @@ SELECT
     r.moneySpend,
     r.earnings,
     (
-        SELECT ev.exploit_name
+        SELECT ev.exploit_name 
         FROM exploitsusedinrunview ev
         WHERE ev.runId = r.runId AND ev.quantity_used > 0
         ORDER BY ev.quantity_used DESC, ev.exploit_name ASC
@@ -116,7 +116,7 @@ LEFT JOIN Metadata m
 WHERE r.isRunning = TRUE
 ORDER BY r.earnings DESC;
 
-DROP VIEW IF EXISTS toprunsview;
+DROP VIEW IF EXISTS toprunsview; 
 CREATE VIEW toprunsview AS
 SELECT
     r.runId,
@@ -126,7 +126,7 @@ SELECT
     r.moneySpend,
     r.earnings,
     (
-        SELECT ev.exploit_name
+        SELECT ev.exploit_name 
         FROM exploitsusedinrunview ev
         WHERE ev.runId = r.runId AND ev.quantity_used > 0
         ORDER BY ev.quantity_used DESC, ev.exploit_name ASC
@@ -154,7 +154,7 @@ LEFT JOIN toprunsview r
 ON eu.runId = r.runId
 GROUP BY e.exploitID, e.name, e.type, e.price, e.description;
 
-DROP VIEW IF EXISTS topexploitsusedplayerrank;
+DROP VIEW IF EXISTS topexploitsusedplayerrank; 
 CREATE VIEW topexploitsusedplayerrank AS
 SELECT
 e.*,
@@ -166,19 +166,19 @@ LEFT JOIN topplayersview r
 ON eu.runId = r.runId
 GROUP BY e.exploitID, e.name, e.type, e.price, e.description;
 
-DROP VIEW IF EXISTS exploitcountplayer;
-CREATE VIEW exploitcountplayer AS
-SELECT
-    r.runId,
+DROP VIEW IF EXISTS exploitcountplayer; 
+CREATE VIEW exploitcountplayer AS 
+SELECT 
+    r.runId, 
     CAST(SUM(quantity_used) AS UNSIGNED) as quantity_used
-FROM Runs r
-LEFT JOIN exploitsusedinrunview eu
-ON r.runId = eu.runId
+FROM Runs r 
+LEFT JOIN exploitsusedinrunview eu 
+ON r.runId = eu.runId 
 GROUP BY r.runId;
 
-DROP VIEW IF EXISTS playersalltimesumary;
-CREATE VIEW playersalltimesumary AS
-SELECT
+DROP VIEW IF EXISTS playersalltimesumary; 
+CREATE VIEW playersalltimesumary AS 
+SELECT 
     u.username,
     COUNT(r.userUuid) as totalRuns,
     CAST(SUM(m.durationMinutes) AS UNSIGNED) as totalTimePlaingMinutes,

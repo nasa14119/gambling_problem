@@ -43,6 +43,7 @@ export type TurnOptions = "fold" | "raise" | "pay" | "check";
 export type InvetoryData = { [K in ExploitId]?: ExploitData }[];
 export type GameState = {
   isStarted: boolean;
+  level: number;
   table: null | (Card | null)[];
   players: Record<string, Omit<PlayerData, "money" | "cards"> | null>;
   user: PlayerData & { invetory: ExploitData[]; currentBet: number | null };

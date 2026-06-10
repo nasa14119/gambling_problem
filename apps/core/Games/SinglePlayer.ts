@@ -194,6 +194,12 @@ export class GameSinglePlayer extends Game {
         this.players.rename(prevPlayer.playerId, newPlayer.playerId);
       },
     });
+    this.eventManager.on({
+      eventId: "player:rename",
+      listener: ({ prevPlayer, newPlayer }) => {
+        this.players.rename(prevPlayer.playerId, newPlayer.playerId);
+      },
+    });
     this.exploitsManager.eventManger.on({
       eventId: "levelup",
       listener: ({ level, playerId }) => {
@@ -355,6 +361,7 @@ export class GameSinglePlayer extends Game {
     const user = this.getUser(id);
     const { [id]: _, ...players } = { ...this.players.getPlayersData() };
     return {
+      level: this.level,
       isStarted: this._isStarted,
       table: this.deck.gameState,
       players,

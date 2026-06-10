@@ -20,13 +20,27 @@ export const useGameEvents = () => {
       const playerReset = Object.fromEntries(
         Object.entries(players).map(([k, v]) => [
           k,
-          { chips: v.chips, playerId: v.playerId, isFold: false },
+          { chips: v!.chips, playerId: v!.playerId, isFold: false },
         ]),
       )
       setState({
         players: playerReset,
         user: { ...user, ...payload, currentBet: null },
       })
+    }
+
+    if (eventId === 'levelup') {
+      console.log({ eventId, payload })
+      setState({
+        level: payload.level,
+        players: {},
+      })
+      setTimeout(() => {
+        setState({
+          level: payload.level,
+          players: payload.players,
+        })
+      }, 500)
     }
   }, [event])
   return

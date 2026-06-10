@@ -67,6 +67,13 @@ export class Rank {
             ...exploit,
           };
         }
+        if (dbRank.level > this.level) {
+          this.level = dbRank.level;
+          this.eventManager.emit("levelup", {
+            playerId: this.player.playerId,
+            level: this.level,
+          });
+        }
         continue;
       }
       if (dbRank.level > this.level) {

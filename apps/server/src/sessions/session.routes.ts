@@ -31,7 +31,7 @@ router.get(
     }
     const { userUUID } = res.locals.user as UserAuth;
     const runId = await startNewRun(userUUID);
-    const exploit = (await getRandomFromUnlock({ userUUID })) ?? undefined;
+    const exploit = await getRandomFromUnlock({ userUUID });
     const exploits_whitelist = exploit ? [exploit] : [];
     const game = new GameSinglePlayer({ exploits_whitelist, runId });
     const playerId = res.locals.playerId;

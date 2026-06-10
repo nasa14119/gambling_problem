@@ -42,12 +42,7 @@ export const useUserEvents = ({ playerId }: Props) => {
     if (eventId === 'bot:reset') {
       const { newPlayer, prevPlayer } = payload
       const { [prevPlayer.playerId]: _, ...rest } = players
-      setTimeout(() => {
-        setState({ players: { ...players, [prevPlayer.playerId]: null } })
-      }, 2_000)
-      setTimeout(() => {
-        setState({ players: { ...rest, [newPlayer.playerId]: newPlayer } })
-      }, 3_000)
+      setState({ players: { ...rest, [newPlayer.playerId]: newPlayer } })
     }
   }, [data])
 }
