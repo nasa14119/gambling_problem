@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UserStadsRouteImport } from './routes/user-stads'
 import { Route as UserRouteImport } from './routes/user'
 import { Route as TestRouteImport } from './routes/test'
 import { Route as SummaryRouteImport } from './routes/summary'
@@ -17,6 +18,11 @@ import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as GameRouteImport } from './routes/game'
 import { Route as IndexRouteImport } from './routes/index'
 
+const UserStadsRoute = UserStadsRouteImport.update({
+  id: '/user-stads',
+  path: '/user-stads',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UserRoute = UserRouteImport.update({
   id: '/user',
   path: '/user',
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/summary': typeof SummaryRoute
   '/test': typeof TestRoute
   '/user': typeof UserRoute
+  '/user-stads': typeof UserStadsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/summary': typeof SummaryRoute
   '/test': typeof TestRoute
   '/user': typeof UserRoute
+  '/user-stads': typeof UserStadsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   '/summary': typeof SummaryRoute
   '/test': typeof TestRoute
   '/user': typeof UserRoute
+  '/user-stads': typeof UserStadsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,8 +100,17 @@ export interface FileRouteTypes {
     | '/summary'
     | '/test'
     | '/user'
+    | '/user-stads'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/game' | '/leaderboard' | '/login' | '/summary' | '/test' | '/user'
+  to:
+    | '/'
+    | '/game'
+    | '/leaderboard'
+    | '/login'
+    | '/summary'
+    | '/test'
+    | '/user'
+    | '/user-stads'
   id:
     | '__root__'
     | '/'
@@ -102,6 +120,7 @@ export interface FileRouteTypes {
     | '/summary'
     | '/test'
     | '/user'
+    | '/user-stads'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -112,10 +131,18 @@ export interface RootRouteChildren {
   SummaryRoute: typeof SummaryRoute
   TestRoute: typeof TestRoute
   UserRoute: typeof UserRoute
+  UserStadsRoute: typeof UserStadsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/user-stads': {
+      id: '/user-stads'
+      path: '/user-stads'
+      fullPath: '/user-stads'
+      preLoaderRoute: typeof UserStadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/user': {
       id: '/user'
       path: '/user'
@@ -176,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   SummaryRoute: SummaryRoute,
   TestRoute: TestRoute,
   UserRoute: UserRoute,
+  UserStadsRoute: UserStadsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
