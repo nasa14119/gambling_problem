@@ -49,14 +49,10 @@ export const exploitsUsed = mysqlTable(
     exploitId: varchar({ length: 30 })
       .notNull()
       .references(() => exploitsData.exploitId, { onDelete: "cascade" }),
-    username: varchar({ length: 50 }).references(() => users.username, {
-      onDelete: "set null",
-    }),
   },
   (table) => [
     index("runId").on(table.runId),
     index("exploitID").on(table.exploitId),
-    index("username").on(table.username),
   ],
 );
 
