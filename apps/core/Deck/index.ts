@@ -76,7 +76,10 @@ export class Deck {
     return true;
   }
 
-  getCards(count: number): Card[] {
+  /**
+   * Will actually change the position of the deck
+   */
+  public getCards(count: number): Card[] {
     if (count < 1) throw new Error("Count must be greater than 0");
     if (this.mustShuffle) {
       this.shuffle();
