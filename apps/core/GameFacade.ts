@@ -197,7 +197,6 @@ export class GameFacade {
       this.send(JSON.stringify({ eventId, payload: undefined }));
     }
     if (eventId === "levelup") {
-      console.log(this.game.players.session());
       setTimeout(() => {
         const players: GameState["players"] = this.game.players
           .session()
@@ -206,7 +205,6 @@ export class GameFacade {
             const { money, cards, ...rest } = c.getData();
             return { ...p, [c.playerId]: rest };
           }, {});
-        console.log(players);
         const { level } = payload as GameEventValue<"levelup">["payload"];
         this.send(
           JSON.stringify({ eventId, payload: { level: level, players } }),

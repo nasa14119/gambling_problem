@@ -83,10 +83,6 @@ export class Rank {
           level: this.level,
         });
       }
-      await saveRank({
-        exploitId: dbRank.exploitId,
-        username: this.player.playerId,
-      });
       if (dbRank.rank < this.rank) {
         this.eventManager.emit("exploit:unlocked", {
           exploit: dbRank,
@@ -98,11 +94,23 @@ export class Rank {
       }
     }
   }
+  private updateUnlocket() {
+    if (this.nextRank === null) return;
+    if (
+      this.user_whitelist.some((u) => u.exploitId === this.nextRank!.exploitId)
+    )
+      return;
+    saveRank({
+      exploitId: this.nextRank.exploitId,
+      username: this.player.playerId,
+    });
+  }
   updateRank(money: number) {
     this.rank = Math.max(this.minRank, money);
     if (this.nextRank === null) return;
     if (this.rank >= this.nextRank.rank) {
       this.minRank = this.nextRank.rank;
+      this.updateUnlocket();
       this.eventManager.emit("exploit:unlocked", {
         exploit: this.nextRank,
         playerId: this.player.playerId,

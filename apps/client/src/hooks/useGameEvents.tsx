@@ -30,7 +30,6 @@ export const useGameEvents = () => {
     }
 
     if (eventId === 'levelup') {
-      console.log({ eventId, payload })
       setState({
         level: payload.level,
         players: {},

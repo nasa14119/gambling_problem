@@ -14,7 +14,7 @@ export function LandingNav() {
           <Spade className="size-5" />
         </NavItem>
       </TooltipTrigger>
-      <TooltipContent className="text-accent">
+      <TooltipContent className="text-accent z-100">
         <span className="text-white text-xs">Landing</span>
       </TooltipContent>
     </Tooltip>

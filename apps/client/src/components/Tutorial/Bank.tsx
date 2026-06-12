@@ -11,7 +11,6 @@ export function Bank() {
   const [pay, setPay] = useState(0)
   const handleSubmit: SubmitFunction = (key, value) => {
     if (key === 'money') {
-      console.log(value)
       setMoney((p) => p - value)
       setChip((p) => p + value)
       return

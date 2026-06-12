@@ -3,6 +3,7 @@ import { cn } from '#/lib/utils'
 import type { ItemsPockerFace } from '@repo/types/client'
 import styles from './styles.module.css'
 import { Item } from '#/components/PockerFace/Item'
+import { useEffect } from 'react'
 
 export type State = 'idle' | 'open' | 'close'
 export type PockerFaceComponentProps = {
@@ -18,6 +19,13 @@ export function PockerFaceComponent({
   trigger,
   handleSend,
 }: PockerFaceComponentProps) {
+  // Necesary cleanup for landing page
+  useEffect(
+    () => () => {
+      document.body.style.overflow = 'auto'
+    },
+    [],
+  )
   return (
     <>
       <div
