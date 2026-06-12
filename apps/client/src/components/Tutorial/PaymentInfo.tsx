@@ -55,7 +55,7 @@ export function PaymentInfo({ money, chips, pay, setMoney, setPay }: Props) {
           )}
         </div>
       </TooltipDark>
-      <TooltipDark text="Here you find information about your credit with the mafia">
+      <TooltipDark text="This is your rank you will unlock exploits when you change rank level">
         <div className="border-2 border-green-600 border-dashed size-full rounded-xl p-5 text-3xl">
           <h3 className="pb-2 text-green-500">Rank</h3>
           <Slider color="var(--color-cyan-600)" percentage={rank} />
