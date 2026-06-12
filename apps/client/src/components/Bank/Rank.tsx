@@ -1,8 +1,9 @@
-import { useRankBank } from '#/components/Bank/store'
 import { cn } from '#/lib/utils'
 
-export function Rank() {
-  const rank = useRankBank()
+type Props = {
+  rank: number | null
+}
+export function Rank({ rank }: Props) {
   return (
     <main className="rounded-xl px-2 border-2 border-current border-dashed grid grid-cols-1 grid-rows-2">
       <header className="flex justify-start items-center mt-5">

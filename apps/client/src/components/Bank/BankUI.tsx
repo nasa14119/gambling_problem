@@ -2,30 +2,18 @@ import { Actions } from '#/components/Bank/Actions'
 import { ChipsBank } from '#/components/Bank/Chips'
 import { Credit } from '#/components/Bank/Credit'
 import { MoneyBalance } from '#/components/Bank/MoneyBalance'
-import { Pay } from '#/components/Bank/Pay'
+import { PaymentInfo } from '#/components/Bank/PaymentInfo.tsx'
 import { Skeleton } from '#/shadcn/ui/skeleton.tsx'
 import { useEffect } from 'react'
 import { useBankLoading } from './store.ts'
 import { fetchData } from './store'
+import { HeaderBank } from '#/components/Bank/HeaderBank.tsx'
 
-const text = String.raw`
-      :::::::::     :::    ::::::::: :::    ::::::::::::     :::    ::::    ::::::    ::: 
-     :+:    :+:  :+: :+:  :+:    :+::+:   :+: :+:    :+:  :+: :+:  :+:+:   :+::+:   :+:   
-    +:+    +:+ +:+   +:+ +:+    +:++:+  +:+  +:+    +:+ +:+   +:+ :+:+:+  +:++:+  +:+     
-   +#+    +:++#++:++#++:+#++:++#: +#++:++   +#++:++#+ +#++:++#++:+#+ +:+ +#++#++:++       
-  +#+    +#++#+     +#++#+    +#++#+  +#+  +#+    +#++#+     +#++#+  +#+#+#+#+  +#+       
- #+#    #+##+#     #+##+#    #+##+#   #+# #+#    #+##+#     #+##+#   #+#+##+#   #+#       
-######### ###     ######    ######    ############ ###     ######    #######    ###       
-`
 export function BankUI() {
   return (
-    <div className="bg-neutral-950 rounded-4xl size-full p-2  text-green-500 flex flex-col justify-between py-[5vh] px-10">
-      <div className="flex text-cyan-300">
-        <span className="h-full w-full grid place-content-center">
-          <pre>{text}</pre>
-        </span>
-      </div>
-      <Pay />
+    <div className="bg-neutral-950 rounded-4xl size-full p-2  text-green-500 flex flex-col justify-between py-[5%] px-10 gap-y-5">
+      <HeaderBank />
+      <PaymentInfo />
       <div className="grid grid-cols-3 gap-x-2 h-[10vh]">
         <Credit />
         <ChipsBank />

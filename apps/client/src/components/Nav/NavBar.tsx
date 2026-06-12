@@ -7,6 +7,7 @@ import type { ComponentProps } from 'react'
 const LINKS = [
   { text: 'Home', to: '/' },
   { text: 'Leaderboard', to: '/leaderboard' },
+  { text: 'Tutorial', to: '/tutorial' },
 ]
 
 type Props = ComponentProps<'nav'>

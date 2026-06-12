@@ -1,10 +1,12 @@
-import { Convertion } from '#/components/Bank/Convertion'
+import { Convertion } from '#/components/Convertion'
 import { useUpdateBank } from '#/components/Bank/store'
 import { useEventSender } from '#/stores/eventsStore'
+import { useGameState } from '#/stores/gameStore'
 
 export function Actions() {
   const send = useEventSender()
   const { setChips, setMoney } = useUpdateBank()
+  const { user } = useGameState()
   const handleChange = (key: string, value: number) => {
     if (key === 'money') {
       send({
@@ -30,11 +32,13 @@ export function Actions() {
         title="Frecuent transfer"
         type="money"
         onChange={handleChange}
+        maxValue={user.money}
       />
       <Convertion
         title="Chips conversion"
         type="chips"
         onChange={handleChange}
+        maxValue={user.chips}
       />
     </div>
   )

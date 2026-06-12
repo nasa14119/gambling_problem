@@ -6,12 +6,13 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
-import { useGameState } from '#/stores/gameStore'
 
+export type SubmitFunction = (key: 'money' | 'chips', value: number) => void
 type Props = {
   title: string
   type: 'money' | 'chips'
-  onChange: (key: string, value: number) => void
+  onChange: SubmitFunction
+  maxValue: number
 } & Omit<ComponentProps<'div'>, 'onChange'>
 const FormSchema = (max: number) =>
   z.object({
@@ -28,12 +29,11 @@ export function Convertion({
   type,
   children,
   className,
+  maxValue,
   onChange,
   ...rest
 }: Props) {
-  const { user } = useGameState()
-  const max = type === 'money' ? user.money : user.chips
-  const schema = FormSchema(max)
+  const schema = FormSchema(maxValue)
   const {
     register,
     handleSubmit,

@@ -19,6 +19,8 @@ import { useExploitEventSetup } from '#/exploits/store'
 import { NewExploit } from '#/components/NewExploit/NewExploit'
 import { useSoundOnLoad } from '#/hooks/useSound/useSoundOnLoad'
 import music from '#/assets/soundEffects/Nivel_1_lobby.mp3'
+import { RankingCardsGame } from '#/components/RankingCards/RankingCards'
+import { RankingTrigger } from '#/components/RankingCards/RankingTrigger'
 
 export const Route = createFileRoute('/game')({
   component: CreateGame,
@@ -67,6 +69,7 @@ function Game() {
     <>
       <PauseScreen />
       <PockerFace />
+      <RankingCardsGame />
       <NewExploit />
       <main className="size-full  h-screen grid grid-cols-1 grid-rows-[auto_1fr_auto] bg-neutral-300">
         <NavGame current={current}>
@@ -87,6 +90,7 @@ function Game() {
         </div>
         <Applications>
           <PockerTrigger />
+          <RankingTrigger />
         </Applications>
       </main>
     </>
