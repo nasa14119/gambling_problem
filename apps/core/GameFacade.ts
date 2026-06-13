@@ -1,3 +1,10 @@
+/* 
+  This is the Game Facade 
+  Here is the code that the session system uses to attach a web socket to a game 
+  The send function is the what what will send send the informatios as a stringify json document 
+  The types and functions that are asociated to this class are also here for clarity
+*/
+// Imports
 import {
   GameEventPayloads,
   GameEvents,
@@ -6,6 +13,9 @@ import {
 import { Game } from "./Game.ts";
 import { z } from "zod";
 import { GameState, Player } from "@repo/types";
+import { sleep } from "./lib/utils.ts";
+
+//  Types and constants
 export type GameEventPayload<T extends GameEvents> = {
   eventId: T;
   payload: GameEventPayloads[T];
@@ -15,6 +25,15 @@ type Props = {
   player: Player["playerId"];
   send: (payload: string) => void;
 };
+
+/** Client side triggers for specific actions */
+const SIGNALS: ReadonlySet<GameEvents> = new Set([
+  "resume",
+  "pause",
+  "round:start",
+]);
+
+// This functions is validating the input of the user for security porpuse
 const validatePayload = (eventId: string, payload: unknown) => {
   if (eventId === "player:input") {
     const value = z
@@ -35,21 +54,20 @@ const validatePayload = (eventId: string, payload: unknown) => {
     return value.data;
   }
 };
-const SIGNALS: ReadonlySet<GameEvents> = new Set([
-  "resume",
-  "pause",
-  "round:start",
-]);
+
 export class GameFacade {
   game: Game;
   player: Player;
   private send: Props["send"];
   private conection: string;
+  private eventQueue: GameEventPayload<GameEvents>[] = [];
+  private busy: boolean = false;
+
   constructor({ gameParam, player, send }: Props) {
     this.game = gameParam;
     this.player = this.game.players.getPlayer(player);
     this.conection = this.game.eventManager.createTransmitter(
-      this.sendPayload.bind(this),
+      this.add.bind(this),
     );
     this.send = send;
     // Sending the message that the playes is on turn
@@ -60,6 +78,24 @@ export class GameFacade {
       });
     }
   }
+
+  // queue to ensure all events are send in order
+  private add<T extends GameEvents>(event: GameEventPayload<T>) {
+    this.eventQueue.push(event);
+    this.dispatch();
+  }
+
+  private async dispatch() {
+    if (this.busy) return;
+    this.busy = true;
+    while (this.eventQueue.length > 0) {
+      const event = this.eventQueue.shift()!;
+      this.sendPayload(event);
+      await sleep(10);
+    }
+    this.busy = false;
+  }
+
   private getPlayersPots() {
     // Sending the players money pot
     for (const [playerId, moneyPot] of Object.entries(
@@ -76,6 +112,7 @@ export class GameFacade {
       );
     }
   }
+
   sendPayload<T extends GameEvents>({ eventId, payload }: GameEventPayload<T>) {
     // Turn end
     if (eventId === "turn:end") {
@@ -149,7 +186,7 @@ export class GameFacade {
       );
       return;
     }
-    // Players bet
+    // Players bet (that was already validated)
     if (eventId === "player:validbet") {
       const payloadBet = payload as GameEventPayloads["player:validbet"];
       const player = this.game.players
@@ -168,6 +205,8 @@ export class GameFacade {
       );
       return;
     }
+
+    // Winner determinated
     if (eventId === "round:winners") {
       const data = payload as GameEventPayloads["round:winners"];
       const winners = data.winners.map((w) => ({
@@ -186,9 +225,12 @@ export class GameFacade {
       );
       return;
     }
+    // Cards where deal
     if (eventId === "deck:cards_deal") {
       this.send(JSON.stringify({ eventId, payload: this.player.cards }));
     }
+
+    // Types of game termination
     if (
       eventId === "reset:hard" ||
       eventId === "reset:soft" ||
@@ -196,6 +238,8 @@ export class GameFacade {
     ) {
       this.send(JSON.stringify({ eventId, payload: undefined }));
     }
+
+    // Level up event
     if (eventId === "levelup") {
       setTimeout(() => {
         const players: GameState["players"] = this.game.players
@@ -211,20 +255,25 @@ export class GameFacade {
         );
       }, 500);
     }
+
+    // This is when the is broke and needs to be replace with other one
     if (eventId === "bot:reset") {
       this.send(JSON.stringify({ eventId, payload }));
     }
-    // console.log("unhandle " + eventId);
   }
+
+  // Client incoming events manager
   handleInput(input: string) {
     try {
-      JSON.parse(input);
+      JSON.parse(input); // Validation for json format is correct form
     } catch {
       this.send("Error parsing JSON DATA");
       return;
     }
-    const { eventId, payload } = JSON.parse(input);
+    const { eventId, payload } = JSON.parse(input); // Client event
+
     if (eventId === "player:info") {
+      // This is kind of legacy but is an event to get the current ifnormation about all the players in the game
       this.send(
         JSON.stringify({
           eventId: "player:info_data",
@@ -234,7 +283,11 @@ export class GameFacade {
       this.getPlayersPots();
       return;
     }
+
+    // Validates the for the type of eventId is string as expected
     if (!eventId || typeof eventId !== "string") return;
+
+    // Trigger events of client
     if (SIGNALS.has(eventId as GameEvents)) {
       if (eventId === "round:start") {
         this.game.startRound();
@@ -243,6 +296,8 @@ export class GameFacade {
       this.game.eventManager.emit(eventId as GameEvents, undefined);
       return;
     }
+
+    // This is what the player is trying to do
     if (eventId === "player:input") {
       const data = validatePayload(eventId, payload);
       if (!data) return;
@@ -252,6 +307,8 @@ export class GameFacade {
         type: data.type,
       });
     }
+
+    // As is implied actions asociated to convertion between money and chips
     if (eventId === "player:deposit" || eventId === "player:withdraw") {
       const data = payload as { chips: number };
       this.game.eventManager.emit(eventId, {
@@ -260,6 +317,8 @@ export class GameFacade {
       });
       return;
     }
+
+    // Mafia, tring to pay debt
     if (eventId === "mafia:pay") {
       const data = payload as { money: number; player: Player["playerId"] };
       if (typeof data.money !== "number") return;
@@ -269,6 +328,8 @@ export class GameFacade {
       });
     }
   }
+
+  /** Termination the websocket connection with the game (removing the event listeners / this facade) */
   terminate() {
     this.game.eventManager.removeTransmiter(this.conection);
   }
