@@ -1,5 +1,6 @@
 import { useExploitEventListener } from '#/exploits/store'
 import { cn } from '#/lib/utils'
+import { useGameState } from '#/stores/gameStore'
 import type { ExploitId } from '@repo/types'
 import { useState } from 'react'
 import type { ComponentProps } from 'react'
@@ -27,13 +28,21 @@ export function Item({
       if (payload.exploit.exploitId !== exploitId) return
       setLoading(false)
     }
+    if (eventId === 'buy:error') {
+      if (payload.exploit !== exploitId) return
+      setLoading(false)
+      console.error(payload.error)
+    }
   })
+  const { user } = useGameState()
+  const insuficientFunds = user.money < price
+  const isDisable = !isAvailable || isLoading || insuficientFunds
   return (
     <button
       className={cn(
         'flex  hover:bg-current/10 transition-all duration-125 ease w-full justify-between items-center my-2 p-2 rounded-sm',
         className,
-        (isLoading || !isAvailable) && 'opacity-50 hover:bg-transparent',
+        isDisable && 'opacity-50 hover:bg-transparent',
       )}
       onClick={(e) => {
         onClick && onClick(e)
@@ -41,13 +50,15 @@ export function Item({
         setLoading(true)
       }}
       {...rest}
-      disabled={!isAvailable || isLoading}
+      disabled={isDisable}
     >
       <div className="flex flex-col text-sm px-2 text-left">
         <h3>{title}</h3>
         <div className="text-xs">{desc}</div>
       </div>
-      <div className="px-4">{price}</div>
+      <div className={cn('px-4', insuficientFunds && 'text-red-800 italic')}>
+        {insuficientFunds ? 'insuficient fonds' : price}
+      </div>
     </button>
   )
 }

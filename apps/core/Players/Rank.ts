@@ -62,6 +62,7 @@ export class Rank {
             exploit,
             playerId: this.player.playerId,
           });
+          this.exploits_unlocked.add(exploit.exploitId);
         } else {
           this.nextRank = {
             ...exploit,
