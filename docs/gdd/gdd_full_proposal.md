@@ -172,19 +172,15 @@ As previously mentioned the main objective is to make the most amount of money w
 
 Leveling is the act of changing tables that resets the exploits you have bought, letting you keep one, also increasing the blind and the possibility to win more each round. And also, the exploits available changes based in the table and rank, meaning the higher you get, the more powerful exploits you get to "keep unlocked", meaning you can buy them in lower tables in future runs. There are synergies between exploits, for example if you are using the exploit to change the card, you should check the cards that are coming so you don't change it to one that is already in play thus being caught.
 
-Every game must feel unique and there is no one strategies, is up to you how you manage your resources.
-
-The indicators that you are making the mafia boss mad are that some exploits can start to fail; maybe you couldn't see other players' hands in that round... and then you start hearing things at home, until suddenly they get to you and shoot you. That is how you can end your round.
+Every game must feel unique and there is no one strategy, is up to you how you manage your resources.
 
 For the casino it should be difficult for you to know if you are being caught thus the tension builds on every turn and before using any exploit. 
 
 For the TCG aspect, the exploits will work as _"cards."_ Better exploits are harder to find and appear in higher betting tables. Each exploit card will have some icon representing what the exploit does.
 
-The game is a roguelike experience, this meaning that losing doesn't restart your progress. In this game you have a casino account that can be banned, which means you lose the money/chips that were in the account. 
+The game is a roguelike experience, this meaning that losing doesn't restart your progress. There is the "real" death of the run, where the mafia gets mad at you, they get to your house and end you, which means you lose it all your progress. Being how far in the tables you've gone and all of your money. 
 
-You don't lose the money outside the banned account. Then there is the "real" death of the run, where the mafia gets mad at you, they get to your house and end you, which means you lose it all your progress. Being how far in the tables you've gone and all of your money. 
-
-But the tun loss is not for nothing as the discovery of powerful exploits is not lost at all. The more you play the game the more exploits you find. The first time you play you have basic exploits like lets say change card and disconnect player, and as you advance you discover change suit. Now there is a chance that when restarting the game when killed by the mafia, you may start with change suit instead of disconnect.
+But the loss is not for nothing as the discovery of powerful exploits is not lost at all. The more you play the game the more exploits you find. The first time you play you have basic exploits like lets say change card and disconnect player, and as you advance you discover change suit. Now there is a chance that when restarting the game when killed by the mafia, you may start with change suit instead of disconnect.
 
 #### Texas Hold'em 
 This version is play by drawing 2 cards to each player then every player has a turn to place a bet. Betting follows a structured sequence where one player can place the first bet, and the others must respond by either calling (matching the current bet), raising (increasing the bet), or folding (leaving the hand). A key rule is that any raise must be at least as large as the previous increase; for example, if a player bets $10 and another raises to $30 (a $20 increase), the next player must raise by at least $20 more (making the total bet $50). 
@@ -206,7 +202,7 @@ video version: [video](https://youtu.be/ep1riICX-KU?si=4E8vLbSnqE0Q2WxZ)
 
 ---
 ### **Screens**
-
+*Note: Early versions of the screens used as concepts
 1. [Title Screen](#title-screen)
 2. [Pause Screen](#pause)
 3. [Analytics](#analytics)
@@ -241,6 +237,7 @@ The pause page will be the content blur and a simple continue of leave button.
 #### Soft Reset
 ![screen lose soft reset](assets/screen_soft.png)
 ### Game concepts and character
+*Note: Early concept art that couldn't be developed further due to time constraints
 ### Casino website
 ![casino website](assets/mesa-poker-pixilart-update.png)
 ### Terminal
@@ -256,11 +253,10 @@ This can be extended if necessary.
 Game Event
 - turn ended 
 - hard reset 
-- soft reset 
 - withdraw chips
 - player change 
 - deck change
-- time exceeded _(experimental)_
+- time exceeded
 - buy exploit attempt 
 - winner assigned 
 - change of round
@@ -283,15 +279,15 @@ The key factor is that we are taking the already fun game of Texas Hold’em and
 
 The game starts like a normal poker match, but with two random exploits unlocked. The objective is to win rounds and reach certain money thresholds. Once you reach them, you can move up to higher betting tables, where you can increase your earnings per turn and unlock new exploits.
 
-A limitation is that when you change tables, you can only take one exploit with you. This adds the need to buy the other exploits again. The casino instance keeps track of how many exploits have been used and how many rounds have been played. If you use too many exploits in a small number of turns, you will trigger a soft reset. When this happens, you lose the chips and the exploits you were using at that moment. However, your overall money is safe, so you can quickly buy them back or try different combinations of exploits from the start.
+A limitation is that when you change tables, you can only take one exploit with you. This adds the need to buy the other exploits again. Having it challenges the player to always stay on their toes as victory can become difficult if the exploits and money are managed incorrectly.
 
 If the game were just about continuing to play without purpose, it would become boring. That’s where the other twist comes in: the mafia. You need to manage your loans by withdrawing and repaying them. The interest rates are very high, making it a real challenge to overcome. 
 
-The mafia also determines how many rounds you have to repay the loan (this may vary depending on internal logic and your current level). If the loan is not paid on time, the game ends—they come to your house and kill you.
+The mafia also determines how many rounds you have to repay the loan (this may vary depending on internal logic and your current level). If the loan is not paid on time, the game ends. What hppens next is that they [the mafia] come to your house and end you forever (or atleast until you restart another run).
 
 The meta aspect is that it makes you feel like you are engaging in complex gambling. You can evaluate your current strategies, compare them with other players, see which exploits are useful, and check if you are falling behind. It feels very close to the real experience.
 
-See the development section to see details in how the Mafia, and Casino are model.  
+See the development section to see details in how the Mafia is modeled.  
 
 Monte Carlo in poker AI works by simulating many possible outcomes of a hand to estimate the chance of winning. The AI randomly completes the unknown cards (like opponents’ hands and future community cards) thousands of times, plays out each scenario, and counts how often it wins. From this, it calculates a win probability and uses it to decide whether to fold, call, or raise. This is adjustable, so creating different difficulties for each respective table is adjustable through this. 
 
@@ -307,57 +303,18 @@ We have 5 level for now and the blind increase:
 - 5 \$10000 blind and last increase in it 
 
 Players unlock exploits on every level change in the following form:
+*Note: The game is currently programmed so that the exploit unlock and level change can be achieved quickly
 
-Level 0 to Level 1\
-from \$0 to \$1,000
+Starting exploit (Always unlocked): see flop (for this instance the most powerful card available is unlocked from the start, could be balanced when more exploits are added)
 
-Level 1 to Level 1.5\
-from \$1,000 to \$5,000
+Level 0:
+- Earn a total of $2200 -> unlocks "Change to random hand" 
 
-Level 1.5 to Level 2
-from \$5,000 to \$10,000
+Level 1:
+- Earn $3000 to enter lvl 1 and unlock "see other player's cards" 
+- Earn $3500 unlocks "no shuffle"
 
-Level 2 to Level 2.25 \
-from \$10,000 to \$30,000
-
-Level 2.25 to Level 2.75 \
-from \$30,000 to \$70,000
-
-Level 2.75 to Level 3
-from \$70,000 to \$250,000
-
-Level 3 to 3.10 \
-from \$250,000 to \$270,000
-
-Level 3 to 3.5 \
-from \$270,000 to \$300,000
-
-Level 3.5 to 3.75 \
-from \$300,000 to \$400,000 
-
-Level 3.75 to 4
-from \$400,000 to \$500,000
-
-Level 4 to 4.10 \
-from \$500,000 to \$550,000
-
-Level 4.10 to 4.20 \
-from \$600,000 to \$650,000
-
-Level 4.20 to 4.30 \
-from \$700,000 to \$750,000
-
-Level 4.30 to 4.40 \
-from \$750,000 to \$800,000
-
-Level 4.40 to 4.50 \
-from \$800,000 to \$850,000
-
-Level 4.50 to 4.60 \
-from \$850,000 to \$900,000
-
-Level 5 to END -> blind $10,000
-from \$1,000,000 to record
+*Note: To know what each exploit does check teh 'Exploit' tab
 
 ### Exploit
 
@@ -367,61 +324,30 @@ Interface required for every exploit:
 - trigger()
 - playerId: string
 
-Exploits are divided in low, high and critical order. This classification means that a low level exploit is not the most powerful, but can be used more before getting detected by the casino, high level exploits are the more balanced ones as they have good but not too powerful effects and do raise the casino awareness but not too high as a critical exploit would do. Critical level exploits are the most powerful ones, but they raise the casino awareness too much and some might have downsides to them (if there is time to code it).
+Exploits come in different "theoretical" rarities. What we mean by this is that in-game there is no indicator of this rarity, it just used to refer to them on how powerful they act. THese rarities are divided in 3 categories: low, high, and critical. The more powerful the exploit feels is how the exploit is categorized. 
 
 Other way to view the exploits rarities:
 low level => common card
 high level => rare card
 Critical level => Epic/Legendary card
 
-Provisional exploits:
+ Exploits:
+ *Note: Due to the complexity of the project and time constraints only 4 exploits were achieved and were correctly implemented
+ 
 - No reshuffle [ high ] \
   Disables that the card are shuffle on every round change.
 
-- Count cards [ low ] \
-  Like in blackjack. It is not useful without the no shuffle exploit.
 
 - Change current hand random [ low ] \
-  Player hand redraw.
+  Player hand redraw from available cards (meaning cards that are in the current deck).
 
-- See coming card [ high ] \
-  Peak the current deck cards array. See the next card that will be turned.
 
-- See card played history [ low ] \
-  Save and stack of all the cards played. Probably will need a cooldown or max uses before rebuy. 
-
-- Save a card [ critical ] \
-  Draws card to save current, create exploit to use the card that was picked by user later.
-
-- Remove player [ critical ] \
-  Remove a player from the players array. Remove a player from the round. 
-
-- Disconnect player [ high ] \
-  Mark player as disconnected. Overwrite the _change turn_ method to skip player in the current/his turn one time only.
-
-- Change to random strong (A, K, Q, J) [ high ] \
-  Pick random card in that range of high cards then update the deck. 
-
-- Change to x card [ critical ] \
-  Put that card in players hand and trigger event to check if card was already played. This card can cause the casino to trigger a soft reset if card already in play (other player has it, or in the table).
-
-- Change the coming card [ high ] \
-  Change the deck card to x
-
-- Change username [ critical ] \
-  Reset the casino awareness
-
-- Change suit [ high ] \
-  Change the suit of the player card or the coming card
-
-- See flop [ low ] \
+- See flop [ high ] \
   See the 3 card that will be placed at the beginning
 
-- See a player's cards [ high ] \
+- See a player's cards [ Critical ] \
   Pick a player and see their current hand
 
-- Trigger full view [ critical ] \
-  See all the players' cards all the time. Might stop working in some scenarios.
 
 
 ## _Level Design_
@@ -438,132 +364,41 @@ The game is simulating an online casino so the levels and themes are going to be
         1. _Ambient_
             1. Other players
             2. Pristine green mat, standard issue for poker
-            3. Poker Chair
-            4. Poker Chips
-            5. Other player's portraits (NPCs)
+            3. Poker Chips
         2. _Interactive_
             1. Cards
             2. Exploits
             3. Buttons (raise, stay, fold, etc)
-            4. Dms for missions
-            5. Terminal
+            4. Terminal
       3. Sound
          1. _Ambient_
             1. Chill house/edm
-            2. player chatter (mumbling)
-         2. _Interactive_sounds_
-            1. Heartbeat
-            2. Footsteps
-           
-2. Table 2 (blue mat)
+2. Table 2 (Red mat)
     1. Mood
         1. Dangerous, tense
         2. Players are not friendly
     2. Objects
         1. _Ambient_
-            1. Blue mat
+            1. RED mat
             2. The mat is a bit used
-            3. Poker Chair
-            4. Poker Chips
-            5. Other player's portraits (NPCs)
+            3. Poker Chips
         2. _Interactive_
             1. Cards
             2. Exploits
             3. Buttons (raise, stay, fold, etc)
-            4. Dms for missions
-            5. Terminal
+            4. Terminal
    3. Sound
          1. _Ambient_
-             1. More active edm song, drops the house elements
-             2. player chatter (mumbling)
-         2. _Interactive_sounds_
-             1. Heartbeat
-             2. Footsteps
-3. Table 3 (red mat)
-    1. Mood
-        1. Players are out for your head
-        2. Gloomy players, they want your money
-    2. Objects
-        1. _Ambient_
-            1. Red table poker mat
-            2. Less illumination, for tense ambient
-            3. Very used an weathered table and mat
-            4. Poker Chair
-            5. Poker Chips
-            6. Other player's portraits (NPCs)
-        2. _Interactive_
-            1. Cards
-            2. Exploits
-            3. Buttons (raise, stay, fold, etc)
-            4. Dms for missions
-            5. Terminal
-   3. Sound
-      1. _Ambient_
-            1. High tempo EDM Track
-            2. Tense player silence (not technically a sound but used for unnerving the player)
-      2. _Interactive_sounds_
-            1. Heartbeat
-            2. Footsteps
-4. Table 4 (black mat: Mafia mat )
-    1. Mood
-        1. Eerie
-        2. Last stand
-        3. Your life is on the line
-    2. Objects
-        1. _Ambient_
-            1. Black mat, with mafia decoration
-            2. Money on the table
-            3. Poker Chips
-            4. Poker chair
-            5. Other player's portraits (NPCs)
-        2. _Interactive_
-            1. Cards
-            2. Exploits
-            3. Buttons (raise, stay, fold, etc)
-            4. Dms for missions
-            5. Terminal
-    3. Sound
-       1. _Ambient_
-            1. Combination of all tracks and motifs, signifying the end
-            2. Boss evil laughs
-       2. _Interactive_sounds_
-            1. Heartbeat
-            2. Footsteps
-5. Table 5 (dark theme end)
-    1. Mood
-        1. Calm
-        2. Relax
-        3. You are playing for fun
-    2. Objects
-        1. _Ambient_
-            1. Black mat, with mafia decoration changed
-            2. Money on the table
-            3. Poker Chips
-            4. Poker chair
-            5. Other player's portraits (NPCs)
-        2. _Interactive_
-            1. Cards
-            2. Exploits
-            3. Buttons (raise, stay, fold, etc)
-            4. Dms for ending the run
-            5. Terminal
-    3. Sound
-        1. _Ambient_
-            1. Cool music
-        2. _Interactive_sounds_
-            1. Heartbeat 
-            2. Footsteps   
-            3. Knocking at the door 
-               
-
+             1. Chill edm/ house
+  
+      
 ### **Game Flow**
 #### Tutorial
-1. Notification dm got 
-2. Player is presented the main page 
-3. Poker face use (how to see exploit description)
-4. Display of money that must be paid
-5. See the bank page (describe the main info of that page like who much money they have) 
-6. First round with help to see all the buttons 
+1. Player is presented the main page 
+2. Poker face use (how to see exploit description)
+3. Display of money that must be paid
+4. See the bank page (describe the main info of that page like who much money they have) 
+5. First round with help to see all the buttons 
 
 #### Game Loop
 
@@ -575,7 +410,7 @@ The game is simulating an online casino so the levels and themes are going to be
 ##### Poker loop
 1. ¿Continue playing?
 2. The round counter will increase
-3. Remove the blind from the chips of player
+3. Remove the blind from the chips of player 
 4. flop and hand cards to players  
 5. place bet (if turn)
 6. (sends the _end turn_ event to other objects)
@@ -707,7 +542,7 @@ Cache:
 
 Views:
 - Best 50 players
-- Exploits Meta data (Prices)
+- Exploits Meta data (amount used by all players/one player)
 
 User cache:
 - Player record run
@@ -725,30 +560,26 @@ The game will have a trigger where if the runs enters in the top 50 runs, it wil
 ### **Style Attributes**
 
 
-The colors that are going to be used, are going to be muted colors, so that ity gives the game a sense of danger and eeriness. The ones used in the concepts were just to see how the concept would look like. These colors will be complemented by a pixel artstyle with semi detailed portraits and game assets to keep that eerie and tense vibe.
+The colors that are going to be used, are going to be muted colors, so that ity gives the game a sense of danger and eeriness. The ones used in the concepts were just to see how the concept would look like. These colors will be complemented by a pixel artstyle with semi detailed portraits and game assets to keep that eerie and tense vibe. 
+*Note that in the final game the assets for the tables, chips, etc. were rapleced by solid backgrounds 1. for time reasons 2. it also fits the computer simulation aesthetic that we were trying to do for immersion purposes (although not as pretty as having dedicated art, but still works)
 
 
 ### **Graphics Needed**
-
+*Note: Early versions of the project inteded to have random portraits for npcs and one for the player but due to time constraints most of the graphic part couldn't be implemented.
 1. Characters
     1. Human
         1. Main character
         2. Random online players (portraits, profile picture-like)
         3. Mafia npcs
-      #Note: NPCs won't have dialogue, they're just to give the game a bit of character
+      *Note: NPCs won't have dialogue, they're just to give the game a bit of character
  
 2. Poker Tables
     1. Red used and weathered table
     2. Green mat pristine table
-    3. Blue mat almost new table
-    4. Black mat Mafia table
 3. Ambient
     1. Poker chips
-    2. Poker chairs or normal chairs
-    3. Loose money bills
-    4. Stacked money bills
-    5. Player Portraits (goes in hand with the character assets)
-    6. Blood stains (matching Weathered Stone Bricks)
+    2. Blood stains (death screen)
+    3. Gunshot cracked screen (death screen)
 ## _Sounds/Music_
 
 ---
@@ -759,7 +590,7 @@ The music that is going to be used is going to be in the Electronic genre, with 
 Effects as card shuffling, moving cards, electronic buzzes, chips stacking and many others are going to be used. The ones related to the casino aspect of the game are going to be used to immerse you in the world of online gambling, while the ones relating to the hecker world are more focused on electronic buzzes and notifications, things you mght hear in a computer. For the Immersive game part, we'll have footsteps play in the backround to make the tention rise as maybe the mafia is at your doorstep and heartbeats when you are close to losing.
 
 ### **Sounds Needed**
-
+*Note: The effects were added to the repository but were not used
 1. Effects
     1. Cards shuffling
     2. Cards dealt
@@ -769,19 +600,10 @@ Effects as card shuffling, moving cards, electronic buzzes, chips stacking and m
     6. Exploit used (some electronic buzz)
     7. Player disconnect (Exploit based)
     8. Footsteps
-2. Feedback
-    1. Heartbeat (louder if about to lose); (Winning/Losing state)
-    2. Coins dropped; (Gained money)
-    3. Happy chime (extra life)
-    4. Sad chime (died)
     
 ### **Music Needed**
 
 1. Chill house/EDM track
-2. Edm track 120 bpm major key 
-3. EDM track 150 bpm other major key
-4. EDM track 150 bpm minor relative key to the first track
-5. House track for credits;
 
 ## _Schedule_
 
