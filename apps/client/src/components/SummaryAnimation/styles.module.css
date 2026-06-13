@@ -13,3 +13,13 @@
   border-radius: 99999px;
   animation: shutdown 750ms ease forwards;
 }
+
+@keyframes show {
+  to {
+    opacity: 1;
+  }
+}
+.shot {
+  opacity: 0;
+  animation: show 0s 500ms step-end forwards;
+}

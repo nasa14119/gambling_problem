@@ -1,4 +1,3 @@
-import gunsuhut from '#/assets/gunshut.png'
 import shutdown from '#/assets/soundEffects/shutdown.mp3'
 import guntshotSound from '#/assets/soundEffects/gunshot.mp3'
 import { Content as DataContent } from '#/components/Summary/Content'
@@ -9,7 +8,8 @@ import { cn } from '#/lib/utils'
 import { SERVER_PATH } from '#/env'
 import type { LastRun } from '@repo/types/server'
 import { useSoundOnLoad } from '#/hooks/useSound/useSoundOnLoad'
-import { Shutdown } from '#/components/ShutDown'
+import { Shutdown } from '#/components/SummaryAnimation/ShutDown'
+import { Gunshot } from '#/components/SummaryAnimation/Gunshot'
 
 export const Route = createFileRoute('/summary')({ component: Summary })
 async function getSummary(): Promise<LastRun | null> {
@@ -139,5 +139,5 @@ function WinSummaryAside() {
 
 function LossSummaryAside() {
   useSoundOnLoad(guntshotSound)
-  return <img src={gunsuhut} className="w-full aspect-square object-cover" />
+  return <Gunshot />
 }

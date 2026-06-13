@@ -6,20 +6,20 @@ export function Description() {
     <Section title="Description" className={styles['p-styles']} side="center">
       <div className="col-span-12 flex justify-start items-center flex-col *:text-center py-[6vh]">
         <p>
-          Gambling problem is a TCG, roguelike, strategy game. This is that the
-          game is unique every time you start a new round. The objective is for
-          you to do a strategy between exploit use, paying your debts on time,
-          and leveling up to unlock new exploits.
+          Gambling problem is a TCG, roguelike, strategy game. By this at the
+          begining your run is unique from the last. The objective is for you to
+          do a strategize between exploit use, paying your debts on time, and
+          leveling up to unlock new exploits.
         </p>
         <p>
-          Your rank is given by the money you are gaining; as you progress,
+          Your rank is given by the money you are gaining. As you progress,
           expect other players to start to become better as you get to exclusive
           tables.
         </p>
         <p>
-          The problem is that you have to pay your bills with the mafia that let
-          you use their tool to play. Their interest rises as levels pass; if
-          you don't pay in time, they will try to kill you.
+          Remember to pay your contribution with the mafia. Afeter all they gave
+          you a unique oportunity. It is common that in the word of gangs
+          someone get's kill...
         </p>
       </div>
     </Section>

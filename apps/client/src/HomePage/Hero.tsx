@@ -1,6 +1,6 @@
 import { cn } from '#/lib/utils'
 import soundEffect from '#/assets/soundEffects/boot-effect.mp3'
-import { ArrowRight, Power, User2 } from 'lucide-react'
+import { ArrowRight, Fullscreen, Power, User2 } from 'lucide-react'
 import styles from './styles.module.css'
 import { useEffect, useRef, useState } from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '#/shadcn/ui/tooltip'
@@ -71,8 +71,8 @@ export function Hero() {
             <span className="text-xl pl-2 flex items-center h-full absolute transition-all duration-500 left-1/2 -translate-x-1/2 group-hover:left-0 group-hover:translate-x-0 text-blue-900 group-hover:opacity-80 group-hover:*:opacity-100 font-medium">
               Landing
             </span>
-            <div className="aspect-square h-full flex items-center text-blue-900 absolute right-0 top-0">
-              <ArrowRight className="size-5 translate-x-[200%] transition-transform duration-500 group-hover:translate-x-0" />
+            <div className="h-full flex items-center text-blue-900 absolute right-0 top-0 transition-all duration-500 translate-x-full group-hover:translate-x-0 px-2">
+              <ArrowRight className="size-5" />
             </div>
           </Link>
           <div className="h-[5vh] w-[20vw] grid grid-cols-[1fr_min-content] mx-auto">
@@ -119,6 +119,10 @@ export function Hero() {
             )}
           />
         </div>
+      </div>
+      <div className="absolute left-5 bottom-5 flex items-center justify-start text-[#f2f2f2] -z-10 gap-x-2">
+        <Fullscreen className="size-5" />
+        <span className="text-sm ">Make your screen fullscreen</span>
       </div>
     </header>
   )
