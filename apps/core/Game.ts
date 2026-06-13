@@ -1,10 +1,14 @@
+/* 
+  This is the file that contain the base logic for a pocker game 
+  The idea is that this could be share between game modes like multiplayer or demo 
+ */
 import { v4 as uuid } from "uuid";
 import { GameEventManager } from "./Events/GameEventManager.ts";
 import { DeckEventsManager } from "./Deck/DeckEventsFactory.ts";
 import { Player } from "./Players/Player.ts";
 import { Players } from "./Players/index.ts";
 import { TurnSystem } from "./Deck/TurnSystem.ts";
-import type { Card, ExploitId, GameState } from "@repo/types";
+import type { Card, ExploitId } from "@repo/types";
 import { ExploitManager } from "./Exploits/ExploitManager.ts";
 import { ExploitFacade } from "./Exploits/ExploitFacade.ts";
 import type { TypeEnd } from "@repo/types/db";
@@ -25,27 +29,45 @@ export abstract class Game implements SessionGameInterface {
   protected _isStarted = false;
   public round: number = 0;
   public isEnded: TypeEnd | null = null;
+  get isStarted() {
+    return this._isStarted;
+  }
   constructor({ runId, exploits_whitelist = [] }: GameOptions = {}) {
     this.id = runId?.toString() ?? uuid();
     this.round = 0;
     this.exploits_whitelist = [...exploits_whitelist];
   }
+
+  // Methods needed by session system
+
+  /** Referce  to the gameState in that particular moment*/
   abstract getState(id: string): unknown;
+
+  /** Any necessary elements needed before inicialization like game level event listeneres*/
   abstract init(): void;
+
+  /** Terminate the game (will end game) */
   abstract kill(playerId: string): void;
+
+  /** Save the game without removing*/
+  abstract quit(id: string): unknown;
+
+  /** Add a player to the game */
+  abstract addPlayer(id: string, options?: unknown): unknown;
+
+  /** Attach a websocket to the game  */
   abstract attachClient(
     player: Player["playerId"],
     send: (payload: string) => void,
   ): unknown;
-  abstract quit(id: string): unknown;
-  abstract addPlayer(id: string, options?: unknown): unknown;
-  get isStarted() {
-    return this._isStarted;
-  }
+
+  /** Attach a websocket to the ExploitManager */
   attachExploit(playerId: string, send: (payload: string) => void) {
     const facade = new ExploitFacade(this.exploitsManager, playerId, send);
     return facade;
   }
+
+  /** This is the method for logic to determine the winner or if tie split the pot */
   determineWinner({ moneyPot, state }: { moneyPot: number; state: Card[] }) {
     if (moneyPot <= 0) return;
     const players = this.players.getPlaingPlayers();
@@ -78,6 +100,8 @@ export abstract class Game implements SessionGameInterface {
       })),
     });
   }
+
+  /** This are a helper method for teminating a round */
   roundEnd() {
     this._isStarted = false;
     this.determineWinner({
@@ -90,6 +114,8 @@ export abstract class Game implements SessionGameInterface {
     if (this.isEnded) return false;
     return this.players.getPlaingPlayers().length > 1;
   }
+
+  /** Logic for cordinating a round, will be call on round start */
   async startRound() {
     if (this.isEnded) return;
     this._isStarted = true;
@@ -116,6 +142,8 @@ export abstract class Game implements SessionGameInterface {
     await this.turnSystem.startTurn(this.players.getPlaingPlayers());
     this.roundEnd();
   }
+
+  /** This will return a players but as user, adding aditional methods to the type */
   getUser(id: string): User {
     const user = this.players.getPlayer(id) as User;
     if (!user || user instanceof PokerBot)

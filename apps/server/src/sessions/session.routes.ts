@@ -41,7 +41,8 @@ router.get(
     game.addBot();
     game.addPlayer(playerId);
     game.init();
-    res.cookie("sessionId", sessions.newGame(game, "user:"));
+    const sessionId = sessions.newGame(game, "user:");
+    res.cookie("sessionId", sessionId, COOKIES_OPTS);
     res.cookie("playerId", playerId, COOKIES_OPTS);
     res.sendStatus(200);
   },

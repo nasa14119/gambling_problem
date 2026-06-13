@@ -1,11 +1,13 @@
 import { cn } from '#/lib/utils'
+import { useEventSender } from '#/stores/eventsStore'
 
 type Props = {
   rank: number | null
 }
 export function Rank({ rank }: Props) {
+  const sendEvent = useEventSender()
   return (
-    <main className="rounded-xl px-2 border-2 border-current border-dashed grid grid-cols-1 grid-rows-2">
+    <main className="rounded-xl px-2 border-2 border-current border-dashed grid grid-cols-1 grid-rows-2 relative">
       <header className="flex justify-start items-center mt-5">
         <h3 className="text-3xl font-medium leading-3.75 ">Rank</h3>
       </header>
@@ -25,6 +27,14 @@ export function Rank({ rank }: Props) {
           )}
         </span>
       </span>
+      {rank === null && (
+        <button
+          onClick={() => sendEvent({ eventId: 'end:game' })}
+          className="rounded-sm border-2 border-dashed border-white capitalize absolute top-5 right-5 py-1 px-5"
+        >
+          Terminate Your Run
+        </button>
+      )}
     </main>
   )
 }

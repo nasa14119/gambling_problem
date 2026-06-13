@@ -41,6 +41,7 @@ export type GameEventPayloads = {
   pause: undefined;
   resume: undefined;
   "bot:reset": { prevPlayer: PlayerData; newPlayer: PlayerData };
+  "end:game": { playerId: Player["playerId"] };
 };
 export type GameEvents = keyof GameEventPayloads;
 
@@ -86,6 +87,7 @@ export type ExploitsPayloads = {
   };
   "exploit:kill": { playerId: Player["playerId"]; exploitId: ExploitId };
   "exploit:unlocked": { playerId: Player["playerId"]; exploit: NextRank };
+  "rank:max": { rank: number };
   levelup: { playerId: Player["playerId"]; level: number };
 } & GameEventsExploit;
 export type ExploitsEvents = keyof ExploitsPayloads;

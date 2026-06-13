@@ -1,5 +1,6 @@
 import gunsuhut from '#/assets/gunshut.png'
-import exploitCover from '#/assets/exploitCover.png'
+import shutdown from '#/assets/soundEffects/shutdown.mp3'
+import guntshotSound from '#/assets/soundEffects/gunshot.mp3'
 import { Content as DataContent } from '#/components/Summary/Content'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
@@ -7,6 +8,8 @@ import { Row } from '#/components/Summary/Row'
 import { cn } from '#/lib/utils'
 import { SERVER_PATH } from '#/env'
 import type { LastRun } from '@repo/types/server'
+import { useSoundOnLoad } from '#/hooks/useSound/useSoundOnLoad'
+import { Shutdown } from '#/components/ShutDown'
 
 export const Route = createFileRoute('/summary')({ component: Summary })
 async function getSummary(): Promise<LastRun | null> {
@@ -104,7 +107,8 @@ const SUMMARY_ROWS = [
 ]
 
 const formatData = (payload: SummaryPayload) => {
-  const message = payload.typeEnd === 'WIN' ? SUMMARY_TEXT.win : SUMMARY_TEXT.loss
+  const message =
+    payload.typeEnd === 'WIN' ? SUMMARY_TEXT.win : SUMMARY_TEXT.loss
   const items = [
     ({ ...args }) => (
       <Row
@@ -129,26 +133,11 @@ const formatData = (payload: SummaryPayload) => {
 }
 
 function WinSummaryAside() {
-  return (
-    <div className="h-full border-l border-[#00FDFF]/30 bg-[#061313] px-5 py-6 flex flex-col items-center justify-between overflow-hidden">
-      <div className="w-full text-right text-[#00FDFF] text-3xl tracking-[0.35em] uppercase">
-        win
-      </div>
-      <div className="relative grid place-items-center">
-        <div className="absolute size-56 rounded-full border border-[#00FDFF]/25" />
-        <div className="absolute size-72 rounded-full border border-[#E5E500]/15" />
-        <img
-          src={exploitCover}
-          className="relative w-32 [image-rendering:pixelated] drop-shadow-[0_0_22px_rgba(0,253,255,0.45)]"
-        />
-      </div>
-      <div className="w-full text-[#E5E500] text-right text-xl uppercase tracking-[0.2em]">
-        access granted
-      </div>
-    </div>
-  )
+  useSoundOnLoad(shutdown)
+  return <Shutdown />
 }
 
 function LossSummaryAside() {
+  useSoundOnLoad(guntshotSound)
   return <img src={gunsuhut} className="w-full aspect-square object-cover" />
 }

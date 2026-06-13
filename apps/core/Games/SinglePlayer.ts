@@ -222,6 +222,14 @@ export class GameSinglePlayer extends Game {
         await useExploit(id, exploitId);
       },
     });
+    this.eventManager.on({
+      eventId: "end:game",
+      listener: ({ playerId }) => {
+        this.isEnded = "WIN";
+        this.kill(playerId);
+        this.eventManager.emit("reset:hard", { end: "WIN", player: playerId });
+      },
+    });
     if (this._isStarted) {
       this.resumeGame();
     }

@@ -1,9 +1,16 @@
-import { getRank, getUserWhiteList, saveRank } from "db";
+/* 
+  Here is encapsulated the logic for unlocking exploits, will change level base on db 
+  Will also indicate when the game is a win 
+*/
+
+// Imports
+import { getRank, getUserWhiteList, isMaxRank, saveRank } from "db";
 import type { Player } from "./Player.ts";
 import { ExploitId } from "@repo/types";
 import { ExpoitEventManager } from "../Events/ExploitsEventManager.ts";
 import { ExploitData, NextRank } from "@repo/types/db";
 
+// Types
 type RankConstructor = {
   player: Player;
   exploits_whitelist: ExploitId[];
@@ -12,15 +19,22 @@ type RankConstructor = {
 type RankOptions = {
   current_level: number;
 };
+
 export class Rank {
+  // The players this rank belongs to
   player: Player;
+  //
   private exploits_unlocked: Set<ExploitId>;
+  // This are the user's unlocked exploits globaly
   private user_whitelist!: ExploitData[];
+  // This is the amount of money and chips the player has at the moment
   private rank: number;
+  // Internal variable to know the new minimun so that if you go to a lower level you don't unlock exploits again
   private minRank: number = 0;
   private eventManager: ExpoitEventManager;
   private level: number = 0;
   private nextRank: NextRank | null = null;
+
   constructor(
     { player, exploits_whitelist, exploitsManager }: RankConstructor,
     options?: RankOptions,
@@ -31,23 +45,40 @@ export class Rank {
     this.eventManager = exploitsManager;
     this.init();
   }
+
+  /** Method call for setup of rank class */
   async init() {
     const res = await getUserWhiteList(this.player.playerId);
     this.user_whitelist = res;
+    if (await isMaxRank(this.rank)) {
+      this.eventManager.emit("rank:max", { rank: this.rank });
+      this.nextRank = null;
+      return;
+    }
     await this.getNextRank();
   }
+
+  /** Will get the next exploit the players is going to get */
   async getNextRank() {
+    /** List of the epxloits that where unlocked by the player but are not unlocked in the current game */
     const list = this.user_whitelist.filter(
       (e) => !this.exploits_unlocked.has(e.exploitId),
     );
+
+    /** Stored the values that are in between the current rank and the one next
+     * (this is because you can pass more than one rank in a round end) */
     const dbRankValues = await getRank({
       currentLevel: this.rank,
       prevRank: this.nextRank?.rank ?? 0,
     });
+
     if (dbRankValues === null) {
+      // if there is not other rank to unlock then the max level is reach
       this.nextRank = null;
+      this.eventManager.emit("rank:max", { rank: this.getRank() });
       return;
     }
+
     for (const dbRank of dbRankValues) {
       if (list.length !== 0) {
         const index = Math.floor(Math.random() * list.length);
@@ -95,6 +126,8 @@ export class Rank {
       }
     }
   }
+
+  /** Will save in the database the exploit the player have unlocked if it wasent on his whitelist */
   private updateUnlocket() {
     if (this.nextRank === null) return;
     if (
@@ -106,6 +139,8 @@ export class Rank {
       username: this.player.playerId,
     });
   }
+
+  /** Will be call in case the rank have surpase the prev rank */
   updateRank(money: number) {
     this.rank = Math.max(this.minRank, money);
     if (this.nextRank === null) return;
@@ -120,10 +155,14 @@ export class Rank {
       this.getNextRank();
     }
   }
+
+  /** Get information of the player is aspirating to get */
   getNextGoal() {
     if (!this.nextRank) return null;
     return this.nextRank.rank;
   }
+
+  /** Current rank of the player */
   getRank() {
     return this.rank;
   }

@@ -327,6 +327,12 @@ export class GameFacade {
         player: this.player.playerId,
       });
     }
+
+    if (eventId === "end:game") {
+      this.game.eventManager.emit("end:game", {
+        playerId: this.player.playerId,
+      });
+    }
   }
 
   /** Termination the websocket connection with the game (removing the event listeners / this facade) */

@@ -5,8 +5,9 @@ import {
   metadata,
   exploitsUsed,
   userrunsmetadataview,
+  ranks,
 } from "#schemas";
-import { desc, eq, sql } from "drizzle-orm";
+import { desc, eq, gte, sql } from "drizzle-orm";
 import { db } from "../connection.ts";
 import { RunDataGame, RunsMetadataAdmin } from "@repo/types/db";
 import type { SavedGame } from "@repo/types/server";
@@ -244,4 +245,13 @@ export const getRunsMetadata = async (): Promise<
     durationMinutes: v.durationMinutes ?? 0,
   }));
   return parsed;
+};
+
+export const isMaxRank = async (rank: number) => {
+  const res = await db
+    .select()
+    .from(ranks)
+    .where(gte(ranks.rankUnlock, rank))
+    .limit(1);
+  return res.length <= 0;
 };
