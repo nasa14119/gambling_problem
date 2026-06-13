@@ -1,6 +1,5 @@
 import { useExploitEventListener } from '#/exploits/store'
 import { cn } from '#/lib/utils'
-import { useGameState } from '#/stores/gameStore'
 import type { ExploitId } from '@repo/types'
 import { useState } from 'react'
 import type { ComponentProps } from 'react'
@@ -11,6 +10,7 @@ type Props = {
   desc: string
   price?: number
   isAvailable?: boolean
+  insuficientFunds?: boolean
 } & ComponentProps<'button'>
 export function Item({
   title,
@@ -19,6 +19,7 @@ export function Item({
   className,
   isAvailable = true,
   exploitId,
+  insuficientFunds = false,
   onClick,
   ...rest
 }: Props) {
@@ -34,8 +35,6 @@ export function Item({
       console.error(payload.error)
     }
   })
-  const { user } = useGameState()
-  const insuficientFunds = user.money < price
   const isDisable = !isAvailable || isLoading || insuficientFunds
   return (
     <button

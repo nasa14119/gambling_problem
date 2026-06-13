@@ -11,6 +11,7 @@ export type PockerFaceComponentProps = {
   items: ItemsPockerFace[]
   trigger: (state: State) => void
   handleSend: (item: ItemsPockerFace['exploitId']) => void
+  money: number
 }
 
 export function PockerFaceComponent({
@@ -18,6 +19,7 @@ export function PockerFaceComponent({
   items,
   trigger,
   handleSend,
+  money,
 }: PockerFaceComponentProps) {
   // Necesary cleanup for landing page
   useEffect(
@@ -62,6 +64,7 @@ export function PockerFaceComponent({
               title={exploit.name}
               isAvailable={exploit.isAvailable}
               onClick={() => handleSend(exploit.exploitId)}
+              insuficientFunds={money < exploit.price}
               className="text-green-400"
             />
           ))}

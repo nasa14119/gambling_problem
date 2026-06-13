@@ -39,7 +39,7 @@ export function PockerFaceTutorial({
     exploitId: 'see_flop',
     isAvailable: true,
     name: 'See Flop',
-    price: 0,
+    price: 100,
     type: 'common',
   }
   return (
@@ -50,6 +50,7 @@ export function PockerFaceTutorial({
       }}
       items={[exploitExample, !isActive ? disabled : see_flop]}
       state={state}
+      money={200}
     />
   )
 }
